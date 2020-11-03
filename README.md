@@ -39,13 +39,14 @@ Ex: Change stop time from exact time stamps to time of the day (12AM-3AM, 3AM-6A
 
 
 ### Methods Considered 
-We were thinking about using decision trees (like random forest), Naive Bayes, chi-squared, or even k-nearest neighbors. We want to use at least 2-3 algorithms to see which one would give the best accuracies and report the outcome. We aren't too well versed in some of these algorithms, so we are not sure how the implementation will end up. We want to use this project as a chance to dive deeper into different algorithms and figure out how they work and how they are implemented after being preprocessed. 
+We were thinking about using decision trees, random forest or  k-nearest neighbors. We want to use at least 2-3 algorithms to see which one would give the best accuracies and report the outcome. We aren't too well versed in some of these algorithms, so we are not sure how the implementation will end up. We want to use this project as a chance to dive deeper into different algorithms and figure out how they work and how they are implemented after being preprocessed. 
 
-- Decision Trees- It would be our first choice of metric and we will start classifying the data considering parameters like violation type, gender, time and so on thus reaching the stop outcome as our final branch. Henceforth, extracting a tree model depicting results.
+- Decision Trees: It would be our first choice of metric and we will start classifying the data considering parameters like violation type, gender, time and so on thus reaching the stop outcome as our final branch. Henceforth, extracting a tree model depicting results.
 
 - KNN: This will match data points given as input to the information available in the dataset. The prediction will be based on the closest match to a stop that happened in the past. 
 
-- 
+- Random Forest: Multiple trees are grown instead of just one tree in decision tree algorithm. When a new object is given, the classification happens based on number of votes by the trees and it takes the average of the outputs in case of regression. This algorithm will also handle missing values and maintains accuracy for missing data. Additionally, it will not overfit the model as well. 
+
 
 ## Metrics to Measure Success
 We’ll measure success based on the accuracy of the test dataset portion of the population dataset after running the algorithms on the training set. We will divide our dataset into a 70-30 split for training and testing. We hope to reach around 85-90% accuracy for the models. 
