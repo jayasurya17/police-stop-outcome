@@ -48,7 +48,30 @@ def transform_data_columns_1_4(dataframe):
 	dataframe['stop_year'] = dataframe['stop_date'].apply(lambda x: int(x.split('-')[0]))
   
 	return dataframe
-   
+
+def transform_data_columns_5_8(df):
+	# There are 2 similar columns that is driver's year of birth and driver's age 
+    # which provide converging information, pre-pruning is performed and driver's year of birth is
+    # dropped as driver's age is sufficient for analysis.
+    # It also helps in removing unneccessary branches before performing classification
+	df=df.drop(columns=['driver_age_raw'], axis=1, inplace=False)
+
+    #To clean the driver's age column and treat null values, we can replace it with the average value
+	#of age in column
+	df["drivers_age"]= df["driver_age"].fillna(df["driver_age"].mean())
+	df=df.drop(columns=["driver_age"], axis=1, inplace=False)
+    
+	#To clean the driver's race column and treat null values, we can replace it with the most frequent value
+	#of race in column
+	df["drivers_race"]= df["driver_race"].fillna(df["driver_race"].mode())
+	df=df.drop(columns=["driver_race"], axis=1, inplace=False)
+    
+	#To clean the violation column and treat null values, we can replace it with the most frequent value
+	#of violation in column
+	df["violations_raw"]= df["violation_raw"].fillna(df["violation_raw"].mode())
+	df=df.drop(columns=["violation_raw"], axis=1, inplace=False)
+	
+    
     
 def visualize_data_columns_1_4(dataframe):  
   #The statistics of the first four coumns are as follows
@@ -148,9 +171,14 @@ if __name__ == "__main__":
 	# dataframe = general_preprocessing(dataframe)
 
 	# Hari Analysis
-	dataframe = transform_data_columns_1_4(dataframe) 
+	dataframe = transform_data_columns_1_4(dataframe)
+	
+	
+
+    
 	# Jayasurya Analysis
 	dataframe = transform_data_columns_9_12(dataframe) 
+	# print(dataframe['stop_hour'].value_counts())
 	
 	# Hari visualization
 	visualize_data_columns_1_4(dataframe)
@@ -158,7 +186,9 @@ if __name__ == "__main__":
 	visualize_data_columns_9_12(dataframe)
 	# Anthony visualization
 	visualize_data_columns_13_15(dataframe)
-
+    
+	#Akash's Anaylsis
+	dataframe=transform_data_columns_5_8(dataframe)
 
 	# Perform a test train split to train our model
 	# Commenting it out for now since we need to wait till all the preprocessing is done
