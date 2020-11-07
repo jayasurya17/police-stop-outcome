@@ -1,8 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
 def read_file(filename):
-	return pd.read_csv(filename)
+  	return pd.read_csv(filename)
+
 
 def transform_data_columns_1_4(dataframe):
 	#The county name column can be dropped cause it is completely null
@@ -25,12 +27,6 @@ def visualize_data_columns_1_4(dataframe):
 	#Column 3 -> Gender 
 	print(dataframe['driver_gender'].value_counts())
 	return dataframe
-	
-def transform_data_columns_5_8(dataframe):
-	pass
-
-def visualize_data_columns_5_8(dataframe):
-	pass
 
 
 def group_and_plot_pivot_graph(df, columns, filename):
@@ -45,11 +41,13 @@ def group_and_plot_pivot_graph(df, columns, filename):
 	plt.tight_layout()
 	plt.savefig(filename)
 
+
 def plot_pie_chart(df, column, filename):
 	fig, ax = plt.subplots()
 	counts = df[column].value_counts().plot(ax=ax, kind='pie')
 	plt.tight_layout()
 	plt.savefig(filename)
+
 
 def transform_data_columns_9_12(df): 
 	# Columns
@@ -62,17 +60,41 @@ def transform_data_columns_9_12(df):
 	df['stop_hour'] = df['stop_time'].apply(lambda x: int(x.split(':')[0]))
 	return df
 
+
 def visualize_data_columns_9_12(df):
 	plot_pie_chart(df, 'search_conducted', 'search_conducted.png')
 	group_and_plot_pivot_graph(df, ['stop_hour', 'violation'], 'violation.png')
 	group_and_plot_pivot_graph(df, ['violation', 'stop_outcome'], 'stop_outcome.png')
 
-def transform_data_columns_13_15(dataframe): 
-	pass
+	
+def general_preprocessing(dataframe):
+  
+	# Define columns that are already mostly null to drop
+	raw_columns = []
+	for c in dataframe.columns:
+		if "search_type" in c or "county_name" in c:
+			raw_columns.append(c)
 
-def visualize_data_columns_13_15(dataframe):
-	pass
+	# Drop previously marked null columns
+	df_clean = dataframe.drop(columns=raw_columns)
 
+	# Drop remaining rows that have nulls
+	df_clean = df_clean.dropna()
+	print(df_clean.count())
+
+	return df_clean
+
+def test_train_split(dataframe):
+	# Set X for test train split and use get_dummies for one hot encoding
+	X = dataframe.drop(columns=["stop_outcome"])
+	X = pd.get_dummies(X)
+
+	# Set y for test train split
+	y = dataframe["stop_outcome"].copy()
+
+	# Perform the test train split
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    
 
 if __name__ == "__main__":
 
@@ -81,19 +103,22 @@ if __name__ == "__main__":
 	# Converting the CSV to a panda dataframe
 	dataframe = read_file(filename)
 
-	# # Hari
-	# dataframe = transform_data_columns_1_4(dataframe) 
-	# dataframe = visualize_data_columns_1_4(dataframe)
+	# Data preprocessing and visualization
 
-	# # Akash	
-	# dataframe = transform_data_columns_5_8(dataframe) 
-	# dataframe = visualize_data_columns_5_8(dataframe)
+	# Commenting out this method since it takes care of all columns and rows
+	# dataframe = general_preprocessing(dataframe)
+
+	# # Hari
+	dataframe = transform_data_columns_1_4(dataframe) 
+	dataframe = visualize_data_columns_1_4(dataframe)
+
 
 	# Jayasurya
 	dataframe = transform_data_columns_9_12(dataframe) 
 	visualize_data_columns_9_12(dataframe)
 
-	# Antony	
-	dataframe = transform_data_columns_13_15(dataframe) 
-	dataframe = visualize_data_columns_13_15(dataframe)
- 
+
+	# Perform a test train split to train our model
+	# Commenting it out for now since we need to wait till all the preprocessing is done
+
+	# X_train, X_test, y_train, y_test = test_train_split(dataframe)
