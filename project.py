@@ -1,9 +1,9 @@
 import pandas as pd
-
+from sklearn.model_selection import train_test_split
 
 
 def read_file(filename):
-    return pd.read_csv(filename)
+  return pd.read_csv(filename)
 
 def transform_data_columns_1_4(dataframe):
     
@@ -34,10 +34,22 @@ def visualize_data_columns_1_4(dataframe):
   return dataframe
 
 
-    
+def general_preprocessing(dataframe):
+  
+  # Define columns that are already mostly null to drop
+  raw_columns = []
+  for c in dataframe.columns:
+      if "search_type" in c or "county_name" in c:
+          raw_columns.append(c)
 
+  # Drop previously marked null columns
+  df_clean = dataframe.drop(columns=raw_columns)
 
+  # Drop remaining rows that have nulls
+  df_clean = df_clean.dropna()
+  print(df_clean.count())
 
+  return df_clean
    
     
 if __name__ == "__main__":
@@ -47,8 +59,6 @@ if __name__ == "__main__":
   # Converting the CSV to a panda dataframe
   dataframe = read_file(filename)
 
-  # Data cleaning , fix missing
-  dataframe = transform_data_columns_1_4(dataframe) 
 
   dataframe = visualize_data_columns_1_4(dataframe)
  
@@ -58,5 +68,4 @@ if __name__ == "__main__":
     
 
     
-
 
