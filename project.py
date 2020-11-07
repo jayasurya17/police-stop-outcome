@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 def read_file(filename):
   	return pd.read_csv(filename)
 
-
 def transform_data_columns_1_4(dataframe):
 	#The county name column can be dropped cause it is completely null
 	dataframe=dataframe.drop(columns=['county_name'], axis=1, inplace=False)
@@ -44,7 +43,16 @@ def group_and_plot_pivot_graph(df, columns, filename):
 
 def plot_pie_chart(df, column, filename):
 	fig, ax = plt.subplots()
-	counts = df[column].value_counts().plot(ax=ax, kind='pie')
+	df[column].value_counts().plot(ax=ax, kind='pie')
+	plt.tight_layout()
+	plt.savefig(filename)
+
+
+def plot_bar_graph(df, column, filename):
+	fig, ax = plt.subplots()
+	df[column].value_counts().plot(ax=ax, kind='bar')
+	plt.xlabel(column)
+	plt.ylabel('count')
 	plt.tight_layout()
 	plt.savefig(filename)
 
@@ -56,13 +64,29 @@ def transform_data_columns_9_12(df):
 	# search_type	
 	# stop_outcome
 
-	del df['search_type']
+	# Get the hour of day at which stop happened 
 	df['stop_hour'] = df['stop_time'].apply(lambda x: int(x.split(':')[0]))
+
+	# Remove unwanted column
+	plot_pie_chart(df, 'search_conducted', 'search_conducted.png')
+	del df['search_conducted']
+	
+	# Fill the empty values with string 'None' and make all the values atomic by splitting the comma separated search types
+	df['search_type'].fillna('None', inplace=True)
+	s = df['search_type'].str.split(',', expand=True).stack()
+	index = s.index.get_level_values(0)
+	df = df.loc[index].copy()
+	df['search_type'] = s.values
+
+	# Drop rows where the outcome is not avaliable
+	df = df[df.stop_outcome != 'N/D']
+
 	return df
 
 
 def visualize_data_columns_9_12(df):
-	plot_pie_chart(df, 'search_conducted', 'search_conducted.png')
+	df1 = df[df.search_type != 'None']
+	plot_bar_graph(df1, 'search_type', 'search_type.png')
 	group_and_plot_pivot_graph(df, ['stop_hour', 'violation'], 'violation.png')
 	group_and_plot_pivot_graph(df, ['violation', 'stop_outcome'], 'stop_outcome.png')
 
@@ -108,13 +132,14 @@ if __name__ == "__main__":
 	# Commenting out this method since it takes care of all columns and rows
 	# dataframe = general_preprocessing(dataframe)
 
-	# # Hari
+	# Hari Analysis
 	dataframe = transform_data_columns_1_4(dataframe) 
-	dataframe = visualize_data_columns_1_4(dataframe)
-
-
-	# Jayasurya
+	# Jayasurya Analysis
 	dataframe = transform_data_columns_9_12(dataframe) 
+	
+	# Hari visualization
+	visualize_data_columns_1_4(dataframe)
+	# Jayasurya visualization
 	visualize_data_columns_9_12(dataframe)
 
 
