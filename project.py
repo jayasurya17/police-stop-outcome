@@ -6,8 +6,6 @@ def read_file(filename):
   	return pd.read_csv(filename)
 
 
-
-
 def group_and_plot_pivot_graph(df, columns, filename):
 	grouped_multiple = df.groupby(columns).size().reset_index()
 	grouped_multiple.columns = columns + ['count']
@@ -102,6 +100,11 @@ def visualize_data_columns_9_12(df):
 	group_and_plot_pivot_graph(df, ['stop_hour', 'violation'], 'violation.png')
 	group_and_plot_pivot_graph(df, ['violation', 'stop_outcome'], 'stop_outcome.png')
 
+def visualize_data_columns_13_15(dataframe):
+	plot_pie_chart(dataframe, 'is_arrested', 'is_arrested.png')
+	plot_pie_chart(dataframe, 'stop_duration', 'stop_duration.png')
+	plot_pie_chart(dataframe, 'drugs_related_stop', 'drugs_related_stop.png')
+
 	
 def general_preprocessing(dataframe):
   
@@ -153,6 +156,8 @@ if __name__ == "__main__":
 	visualize_data_columns_1_4(dataframe)
 	# Jayasurya visualization
 	visualize_data_columns_9_12(dataframe)
+	# Anthony visualization
+	visualize_data_columns_13_15(dataframe)
 
 
 	# Perform a test train split to train our model
