@@ -50,7 +50,17 @@ def general_preprocessing(dataframe):
   print(df_clean.count())
 
   return df_clean
-   
+
+def test_train_split(dataframe):
+  # Set X for test train split and use get_dummies for one hot encoding
+  X = dataframe.drop(columns=["stop_outcome"])
+  X = pd.get_dummies(X)
+
+  # Set y for test train split
+  y = dataframe["stop_outcome"].copy()
+
+  # Perform the test train split
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
     
 if __name__ == "__main__":
 
@@ -59,13 +69,20 @@ if __name__ == "__main__":
   # Converting the CSV to a panda dataframe
   dataframe = read_file(filename)
 
+  # Data preprocessing and visualization
+
+  # Commenting out this method since it takes care of all columns and rows
+  # dataframe = general_preprocessing(dataframe)
+
+  dataframe = transform_data_columns_1_4(dataframe)
+
+
+  # Visualize the preprocessed dataset
 
   dataframe = visualize_data_columns_1_4(dataframe)
- 
 
 
-     
-    
+  # Perform a test train split to train our model
+  # Commenting it out for now since we need to wait till all the preprocessing is done
 
-    
-
+  # X_train, X_test, y_train, y_test = test_train_split(dataframe)
