@@ -86,10 +86,12 @@ def visualize_data_columns_1_4(dataframe):
   #The statistics of the first four coumns are as follows
 
   #Column 1 -> Stop Date - The year on which the person is stopped for each gender
+  plot_bar_graph(dataframe,'stop_year','priliminary_visualization/stop_year.png')
   group_and_plot_pivot_graph(dataframe, ['stop_year', 'driver_gender'], 'priliminary_visualization/gender_with_year.png')
 
 
   #Column 2 -> Stop Time - The hour on which the person is stopped for each gender
+  plot_bar_graph(dataframe,'stop_hour','priliminary_visualization/stop_hour.png')
   group_and_plot_pivot_graph(dataframe, ['stop_hour', 'driver_gender'], 'priliminary_visualization/gender_with_hour.png')
 
   #Column 3 -> Gender 

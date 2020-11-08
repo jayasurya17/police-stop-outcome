@@ -56,6 +56,8 @@ In the perspective of the project, Our aim is to assist researchers, journalists
 ## Outcome
 At the end of the project, we want to be able to present statistics visually on the different algorithms on how they predicted versus what the actual stop_outcomes were. Based on the different columns like driver_race, stop_time, driver_age, search_conducted, violation, and gender, we want to use these as parameters to be passed into our model and predict the stop_outcome that can act as an additional assistance to the police force. 
 
+
+
 ## Preliminary Analysis Writeup
 
 The data cleanup and visualization has been divided based on the number of columns into 4 parts. Each person is given 4 columns and are responsible for the data cleaning and visualization of those columns
@@ -66,3 +68,103 @@ The columns present in this section are Stop_time, Stop_year, gender of the pers
 The gender column contains nulls for some of the rows. The null values consitute of around 5% of the total values. Since the dataset is large enough, it is fine to discard the null values than replacing them with random or mode values. 
 
 Regarding the visualization, the stop time and stop year are primarily considered as base for visualization with respect to  gender. Bar plots of stop outcomes for each each gender are plotted for each hour of the day. Also they are plotted for each year. These insights provide a clear overview of the variance of gender with respect to time of the day and also year. Some of the key things that can be seen in general is, males are more prone to stop over female and times around 9am to 6pm have the highest stop outcomes.
+
+### Column: stop_date
+- **Datatype:** String
+- **Description:** It is the date on which the search was conducted by the police officer after the vehicle was stopped
+- **Values:** Dates in YYYY-MM--DD format.
+
+![Stop Date](priliminary_visualization/stop_year.png)
+
+**Observations**
+- Various Stop Dates are available with all of them between 2005 and 2015
+
+### Column: stop_time
+- **Datatype:** String 
+- **Description:** It is the time of the day on which the search was conducted by the police officer after the vehicle was stopped
+
+![Stop Time](priliminary_visualization/stop_hour.png)
+
+**Observations**
+- Times in the morning have the highest stop outcomesm also 11pm being an exception.
+
+
+
+### Column:  county_name
+- **Datatype:** String
+- **Values:** Contains All Nulls
+- **Description:** Describes the county name where the search was conducted by the police officer after the vehicle was stopped
+
+
+**Observations**
+- All the values are empty, so this column has no affect on the stop, hence deleting this column
+
+**Result:** This column can be deleted
+
+### Column:  driver_gender
+- **Datatype:** String
+- **Values:** Male , Female
+- **Description:** Describes wthe gender of the driver wheb search is conducted by the police officer after the vehicle was stopped
+
+![Driver Gender](priliminary_visualization/driver_gender.png)
+
+The graph between Gender and the hour of incident is as follows
+
+![Gender with Hour](priliminary_visualization/gender_with_hour.
+png)
+
+The graph between Gender and the year of incident is as follows
+
+![Gender with Year](priliminary_visualization/gender_with_year.png)
+
+**Observations**
+- Males have a higher chance of getting stopped over females
+
+
+### Columns 9 To 12
+### Column: violation
+- **Datatype:** String
+- **Values:** Equipment, Moving violation, Other, Registration/plates, Seat belt, Speeding 
+- **Description:** Describes the violation the person has committed
+
+![Violations](priliminary_visualization/violation.png)
+
+**Observations**
+- Speeding is the most frequently committed violation throughout the day
+- Number of violations peak between 9AM-11AM and again between 10PM-1AM
+- 4AM-5AM has the least number of violations
+
+### Column: search_conducted
+- **Datatype:** Boolean
+- **Description:** Describes if any search was conducted by the police officer after the vehicle was stopped
+
+![Search Conducted](priliminary_visualization/search_conducted.png)
+
+**Observations**
+- Most of the stops don't cause a search to be conducted by the police offer
+- This column does not provide any significant value to the dataset itself
+
+**Result:** This column can be deleted
+
+### Column:  search_type
+- **Datatype:** String
+- **Values:** Intend to Arrest, Probable Cause, Inventory, Reasonable Suspicion, Protective Frisk
+- **Description:** Describes what type of search was conducted by the police officer after the vehicle was stopped
+
+![Search Type](priliminary_visualization/search_type.png)
+
+**Observations**
+- Some stops had multiple searches conducted and this was recorded as comma separated values. When a single stop had multiple searches conducted, each search type was split into its own row so that all the values in this column are atomic
+- Incident to arrest is the most common search_type that has occurred
+
+
+
+### Column:  stop_outcome
+- **Datatype:** String
+- **Values:** Arrest Driver, Arrest Passenger, Citation, N/D, No Action, Warning
+- **Description:** Describes what type of search was conducted by the police officer after the vehicle was stopped
+
+![Stop Outcome](priliminary_visualization/stop_outcome.png)
+
+**Observations**
+- Citation is the most common outcome for any kind of violation
