@@ -55,3 +55,14 @@ In the perspective of the project, Our aim is to assist researchers, journalists
 
 ## Outcome
 At the end of the project, we want to be able to present statistics visually on the different algorithms on how they predicted versus what the actual stop_outcomes were. Based on the different columns like driver_race, stop_time, driver_age, search_conducted, violation, and gender, we want to use these as parameters to be passed into our model and predict the stop_outcome that can act as an additional assistance to the police force. 
+
+## Preliminary Analysis Writeup
+
+The data cleanup and visualization has been divided based on the number of columns into 4 parts. Each person is given 4 columns and are responsible for the data cleaning and visualization of those columns
+
+### Columns 1 To 4
+The columns present in this section are Stop_time, Stop_year, gender of the person and the county name. The county name can be dropped from the dataset because the county name is completeley null and it is not affecting the result. 
+
+The gender column contains nulls for some of the rows. The null values consitute of around 5% of the total values. Since the dataset is large enough, it is fine to discard the null values than replacing them with random or mode values. 
+
+Regarding the visualization, the stop time and stop year are primarily considered as base for visualization with respect to  gender. Bar plots of stop outcomes for each each gender are plotted for each hour of the day. Also they are plotted for each year. These insights provide a clear overview of the variance of gender with respect to time of the day and also year. Some of the key things that can be seen in general is, males are more prone to stop over female and times around 9am to 6pm have the highest stop outcomes.
