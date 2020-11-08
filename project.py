@@ -34,6 +34,7 @@ def plot_bar_graph(df, column, filename):
 	plt.tight_layout()
 	plt.savefig(filename)
 
+
 def plot_kde_graph(df, column, filename):
 	fig, ax = plt.subplots()
 	df[column].value_counts().plot(ax=ax, kind='kde')
@@ -41,6 +42,7 @@ def plot_kde_graph(df, column, filename):
 	plt.ylabel('count')
 	plt.tight_layout()
 	plt.savefig(filename)
+
 
 def transform_data_columns_1_4(dataframe):
 	#The county name column can be dropped cause it is completely null
@@ -56,6 +58,7 @@ def transform_data_columns_1_4(dataframe):
 	dataframe['stop_year'] = dataframe['stop_date'].apply(lambda x: int(x.split('-')[0]))
   
 	return dataframe
+
 
 def transform_data_columns_5_8(df):
 	# There are 2 similar columns that is driver's year of birth and driver's age 
@@ -79,7 +82,6 @@ def transform_data_columns_5_8(df):
 	df["violations_raw"]= df["violation_raw"].fillna(df["violation_raw"].mode())
 	df=df.drop(columns=["violation_raw"], axis=1, inplace=False)
 	return df
-	
     
     
 def visualize_data_columns_1_4(dataframe):  
@@ -189,21 +191,19 @@ if __name__ == "__main__":
 
 	# Hari Analysis
 	dataframe = transform_data_columns_1_4(dataframe)
-	
+	# Akash's Anaylsis
+	dataframe=transform_data_columns_5_8(dataframe)
 	# Jayasurya Analysis
-	dataframe = transform_data_columns_9_12(dataframe) 
+	dataframe = transform_data_columns_9_12(dataframe)
 	
 	# Hari visualization
 	visualize_data_columns_1_4(dataframe)
+	# Akash's visualization
+	visualize_data_columns_5_8(dataframe)
 	# Jayasurya visualization
 	visualize_data_columns_9_12(dataframe)
 	# Anthony visualization
 	visualize_data_columns_13_15(dataframe)
-    
-	#Akash's Anaylsis
-	dataframe=transform_data_columns_5_8(dataframe)
-	#Akash's visualization
-	visualize_data_columns_5_8(dataframe)
 
 	# Perform a test train split to train our model
 	# Commenting it out for now since we need to wait till all the preprocessing is done

@@ -58,11 +58,11 @@ At the end of the project, we want to be able to present statistics visually on 
 
 
 
-## Preliminary Analysis Writeup
+# Preliminary Analysis Writeup
 
 The data cleanup and visualization has been divided based on the number of columns into 4 parts. Each person is given 4 columns and are responsible for the data cleaning and visualization of those columns
 
-### Columns 1 To 4
+## Columns 1 to 4
 The columns present in this section are Stop_time, Stop_year, gender of the person and the county name. The county name can be dropped from the dataset because the county name is completeley null and it is not affecting the result. 
 
 The gender column contains nulls for some of the rows. The null values consitute of around 5% of the total values. Since the dataset is large enough, it is fine to discard the null values than replacing them with random or mode values. 
@@ -110,8 +110,7 @@ Regarding the visualization, the stop time and stop year are primarily considere
 
 The graph between Gender and the hour of incident is as follows
 
-![Gender with Hour](priliminary_visualization/gender_with_hour.
-png)
+![Gender with Hour](priliminary_visualization/gender_with_hour.png)
 
 The graph between Gender and the year of incident is as follows
 
@@ -121,7 +120,7 @@ The graph between Gender and the year of incident is as follows
 - Males have a higher chance of getting stopped over females
 
 
-### Columns 9 To 12
+## Columns 9 to 12
 ### Column: violation
 - **Datatype:** String
 - **Values:** Equipment, Moving violation, Other, Registration/plates, Seat belt, Speeding 
@@ -168,3 +167,38 @@ The graph between Gender and the year of incident is as follows
 
 **Observations**
 - Citation is the most common outcome for any kind of violation
+
+## Columns 13 to 15
+
+### Column:  is_arrested
+- **Datatype:** Boolean
+- **Description:** Describes if an arrest was made for a given stop
+
+![Is Arrested](priliminary_visualization/is_arrested.png)
+
+**Observations**
+- Based on the stop_outcome column, only the stop outcomes that are Arrest Driver or Arrest Passenger are true for this column
+- 92% of the not arrested stops are citations
+
+### Column:  stop_duration
+- **Datatype:** String
+- **Values:** 0-15 Min, 16-30 Min, 30+ Min
+- **Description:** Describes how long a police stop takes
+
+![Is Arrested](priliminary_visualization/stop_duration.png)
+
+**Observations**
+- Majority of the police stops take less than 16 minutes
+- Of the stops that are 30+ minutes, seems like more of the stops end up in arrest
+- Of the stops thare are 16-30 minutes, majority of the stops do not end up in an arrest
+- Of the stops thare are 0-15 minutes, a vast majority of the stops do not end up in an arrest
+
+### Column:  drugs_related_stop
+- **Datatype:** Boolean
+- **Description:** Describes if a stop had drugs involved
+
+![Is Arrested](priliminary_visualization/drugs_related_stop.png)
+
+**Observations**
+- A small subset of the true drug related stops, around 26%, ended up in arrest
+- Around 3% of the not drug related stops ended up in an arrest
