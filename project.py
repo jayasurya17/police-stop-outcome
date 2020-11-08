@@ -86,24 +86,24 @@ def visualize_data_columns_1_4(dataframe):
   #The statistics of the first four coumns are as follows
 
   #Column 1 -> Stop Date - The year on which the person is stopped for each gender
-  group_and_plot_pivot_graph(dataframe, ['stop_year', 'driver_gender'], 'gender_with_year.png')
+  group_and_plot_pivot_graph(dataframe, ['stop_year', 'driver_gender'], 'priliminary_visualization/gender_with_year.png')
 
 
   #Column 2 -> Stop Time - The hour on which the person is stopped for each gender
-  group_and_plot_pivot_graph(dataframe, ['stop_hour', 'driver_gender'], 'gender_with_hour.png')
+  group_and_plot_pivot_graph(dataframe, ['stop_hour', 'driver_gender'], 'priliminary_visualization/gender_with_hour.png')
 
   #Column 3 -> Gender 
   print(dataframe['driver_gender'].value_counts())
-  plot_pie_chart(dataframe,'driver_gender','driver_gender.png')
+  plot_pie_chart(dataframe,'driver_gender','priliminary_visualization/driver_gender.png')
 
   return dataframe
 
 def visualize_data_columns_5_8(df):
 	
-	plot_pie_chart(df, 'drivers_race', 'drivers_race.png')
+	plot_pie_chart(df, 'drivers_race', 'priliminary_visualization/drivers_race.png')
 	
-	plot_bar_graph(df, 'violations_raw', 'violations_raw.png')
-	plot_kde_graph(df, 'drivers_age', 'drivers_age.png')
+	plot_bar_graph(df, 'violations_raw', 'priliminary_visualization/violations_raw.png')
+	plot_kde_graph(df, 'drivers_age', 'priliminary_visualization/drivers_age.png')
 
 def transform_data_columns_9_12(df): 
 	# Columns
@@ -116,7 +116,7 @@ def transform_data_columns_9_12(df):
 	df['stop_hour'] = df['stop_time'].apply(lambda x: int(x.split(':')[0]))
 
 	# Remove unwanted column
-	plot_pie_chart(df, 'search_conducted', 'search_conducted.png')
+	plot_pie_chart(df, 'search_conducted', 'priliminary_visualization/search_conducted.png')
 	del df['search_conducted']
 	
 	# Fill the empty values with string 'None' and make all the values atomic by splitting the comma separated search types
@@ -134,14 +134,14 @@ def transform_data_columns_9_12(df):
 
 def visualize_data_columns_9_12(df):
 	df1 = df[df.search_type != 'None']
-	plot_bar_graph(df1, 'search_type', 'search_type.png')
-	group_and_plot_pivot_graph(df, ['stop_hour', 'violation'], 'violation.png')
-	group_and_plot_pivot_graph(df, ['violation', 'stop_outcome'], 'stop_outcome.png')
+	plot_bar_graph(df1, 'search_type', 'priliminary_visualization/search_type.png')
+	group_and_plot_pivot_graph(df, ['stop_hour', 'violation'], 'priliminary_visualization/violation.png')
+	group_and_plot_pivot_graph(df, ['violation', 'stop_outcome'], 'priliminary_visualization/stop_outcome.png')
 
 def visualize_data_columns_13_15(dataframe):
-	plot_pie_chart(dataframe, 'is_arrested', 'is_arrested.png')
-	plot_pie_chart(dataframe, 'stop_duration', 'stop_duration.png')
-	plot_pie_chart(dataframe, 'drugs_related_stop', 'drugs_related_stop.png')
+	plot_pie_chart(dataframe, 'is_arrested', 'priliminary_visualization/is_arrested.png')
+	plot_pie_chart(dataframe, 'stop_duration', 'priliminary_visualization/stop_duration.png')
+	plot_pie_chart(dataframe, 'drugs_related_stop', 'priliminary_visualization/drugs_related_stop.png')
 
 	
 def general_preprocessing(dataframe):
@@ -188,12 +188,8 @@ if __name__ == "__main__":
 	# Hari Analysis
 	dataframe = transform_data_columns_1_4(dataframe)
 	
-	
-
-    
 	# Jayasurya Analysis
 	dataframe = transform_data_columns_9_12(dataframe) 
-	# print(dataframe['stop_hour'].value_counts())
 	
 	# Hari visualization
 	visualize_data_columns_1_4(dataframe)
