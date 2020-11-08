@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
@@ -61,17 +62,11 @@ def transform_data_columns_1_4(dataframe):
 
 
 def transform_data_columns_5_8(df):
-	# There are 2 similar columns that is driver's year of birth and driver's age 
-    # which provide converging information, pre-pruning is performed and driver's year of birth is
-    # dropped as driver's age is sufficient for analysis.
-    # It also helps in removing unneccessary branches before performing classification
-	df=df.drop(columns=['driver_age_raw'], axis=1, inplace=False)
 
     #To clean the driver's age column and treat null values, we can replace it with the average value
-	#of age in column
-	df["drivers_age"]= df["driver_age"].fillna(df["driver_age"].mean())
-	df=df.drop(columns=["driver_age"], axis=1, inplace=False)
-    
+	#of age in column where there is an incorrect value, null value or age less than 16.	
+	df["drivers_age_new"]= df["driver_age"]
+	    
 	#To clean the driver's race column and treat null values, we can replace it with the most frequent value
 	#of race in column
 	df["drivers_race"]= df["driver_race"].fillna(df["driver_race"].mode())
@@ -81,6 +76,24 @@ def transform_data_columns_5_8(df):
 	#of violation in column
 	df["violations_raw"]= df["violation_raw"].fillna(df["violation_raw"].mode())
 	df=df.drop(columns=["violation_raw"], axis=1, inplace=False)
+	
+	x=0
+	y=0
+	z=int(df["driver_age"].mean())
+ 
+	for i in df.index:
+		x= df["stop_year"][i]-df["driver_age_raw"][i]
+		if(x<16 or df["driver_age"][i]==np.nan or x!= df["driver_age"][i]):
+			y=y+1
+			df["drivers_age_new"][i]=z
+								
+	# There are 2 similar columns that is driver's year of birth and driver's age 
+    # which provide converging information, pre-pruning is performed and driver's year of birth is
+    # dropped as driver's age is sufficient for analysis.
+    # It also helps in removing unneccessary branches before performing classification
+	df=df.drop(columns=["driver_age"], axis=1, inplace=False)
+	df=df.drop(columns=['driver_age_raw'], axis=1, inplace=False)
+
 	return df
     
     
@@ -107,7 +120,7 @@ def visualize_data_columns_5_8(df):
 	plot_pie_chart(df, 'drivers_race', 'priliminary_visualization/drivers_race.png')
 	
 	plot_bar_graph(df, 'violations_raw', 'priliminary_visualization/violations_raw.png')
-	plot_kde_graph(df, 'drivers_age', 'priliminary_visualization/drivers_age.png')
+	plot_kde_graph(df, 'drivers_age_new', 'priliminary_visualization/drivers_age.png')
 
 def transform_data_columns_9_12(df): 
 	# Columns
