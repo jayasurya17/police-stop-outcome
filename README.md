@@ -67,7 +67,6 @@ The columns present in this section are Stop_time, Stop_year, gender of the pers
 
 The gender column contains nulls for some of the rows. The null values consitute of around 5% of the total values. Since the dataset is large enough, it is fine to discard the null values than replacing them with random or mode values. 
 
-Regarding the visualization, the stop time and stop year are primarily considered as base for visualization with respect to  gender. Bar plots of stop outcomes for each each gender are plotted for each hour of the day. Also they are plotted for each year. These insights provide a clear overview of the variance of gender with respect to time of the day and also year. Some of the key things that can be seen in general is, males are more prone to stop over female and times around 9am to 6pm have the highest stop outcomes.
 
 ### Column: stop_date
 - **Datatype:** String
@@ -77,7 +76,7 @@ Regarding the visualization, the stop time and stop year are primarily considere
 ![Stop Date](priliminary_visualization/stop_year.png)
 
 **Observations**
-- Various Stop Dates are available with all of them between 2005 and 2015
+- The dates are visualized by plotting the number of stop outcomes happening per yer. This bar graph provides some insight about the stop outcomes. When plotted we can see that the year 2012 has the highest  number of stop outcomes while 2005 has the least.
 
 ### Column: stop_time
 - **Datatype:** String 
@@ -86,7 +85,7 @@ Regarding the visualization, the stop time and stop year are primarily considere
 ![Stop Time](priliminary_visualization/stop_hour.png)
 
 **Observations**
-- Times in the morning have the highest stop outcomesm also 11pm being an exception.
+- Times in the morning and afternoon have the highest stop outcomes, with 11pm, 12am being some exception.
 
 
 
@@ -108,11 +107,11 @@ Regarding the visualization, the stop time and stop year are primarily considere
 
 ![Driver Gender](priliminary_visualization/driver_gender.png)
 
-The graph between Gender and the hour of incident is as follows
+The graph between Gender and the hour of incident is as follows. Here the graph displays the variation of stop count with day of the hour also considering the gender into account.
 
 ![Gender with Hour](priliminary_visualization/gender_with_hour.png)
 
-The graph between Gender and the year of incident is as follows
+The graph between Gender and the year of incident is as follows. Here the graph displays the variation of stop count with the year also considering the gender into account.
 
 ![Gender with Year](priliminary_visualization/gender_with_year.png)
 
