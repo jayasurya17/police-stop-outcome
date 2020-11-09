@@ -60,7 +60,12 @@ At the end of the project, we want to be able to present statistics visually on 
 
 # Preliminary Analysis Writeup
 
-The data cleanup and visualization has been divided based on the number of columns into 4 parts. Each person is given 4 columns and are responsible for the data cleaning and visualization of those columns
+To perform Preliminary Preprocessing and Visualization, each member of the group is given 4 columns to perform different operations as the total number of columns are 16.
+
+- Akash Aggarwal - Columns 5 to 8.
+- Anthony Minaise- Columns 13 to 15
+- Jayasurya Pinaki-Columns 9 to 12
+- Sri Hari Duvvuri- Columns 1 to 4
 
 ## Columns 1 to 4
 
