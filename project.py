@@ -38,7 +38,15 @@ def plot_bar_graph(df, column, filename):
 
 def plot_kde_graph(df, column, filename):
 	fig, ax = plt.subplots()
-	df[column].value_counts().plot(ax=ax, kind='kde')
+	df[column].plot(ax=ax, kind='kde')
+	plt.xlabel(column)
+	plt.ylabel('Probability Distribution')
+	plt.tight_layout()
+	plt.savefig(filename)
+
+def plot_hist_graph(df, column, filename):
+	fig, ax = plt.subplots()
+	df[column].plot(ax=ax, kind='hist')
 	plt.xlabel(column)
 	plt.ylabel('count')
 	plt.tight_layout()
@@ -121,6 +129,7 @@ def visualize_data_columns_5_8(df):
 	
 	plot_bar_graph(df, 'violations_raw', 'priliminary_visualization/violations_raw.png')
 	plot_kde_graph(df, 'drivers_age_new', 'priliminary_visualization/drivers_age.png')
+	plot_hist_graph(df, 'drivers_age_new', 'priliminary_visualization/drivers_hist_age.png')
 
 def transform_data_columns_9_12(df): 
 	# Columns
