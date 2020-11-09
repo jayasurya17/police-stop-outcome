@@ -148,6 +148,16 @@ def transform_data_columns_9_12(df):
 
 	return df
 
+def transform_data_columns_13_15(dataframe):
+	# Replace 1 and 2 in the stop_duration column with 0-15 Min
+	dataframe['stop_duration'] = dataframe['stop_duration'].str.replace("1", '0-15 Min')
+	dataframe['stop_duration'] = dataframe['stop_duration'].str.replace("2", '0-15 Min')
+
+	# Fix the other values that were impacted
+	dataframe['stop_duration'] = dataframe['stop_duration'].str.replace("0-0-15 Min5 Min", '0-15 Min')
+	dataframe['stop_duration'] = dataframe['stop_duration'].str.replace("0-15 Min6-30 Min", '16-30 Min')
+
+	return dataframe
 
 def visualize_data_columns_9_12(df):
 	df1 = df[df.search_type != 'None']
@@ -163,20 +173,10 @@ def visualize_data_columns_13_15(dataframe):
 	
 def general_preprocessing(dataframe):
   
-	# Define columns that are already mostly null to drop
-	raw_columns = []
-	for c in dataframe.columns:
-		if "search_type" in c or "county_name" in c:
-			raw_columns.append(c)
+	dataframe.dropna()
+	print(dataframe.count())
 
-	# Drop previously marked null columns
-	df_clean = dataframe.drop(columns=raw_columns)
-
-	# Drop remaining rows that have nulls
-	df_clean = df_clean.dropna()
-	print(df_clean.count())
-
-	return df_clean
+	return dataframe
 
 def test_train_split(dataframe):
 	# Set X for test train split and use get_dummies for one hot encoding
@@ -199,15 +199,14 @@ if __name__ == "__main__":
 
 	# Data preprocessing and visualization
 
-	# Commenting out this method since it takes care of all columns and rows
-	# dataframe = general_preprocessing(dataframe)
-
 	# Hari Analysis
 	dataframe = transform_data_columns_1_4(dataframe)
 	# Akash's Anaylsis
 	dataframe=transform_data_columns_5_8(dataframe)
 	# Jayasurya Analysis
 	dataframe = transform_data_columns_9_12(dataframe)
+	# Anthony Analysis
+	dataframe = transform_data_columns_13_15(dataframe)
 	
 	# Hari visualization
 	visualize_data_columns_1_4(dataframe)
@@ -217,6 +216,9 @@ if __name__ == "__main__":
 	visualize_data_columns_9_12(dataframe)
 	# Anthony visualization
 	visualize_data_columns_13_15(dataframe)
+
+	# Last minute catches to finalize preprocessing
+	dataframe = general_preprocessing(dataframe)
 
 	# Perform a test train split to train our model
 	# Commenting it out for now since we need to wait till all the preprocessing is done
