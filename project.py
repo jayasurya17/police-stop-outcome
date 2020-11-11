@@ -44,6 +44,7 @@ def plot_kde_graph(df, column, filename):
 	plt.tight_layout()
 	plt.savefig(filename)
 
+
 def plot_hist_graph(df, column, filename):
 	fig, ax = plt.subplots()
 	df[column].plot(ax=ax, kind='hist')
@@ -123,39 +124,39 @@ def visualize_data_columns_1_4(dataframe):
 
   return dataframe
 
+
 def visualize_data_columns_5_8(df):
-	
 	plot_pie_chart(df, 'drivers_race', 'priliminary_visualization/drivers_race.png')
-	
 	plot_bar_graph(df, 'violations_raw', 'priliminary_visualization/violations_raw.png')
 	plot_kde_graph(df, 'drivers_age_new', 'priliminary_visualization/drivers_age.png')
 	plot_hist_graph(df, 'drivers_age_new', 'priliminary_visualization/drivers_hist_age.png')
 
-def transform_data_columns_9_12(df): 
-	# Columns
-	# violation	
-	# search_conducted	
-	# search_type	
-	# stop_outcome
 
+def calculate_search_score(weights, search_type):
+	search = search_type.split(',')
+	total_weight = 0
+	for value in search:
+		total_weight += pow(2, weights[value])
+	return total_weight
+
+
+def transform_data_columns_9_12(df): 
 	# Get the hour of day at which stop happened 
 	df['stop_hour'] = df['stop_time'].apply(lambda x: int(x.split(':')[0]))
-
-	# Remove unwanted column
-	plot_pie_chart(df, 'search_conducted', 'priliminary_visualization/search_conducted.png')
-	del df['search_conducted']
 	
-	# Fill the empty values with string 'None' and make all the values atomic by splitting the comma separated search types
+	# Fill the empty values with string 'None' and calculate search score by converting search types into a numberic value
 	df['search_type'].fillna('None', inplace=True)
-	s = df['search_type'].str.split(',', expand=True).stack()
-	index = s.index.get_level_values(0)
-	df = df.loc[index].copy()
-	df['search_type'] = s.values
+	lst = df['search_type'].str.split(',').explode().unique().tolist()
+	weights = {}
+	for i in range(len(lst)):
+		weights[lst[i]] = i
+	df['search_score'] = df['search_type'].apply(lambda x: calculate_search_score(weights, x))
 
 	# Drop rows where the outcome is not avaliable
 	df = df[df.stop_outcome != 'N/D']
 
 	return df
+
 
 def transform_data_columns_13_15(dataframe):
 	# Replace 1 and 2 in the stop_duration column with 0-15 Min
@@ -168,11 +169,21 @@ def transform_data_columns_13_15(dataframe):
 
 	return dataframe
 
+
 def visualize_data_columns_9_12(df):
+	plot_pie_chart(df, 'search_conducted', 'priliminary_visualization/search_conducted.png')
+
 	df1 = df[df.search_type != 'None']
+	s = df1['search_type'].str.split(',', expand=True).stack()
+	index = s.index.get_level_values(0)
+	df1 = df1.loc[index].copy()
+	df1['search_type'] = s.values
 	plot_bar_graph(df1, 'search_type', 'priliminary_visualization/search_type.png')
+
 	group_and_plot_pivot_graph(df, ['stop_hour', 'violation'], 'priliminary_visualization/violation.png')
+	
 	group_and_plot_pivot_graph(df, ['violation', 'stop_outcome'], 'priliminary_visualization/stop_outcome.png')
+
 
 def visualize_data_columns_13_15(dataframe):
 	plot_pie_chart(dataframe, 'is_arrested', 'priliminary_visualization/is_arrested.png')
@@ -181,7 +192,10 @@ def visualize_data_columns_13_15(dataframe):
 
 	
 def general_preprocessing(dataframe):
-  
+  	# Remove unwanted column
+	del dataframe['search_conducted']
+	del dataframe['search_type']
+
 	dataframe.dropna()
 	print(dataframe.count())
 

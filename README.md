@@ -232,6 +232,17 @@ The columns present in subsequent section are Driver_age_raw, Driver_age, Driver
 - Some stops had multiple searches conducted and this was recorded as comma separated values. When a single stop had multiple searches conducted, each search type was split into its own row so that all the values in this column are atomic
 - Incident to arrest is the most common search_type that has occurred
 
+**Result**
+- Since this column has a combination of these five values, each type of seach is assigned a weight and transformed to a numeric value
+- This value is stored in the column search_type_score
+- The following steps are done to calculate the score
+
+1. Assign position for each of the values that can occur as a type of search. Example: (Intend to Arrest, Probable Cause, Inventory, Reasonable Suspicion, Protective Frisk, No arrest)
+2. Each of the value will be initialized to 0
+3. If any of the search type occurs then change the value to 1
+4. Convert the binary representation to integer representation
+ 
+
 ### Column: stop_outcome
 
 - **Datatype:** String
