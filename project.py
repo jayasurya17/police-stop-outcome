@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
 
 def read_file(filename):
   	return pd.read_csv(filename)
@@ -211,7 +213,56 @@ def test_train_split(dataframe):
 
 	# Perform the test train split
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+	return X_train, X_test, y_train, y_test
     
+def random_forest(X_train, X_test, y_train, y_test, df_clean):
+	# Set the parameters you want to evaluate 
+	# param_grid = {'n_estimators': [50,75,100,150,200,250,300,350,400,450,500],
+	# 			'max_depth': [None,1,2,3,4,5,10,20,30,50,75,100,150]
+	# 			}
+	param_grid = {'n_estimators': [50,75,100,150,200],
+				'max_depth': [None,1,2,3,4,5]
+				}			
+
+	# Create the GridSearch object for the Random Forest classifier passing the parameters
+	grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
+							param_grid, cv=5)
+
+	# Fit data to the model -- cross validation will be performed during grid search
+	grid_search.fit(X_train, y_train)
+
+	# Printing accuracies, best parameters, and best estimator
+	print("Best parameters: {}".format(grid_search.best_params_))
+	print("Best cross-validation score: {:.2f}".format(grid_search.best_score_))
+	print("Best estimator:\n{}".format(grid_search.best_estimator_))
+	print("Test set score: {:.2f}".format(grid_search.score(X_test, y_test)))
+
+	dict = {}
+
+	# For every column in the dataset, remove the column and train the model, store accuracy
+	for c in df_clean.columns:
+		x_t = df_clean.drop(columns=[c])
+		x_t = pd.get_dummies(x_t)
+		X_train, X_test, y_train, y_test = train_test_split(x_t, dataframe["stop_outcome"].copy(), test_size=0.2, random_state=0)
+		print(x_t.count())
+		grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
+								param_grid, cv=5)
+		grid_search.fit(X_train, y_train)
+		dict[c] = grid_search.best_score_
+
+	# Same for removing no columns
+	x_t = pd.get_dummies(df_clean)
+	X_train, X_test, y_train, y_test = train_test_split(x_t, dataframe["stop_outcome"].copy(), test_size=0.2, random_state=0)
+	print(x_t.count())
+	grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
+							param_grid, cv=5)
+	grid_search.fit(X_train, y_train)
+	dict['None'] = grid_search.best_score_
+
+	print(dict)
+
+	# Return the results
+	return dict
 
 if __name__ == "__main__":
 
@@ -244,6 +295,8 @@ if __name__ == "__main__":
 	dataframe = general_preprocessing(dataframe)
 
 	# Perform a test train split to train our model
-	# Commenting it out for now since we need to wait till all the preprocessing is done
+	X_train, X_test, y_train, y_test = test_train_split(dataframe)
 
-	# X_train, X_test, y_train, y_test = test_train_split(dataframe)
+	# Random Forest
+	# Commented out since still a work in progress
+	# random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
