@@ -237,13 +237,15 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 	print("Test set score: {:.2f}".format(grid_search.score(X_test, y_test)))
 
 	dict = {}
+	y = df_clean["stop_outcome"].copy()
+	df_clean = df_clean.drop(columns=['stop_outcome'])
 
 	# For every column in the dataset, remove the column and train the model, store accuracy
 	for c in df_clean.columns:
 		print("Removing column", c)
 		x_t = df_clean.drop(columns=[c])
 		x_t = pd.get_dummies(x_t)
-		X_train, X_test, y_train, y_test = train_test_split(x_t, dataframe["stop_outcome"].copy(), test_size=0.2, random_state=0)
+		X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
 		grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
 								param_grid, cv=5)
 		grid_search.fit(X_train, y_train)
@@ -251,7 +253,7 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 
 	# Same for removing no columns
 	x_t = pd.get_dummies(df_clean)
-	X_train, X_test, y_train, y_test = train_test_split(x_t, dataframe["stop_outcome"].copy(), test_size=0.2, random_state=0)
+	X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
 	print("Removing no columns")
 	grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
 							param_grid, cv=5)
@@ -263,6 +265,19 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 
 	# Return the results
 	return dict
+
+def random_forest_visualizaton(random_forest):
+	plt.plot(list(random_forest.values()), '--', marker='o')
+	ax = plt.subplot()
+
+	keys = random_forest.keys()
+	ax.set_xticklabels(keys,rotation = (25), fontsize = 8, ha='right')
+	plt.xticks((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14),keys)
+
+	plt.title('Random Forest')
+	plt.xlabel('Columns Removed')
+	plt.ylabel('Accuracy')
+	plt.show()
 
 if __name__ == "__main__":
 
@@ -301,9 +316,5 @@ if __name__ == "__main__":
 	# Commented out since still a work in progress
 	# random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
-	# Results from running random forest (since it will take a few hours to run)
-	# random_forest_results = {'stop_date': 1.0, 'stop_time': 1.0, 'driver_gender': 1.0, 'violation': 1.0, 
-	# 						'stop_outcome': 0.9281011579106888, 'is_arrested': 1.0, 'stop_duration': 1.0, 
-	# 						'drugs_related_stop': 0.999985433357611, 'stop_year': 1.0, 'drivers_age_new': 0.999985433357611, 
-	# 						'drivers_race': 1.0, 'violations_raw': 1.0, 'stop_hour': 0.999985433357611, 'search_score': 1.0, 
-	# 						'None': 1.0}
+	# Displaying results from running random forest
+	# random_forest_visualizaton(random_forest_results)
