@@ -216,13 +216,12 @@ def test_train_split(dataframe):
 	return X_train, X_test, y_train, y_test
     
 def random_forest(X_train, X_test, y_train, y_test, df_clean):
+	print("Start Random Forest")
 	# Set the parameters you want to evaluate 
 	# param_grid = {'n_estimators': [50,75,100,150,200,250,300,350,400,450,500],
 	# 			'max_depth': [None,1,2,3,4,5,10,20,30,50,75,100,150]
 	# 			}
-	param_grid = {'n_estimators': [50,75,100,150,200],
-				'max_depth': [None,1,2,3,4,5]
-				}			
+	param_grid = {'n_estimators': [200],'max_depth': [None]}			
 
 	# Create the GridSearch object for the Random Forest classifier passing the parameters
 	grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
@@ -241,10 +240,10 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 
 	# For every column in the dataset, remove the column and train the model, store accuracy
 	for c in df_clean.columns:
+		print("Removing column", c)
 		x_t = df_clean.drop(columns=[c])
 		x_t = pd.get_dummies(x_t)
 		X_train, X_test, y_train, y_test = train_test_split(x_t, dataframe["stop_outcome"].copy(), test_size=0.2, random_state=0)
-		print(x_t.count())
 		grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
 								param_grid, cv=5)
 		grid_search.fit(X_train, y_train)
@@ -253,13 +252,14 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 	# Same for removing no columns
 	x_t = pd.get_dummies(df_clean)
 	X_train, X_test, y_train, y_test = train_test_split(x_t, dataframe["stop_outcome"].copy(), test_size=0.2, random_state=0)
-	print(x_t.count())
+	print("Removing no columns")
 	grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
 							param_grid, cv=5)
 	grid_search.fit(X_train, y_train)
 	dict['None'] = grid_search.best_score_
 
 	print(dict)
+	print("Random Forest Completed")
 
 	# Return the results
 	return dict
@@ -300,3 +300,10 @@ if __name__ == "__main__":
 	# Random Forest
 	# Commented out since still a work in progress
 	# random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+
+	# Results from running random forest (since it will take a few hours to run)
+	# random_forest_results = {'stop_date': 1.0, 'stop_time': 1.0, 'driver_gender': 1.0, 'violation': 1.0, 
+	# 						'stop_outcome': 0.9281011579106888, 'is_arrested': 1.0, 'stop_duration': 1.0, 
+	# 						'drugs_related_stop': 0.999985433357611, 'stop_year': 1.0, 'drivers_age_new': 0.999985433357611, 
+	# 						'drivers_race': 1.0, 'violations_raw': 1.0, 'stop_hour': 0.999985433357611, 'search_score': 1.0, 
+	# 						'None': 1.0}
