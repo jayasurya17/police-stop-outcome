@@ -217,6 +217,7 @@ def test_train_split(dataframe):
     
 def random_forest(X_train, X_test, y_train, y_test, df_clean):
 	print("Start Random Forest")
+	# Find best parameters to run the model most efficently
 	# Set the parameters you want to evaluate 
 	# param_grid = {'n_estimators': [50,75,100,150,200,250,300,350,400,450,500],
 	# 			'max_depth': [None,1,2,3,4,5,10,20,30,50,75,100,150]
@@ -236,6 +237,7 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 	print("Best estimator:\n{}".format(grid_search.best_estimator_))
 	print("Test set score: {:.2f}".format(grid_search.score(X_test, y_test)))
 
+	# Find out which column is most impactful in predicting stop_outcome
 	dict = {}
 	y = df_clean["stop_outcome"].copy()
 	df_clean = df_clean.drop(columns=['stop_outcome'])
@@ -277,7 +279,7 @@ def random_forest_visualizaton(random_forest):
 	plt.title('Random Forest')
 	plt.xlabel('Columns Removed')
 	plt.ylabel('Accuracy')
-	plt.show()
+	plt.savefig('random_forest.png')
 
 if __name__ == "__main__":
 
@@ -316,5 +318,14 @@ if __name__ == "__main__":
 	# Commented out since still a work in progress
 	# random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
+	# Results from running random forest (so you don't have to run the method)
+	# Comment out this line if you decide to run the random_forest method and get the accuracies from there
+	random_forest_results = {'stop_date': 0.9252461904188284, 'stop_time': 0.926964979960656, 
+							'driver_gender': 0.9277224305128671, 'violation': 0.9279409184792622, 
+							'is_arrested': 0.899187219333417, 'stop_duration': 0.9279554946693738, 
+							'drugs_related_stop': 0.9279700602509047, 'stop_year': 0.9279555020953805, 
+							'drivers_age_new': 0.9265279859932785, 'drivers_race': 0.927300020161608, 
+							'violations_raw': 0.9274311019085207, 'stop_hour': 0.9267756401310521,
+							'search_score': 0.9279117989856394, 'None': 0.9281011579106888}
 	# Displaying results from running random forest
-	# random_forest_visualizaton(random_forest_results)
+	random_forest_visualizaton(random_forest_results)
