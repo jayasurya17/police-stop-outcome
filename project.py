@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import metrics
+
 
 def read_file(filename):
   	return pd.read_csv(filename)
@@ -281,6 +284,35 @@ def random_forest_visualizaton(random_forest):
 	plt.ylabel('Accuracy')
 	plt.savefig('random_forest.png')
 
+def decision_tree(X_train, X_test, y_train, y_test, df_clean):
+	# Set the parameters you want to evaluate 
+
+	params = {'max_leaf_nodes': list(range(2, 8)), 'min_samples_split': [2, 3]}
+
+	# Create the GridSearch object for the Random Forest classifier passing the parameters
+	grid_search_cv = GridSearchCV(DecisionTreeClassifier(random_state=42), params, verbose=1, cv=3)		
+
+	# Fit data to the model -- cross validation will be performed during grid search
+	grid_search_cv.fit(X_train, y_train)
+
+	# Printing accuracies, best parameters, and best estimator
+	print("Best parameters: {}".format(grid_search_cv.best_params_))
+	print("Best cross-validation score: {:.2f}".format(grid_search_cv.best_score_))
+	print("Best estimator:\n{}".format(grid_search_cv.best_estimator_))
+	print("Test set score: {:.2f}".format(grid_search_cv.score(X_test, y_test)))
+
+	# Create Decision Tree classifer object
+	clf = DecisionTreeClassifier()
+
+	# Train Decision Tree Classifer
+	clf = clf.fit(X_train,y_train)
+
+	#Predict the response for test dataset
+	y_pred = clf.predict(X_test)
+	
+	print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+
 if __name__ == "__main__":
 
 	filename = "police_project.csv"
@@ -329,3 +361,10 @@ if __name__ == "__main__":
 							'search_score': 0.9279117989856394, 'None': 0.9281011579106888}
 	# Displaying results from running random forest
 	random_forest_visualizaton(random_forest_results)
+
+	# Decision Trees
+	# Commented out since still a work in progress
+	decision_tree(X_train, X_test, y_train, y_test, dataframe)
+
+
+	
