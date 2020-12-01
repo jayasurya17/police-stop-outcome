@@ -74,6 +74,10 @@ def transform_data_columns_1_4(dataframe):
   
 	return dataframe
 
+def get_driver_age(row, mean_age):
+	age = row["stop_year"] - row["driver_age_raw"]
+	if(age < 16 or row["driver_age"] == np.nan or age != row["driver_age"]):
+		row["drivers_age_new"] = mean_age
 
 def transform_data_columns_5_8(df):
 
@@ -91,16 +95,20 @@ def transform_data_columns_5_8(df):
 	df["violations_raw"]= df["violation_raw"].fillna(df["violation_raw"].mode())
 	df=df.drop(columns=["violation_raw"], axis=1, inplace=False)
 	
-	x=0
-	y=0
-	z=int(df["driver_age"].mean())
+	# x=0
+	# y=0
+	# z=int(df["driver_age"].mean())
  
-	for i in df.index:
-		x= df["stop_year"][i]-df["driver_age_raw"][i]
-		if(x<16 or df["driver_age"][i]==np.nan or x!= df["driver_age"][i]):
-			y=y+1
-			df["drivers_age_new"][i]=z
-								
+	# for i in df.index:
+	# 	x= df["stop_year"][i]-df["driver_age_raw"][i]
+	# 	if(x<16 or df["driver_age"][i]==np.nan or x!= df["driver_age"][i]):
+	# 		y=y+1
+	# 		df["drivers_age_new"][i]=z
+
+
+	mean_age = int(df["driver_age"].mean())
+	df.apply(lambda x: get_driver_age(x, mean_age), axis = 1)
+
 	# There are 2 similar columns that is driver's year of birth and driver's age 
     # which provide converging information, pre-pruning is performed and driver's year of birth is
     # dropped as driver's age is sufficient for analysis.
@@ -195,14 +203,40 @@ def visualize_data_columns_13_15(dataframe):
 	plot_pie_chart(dataframe, 'stop_duration', 'priliminary_visualization/stop_duration.png')
 	plot_pie_chart(dataframe, 'drugs_related_stop', 'priliminary_visualization/drugs_related_stop.png')
 
+def split_date(row):
+	date = row['stop_date'].split('-')
+	row['stop_date'] = date[2]
+	row['stop_month'] = date[1]
+	row['stop_year'] = date[0]
+	return row
+
+
+def save_to_csv(df, filename):
+	df.to_csv(filename, index=False)
+
 	
 def general_preprocessing(dataframe):
+
+	new = dataframe["stop_date"].str.split("-", n = 2, expand = True)
+	dataframe['stop_date'] = new[2]
+	dataframe['stop_month'] = new[1]
+	dataframe['stop_year'] = new[0]
+	dataframe['drivers_age_bucket'] = dataframe['drivers_age_new'].apply(lambda x: x // 5)
+
   	# Remove unwanted column
 	del dataframe['search_conducted']
 	del dataframe['search_type']
+	del dataframe['violation']
+	del dataframe['stop_time']
+	# del dataframe['drivers_age_new']
+
+
+	column_names = ['stop_year', 'stop_month', 'stop_date', 'stop_hour', 'driver_gender', 'drivers_age_bucket', 'drivers_age_new', 'drivers_race', 'stop_duration', 'is_arrested', 'drugs_related_stop', 'violations_raw', 'search_score', 'stop_outcome']
+	dataframe = dataframe.reindex(columns=column_names)
 
 	dataframe.dropna()
-	print(dataframe.count())
+	print("Processed dataframe")
+	print(dataframe)
 
 	return dataframe
 
@@ -323,27 +357,39 @@ if __name__ == "__main__":
 	# Data preprocessing and visualization
 
 	# Hari Analysis
+	print ("transforming data columns_1_4")
 	dataframe = transform_data_columns_1_4(dataframe)
 	# Akash's Anaylsis
+	print ("transforming data columns_5_8")
 	dataframe=transform_data_columns_5_8(dataframe)
 	# Jayasurya Analysis
+	print ("transforming data columns_9_12")
 	dataframe = transform_data_columns_9_12(dataframe)
 	# Anthony Analysis
+	print ("transforming data columns_13_15")
 	dataframe = transform_data_columns_13_15(dataframe)
 	
-	# Hari visualization
-	visualize_data_columns_1_4(dataframe)
-	# Akash's visualization
-	visualize_data_columns_5_8(dataframe)
-	# Jayasurya visualization
-	visualize_data_columns_9_12(dataframe)
-	# Anthony visualization
-	visualize_data_columns_13_15(dataframe)
+	print ("Visualizing data")
+	# # Hari visualization
+	# visualize_data_columns_1_4(dataframe)
+	# # Akash's visualization
+	# visualize_data_columns_5_8(dataframe)
+	# # Jayasurya visualization
+	# visualize_data_columns_9_12(dataframe)
+	# # Anthony visualization
+	# visualize_data_columns_13_15(dataframe)
+
 
 	# Last minute catches to finalize preprocessing
+	print ("General Preprocessing")
 	dataframe = general_preprocessing(dataframe)
 
+	filename = 'processed_data.csv'
+	print ("Saving dataframe into", filename)
+	save_to_csv(dataframe, filename)
+
 	# Perform a test train split to train our model
+	print ("Performing a test train split to train our model")
 	X_train, X_test, y_train, y_test = test_train_split(dataframe)
 
 	# Random Forest
@@ -352,19 +398,19 @@ if __name__ == "__main__":
 
 	# Results from running random forest (so you don't have to run the method)
 	# Comment out this line if you decide to run the random_forest method and get the accuracies from there
-	random_forest_results = {'stop_date': 0.9252461904188284, 'stop_time': 0.926964979960656, 
-							'driver_gender': 0.9277224305128671, 'violation': 0.9279409184792622, 
-							'is_arrested': 0.899187219333417, 'stop_duration': 0.9279554946693738, 
-							'drugs_related_stop': 0.9279700602509047, 'stop_year': 0.9279555020953805, 
-							'drivers_age_new': 0.9265279859932785, 'drivers_race': 0.927300020161608, 
-							'violations_raw': 0.9274311019085207, 'stop_hour': 0.9267756401310521,
-							'search_score': 0.9279117989856394, 'None': 0.9281011579106888}
+	# random_forest_results = {'stop_date': 0.9252461904188284, 'stop_time': 0.926964979960656, 
+	# 						'driver_gender': 0.9277224305128671, 'violation': 0.9279409184792622, 
+	# 						'is_arrested': 0.899187219333417, 'stop_duration': 0.9279554946693738, 
+	# 						'drugs_related_stop': 0.9279700602509047, 'stop_year': 0.9279555020953805, 
+	# 						'drivers_age_new': 0.9265279859932785, 'drivers_race': 0.927300020161608, 
+	# 						'violations_raw': 0.9274311019085207, 'stop_hour': 0.9267756401310521,
+	# 						'search_score': 0.9279117989856394, 'None': 0.9281011579106888}
 	# Displaying results from running random forest
-	random_forest_visualizaton(random_forest_results)
+	# random_forest_visualizaton(random_forest_results)
 
 	# Decision Trees
 	# Commented out since still a work in progress
-	decision_tree(X_train, X_test, y_train, y_test, dataframe)
+	# decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
 
 	
