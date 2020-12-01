@@ -369,7 +369,7 @@ if __name__ == "__main__":
 	print ("transforming data columns_13_15")
 	dataframe = transform_data_columns_13_15(dataframe)
 	
-	print ("Visualizing data")
+	print ("Visualizing data. Commented this part to save time")
 	# # Hari visualization
 	# visualize_data_columns_1_4(dataframe)
 	# # Akash's visualization
