@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 
 
@@ -77,7 +79,8 @@ def transform_data_columns_1_4(dataframe):
 def get_driver_age(row, mean_age):
 	age = row["stop_year"] - row["driver_age_raw"]
 	if(age < 16 or row["driver_age"] == np.nan or age != row["driver_age"]):
-		row["drivers_age_new"] = mean_age
+		return mean_age
+	return row["drivers_age_new"]
 
 def transform_data_columns_5_8(df):
 
@@ -107,7 +110,7 @@ def transform_data_columns_5_8(df):
 
 
 	mean_age = int(df["driver_age"].mean())
-	df.apply(lambda x: get_driver_age(x, mean_age), axis = 1)
+	df["drivers_age_new"] = df.apply(lambda x: get_driver_age(x, mean_age), axis = 1)
 
 	# There are 2 similar columns that is driver's year of birth and driver's age 
     # which provide converging information, pre-pruning is performed and driver's year of birth is
@@ -231,7 +234,7 @@ def general_preprocessing(dataframe):
 	del dataframe['drivers_age_new']
 
 
-	column_names = ['stop_year', 'stop_month', 'stop_date', 'stop_hour', 'driver_gender', 'drivers_age_bucket', 'drivers_age_new', 'drivers_race', 'stop_duration', 'is_arrested', 'drugs_related_stop', 'violations_raw', 'search_score', 'stop_outcome']
+	column_names = ['stop_year', 'stop_month', 'stop_date', 'stop_hour', 'driver_gender', 'drivers_age_bucket', 'drivers_race', 'stop_duration', 'is_arrested', 'drugs_related_stop', 'violations_raw', 'search_score', 'stop_outcome']
 	dataframe = dataframe.reindex(columns=column_names)
 
 	dataframe.dropna()
@@ -347,6 +350,13 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 	print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
 
+def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
+	knn = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
+	knn.fit(X_train, y_train)
+	y_pred = knn.predict(X_test)
+	result = confusion_matrix(y_test, y_pred)
+	print (result)
+
 if __name__ == "__main__":
 
 	filename = "police_project.csv"
@@ -394,6 +404,7 @@ if __name__ == "__main__":
 
 	# Random Forest
 	# Commented out since still a work in progress
+	# print ("random_forest")
 	# random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
 	# Results from running random forest (so you don't have to run the method)
@@ -410,7 +421,10 @@ if __name__ == "__main__":
 
 	# Decision Trees
 	# Commented out since still a work in progress
+	# print ("decision_tree")
 	# decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
 
-	
+	# K Nearest Neighbours
+	# print ("k_neighbors_classifier")
+	# KNN_results = k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
