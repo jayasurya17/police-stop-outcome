@@ -228,7 +228,7 @@ def general_preprocessing(dataframe):
 	del dataframe['search_type']
 	del dataframe['violation']
 	del dataframe['stop_time']
-	# del dataframe['drivers_age_new']
+	del dataframe['drivers_age_new']
 
 
 	column_names = ['stop_year', 'stop_month', 'stop_date', 'stop_hour', 'driver_gender', 'drivers_age_bucket', 'drivers_age_new', 'drivers_race', 'stop_duration', 'is_arrested', 'drugs_related_stop', 'violations_raw', 'search_score', 'stop_outcome']
