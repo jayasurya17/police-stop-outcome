@@ -330,21 +330,60 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 	grid_search_cv.fit(X_train, y_train)
 
 	# Printing accuracies, best parameters, and best estimator
-	print("Best parameters: {}".format(grid_search_cv.best_params_))
-	print("Best cross-validation score: {:.2f}".format(grid_search_cv.best_score_))
-	print("Best estimator:\n{}".format(grid_search_cv.best_estimator_))
-	print("Test set score: {:.2f}".format(grid_search_cv.score(X_test, y_test)))
+	# print("Best parameters: {}".format(grid_search_cv.best_params_))
+	# print("Best cross-validation score: {:.2f}".format(grid_search_cv.best_score_))
+	# print("Best estimator:\n{}".format(grid_search_cv.best_estimator_))
+	# print("Test set score: {:.2f}".format(grid_search_cv.score(X_test, y_test)))
 
 	# Create Decision Tree classifer object
-	clf = DecisionTreeClassifier()
+	clf_1 = DecisionTreeClassifier(max_depth=6)
 
 	# Train Decision Tree Classifer
-	clf = clf.fit(X_train,y_train)
+	clf_1 = clf_1.fit(X_train,y_train)
 
 	#Predict the response for test dataset
-	y_pred = clf.predict(X_test)
+	y_pred = clf_1.predict(X_test)
 	
-	print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+	print("Accuracy with depth 6:",metrics.accuracy_score(y_test, y_pred))
+
+	acc_6 = metrics.accuracy_score(y_test, y_pred)
+
+	# Create Decision Tree classifer object
+	clf_2 = DecisionTreeClassifier(max_depth=8)
+
+	# Train Decision Tree Classifer
+	clf_2 = clf_2.fit(X_train,y_train)
+
+	#Predict the response for test dataset
+	y_pred = clf_2.predict(X_test)
+	
+	print("Accuracy with depth 8:",metrics.accuracy_score(y_test, y_pred))
+
+	acc_8 = metrics.accuracy_score(y_test, y_pred)
+
+		# Create Decision Tree classifer object
+	clf_3 = DecisionTreeClassifier(max_depth=10)
+
+	# Train Decision Tree Classifer
+	clf_3 = clf_3.fit(X_train,y_train)
+
+	#Predict the response for test dataset
+	y_pred = clf_3.predict(X_test)
+	
+	print("Accuracy with depth 10:",metrics.accuracy_score(y_test, y_pred))
+
+	acc_10 = metrics.accuracy_score(y_test, y_pred)
+
+	list_depths = [6,8,10]
+	list_accuracy = [acc_6,acc_8,acc_10]
+
+	plt.plot(list_depths,list_accuracy, label='Depth vs Accuracy')
+
+	plt.xlabel('Maximum Depth') # Label x-axis
+	plt.ylabel('Accuracy') # Label y-axis
+	plt.legend() # Show plot labels as legend
+	plt.ylim(ymin=0.9)
+	plt.savefig('decision_tree.png') # Show graph
 
 
 def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
@@ -418,7 +457,7 @@ if __name__ == "__main__":
 	# Decision Trees
 	# Commented out since still a work in progress
 	# print ("decision_tree")
-	# decision_tree(X_train, X_test, y_train, y_test, dataframe)
+	decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
 
 	# K Nearest Neighbours
