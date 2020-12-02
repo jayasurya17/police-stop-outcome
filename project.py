@@ -262,11 +262,14 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 	# param_grid = {'n_estimators': [50,75,100,150,200,250,300,350,400,450,500],
 	# 			'max_depth': [None,1,2,3,4,5,10,20,30,50,75,100,150]
 	# 			}
-	param_grid = {'n_estimators': [200],'max_depth': [None]}			
-
+	param_grid = {'n_estimators': [250],'max_depth': [None]}
+	dict = {}
+		
 	# Create the GridSearch object for the Random Forest classifier passing the parameters
 	grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
 							param_grid, cv=5)
+
+	print("Removing no columns")
 
 	# Fit data to the model -- cross validation will be performed during grid search
 	grid_search.fit(X_train, y_train)
@@ -277,8 +280,10 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 	print("Best estimator:\n{}".format(grid_search.best_estimator_))
 	print("Test set score: {:.2f}".format(grid_search.score(X_test, y_test)))
 
+	# Store accuracy for no columns removed
+	dict['None'] = grid_search.best_score_
+
 	# Find out which column is most impactful in predicting stop_outcome
-	dict = {}
 	y = df_clean["stop_outcome"].copy()
 	df_clean = df_clean.drop(columns=['stop_outcome'])
 
@@ -293,16 +298,7 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 		grid_search.fit(X_train, y_train)
 		dict[c] = grid_search.best_score_
 
-	# Same for removing no columns
-	x_t = pd.get_dummies(df_clean)
-	X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
-	print("Removing no columns")
-	grid_search = GridSearchCV(RandomForestClassifier(n_jobs= -1, class_weight="balanced", random_state=0), 
-							param_grid, cv=5)
-	grid_search.fit(X_train, y_train)
-	dict['None'] = grid_search.best_score_
-
-	print(dict)
+	print("Results:\n", dict)
 	print("Random Forest Completed")
 
 	# Return the results
@@ -318,6 +314,7 @@ def random_forest_visualizaton(random_forest):
 
 	plt.title('Random Forest')
 	plt.xlabel('Columns Removed')
+	plt.grid(True)
 	plt.ylabel('Accuracy')
 	plt.savefig('random_forest.png')
 
@@ -404,18 +401,17 @@ if __name__ == "__main__":
 
 	# Random Forest
 	# Commented out since still a work in progress
-	# print ("random_forest")
 	# random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
 	# Results from running random forest (so you don't have to run the method)
 	# Comment out this line if you decide to run the random_forest method and get the accuracies from there
-	# random_forest_results = {'stop_date': 0.9252461904188284, 'stop_time': 0.926964979960656, 
-	# 						'driver_gender': 0.9277224305128671, 'violation': 0.9279409184792622, 
-	# 						'is_arrested': 0.899187219333417, 'stop_duration': 0.9279554946693738, 
-	# 						'drugs_related_stop': 0.9279700602509047, 'stop_year': 0.9279555020953805, 
-	# 						'drivers_age_new': 0.9265279859932785, 'drivers_race': 0.927300020161608, 
-	# 						'violations_raw': 0.9274311019085207, 'stop_hour': 0.9267756401310521,
-	# 						'search_score': 0.9279117989856394, 'None': 0.9281011579106888}
+	# random_forest_results = {'stop_year': 0.9225951283381028, 'stop_month': 0.9195216378715305, 
+								# 'stop_date': 0.9111169567927885, 'stop_hour': 0.919958632899766, 
+								# 'driver_gender': 0.9260764349312349, 'drivers_age_bucket': 0.9211530328633148, 
+								# 'drivers_race': 0.9256394908241876, 'stop_duration': 0.9267173438574698, 
+								# 'is_arrested': 0.8986191255845395, 'drugs_related_stop': 0.92706694009223, 
+								# 'violations_raw': 0.9240226264056173, 'search_score': 0.9265280072104403, 
+								# 'None': 0.9267901887388534}
 	# Displaying results from running random forest
 	# random_forest_visualizaton(random_forest_results)
 
