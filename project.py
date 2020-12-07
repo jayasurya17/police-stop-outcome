@@ -330,7 +330,7 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     params = {'max_leaf_nodes': list(range(2, 8)), 'min_samples_split': [2, 3]}
 
     # Create the GridSearch object for the Random Forest classifier passing the parameters
-    grid_search_cv = GridSearchCV(DecisionTreeClassifier(random_state=42), params, verbose=1, cv=3)
+    grid_search_cv = GridSearchCV(DecisionTreeClassifier(), params, verbose=1, cv=3)
 
     # Fit data to the model -- cross validation will be performed during grid search
     grid_search_cv.fit(X_train, y_train)
@@ -340,6 +340,45 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     print("Best cross-validation score: {:.2f}".format(grid_search_cv.best_score_))
     print("Best estimator:\n{}".format(grid_search_cv.best_estimator_))
     print("Test set score: {:.2f}".format(grid_search_cv.score(X_test, y_test)))
+
+    dict = {}
+
+    # Store accuracy for no columns removed
+    dict['None'] = grid_search_cv.best_score_
+
+    # Find out which column is most impactful in predicting stop_outcome
+    y = df_clean["stop_outcome"].copy()
+    df_clean = df_clean.drop(columns=['stop_outcome'])
+
+    # For every column in the dataset, remove the column and train the model, store accuracy
+    list_column_removed = []
+    list_accuracy_when_column_removed = []
+
+
+    for c in df_clean.columns:
+        print("Removing column", c)
+        x_t = df_clean.drop(columns=[c])
+        x_t = pd.get_dummies(x_t)
+        X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
+        grid_search = GridSearchCV(DecisionTreeClassifier(max_depth=5), params, cv=5)
+        grid_search.fit(X_train, y_train)
+        list_column_removed.append(c)
+        print("Column Removed:"+str(c)+", Accuracy:"+str(grid_search.best_score_))
+        list_accuracy_when_column_removed.append(grid_search.best_score_)
+    
+    plt.plot(list_column_removed, list_accuracy_when_column_removed, label='Column Removed vs Accuracy')
+
+    plt.xlabel('Column Removed')  # Label x-axis
+    plt.ylabel('Accuracy')  # Label y-axis
+    plt.grid(True)
+    plt.legend()  # Show plot labels as legend
+    plt.ylim(ymin=0.8)
+    plt.savefig('decision_tree_column.png')  # Save graph
+
+    plt.close()
+    
+    
+
 
     # The list of depth which are considered and accuracies are calculated
     list_depths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -367,9 +406,10 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 
     plt.xlabel('Maximum Depth')  # Label x-axis
     plt.ylabel('Accuracy')  # Label y-axis
+    plt.grid(True)
     plt.legend()  # Show plot labels as legend
     plt.ylim(ymin=0.9)
-    plt.savefig('decision_tree.png')  # Save graph
+    plt.savefig('decision_tree_depth.png')  # Save graph
 
 
 def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
