@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split,KFold,cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
@@ -266,6 +266,26 @@ def test_train_split(dataframe):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
     return X_train, X_test, y_train, y_test
 
+def logistic_regression(X_train, X_test, y_train, y_test, df_clean):
+    print("Begin Logistic Regression Analysis")
+    # Define parameters for optimization of Logistic Regression
+    LR_para = {'C':[0.001, 0.1, 1, 10, 100],'max_iter':[1000000]}
+    LR_opt=[]
+    LR_opt.append((LogisticRegression(), LR_para))
+    resultLR=[]
+    print("yes")
+    #Checking the accuracy of the Logistic Regression model using Grid Search and Cross Validation 
+    for model, para in LR_opt:    
+        kfold = KFold(2, random_state=0, shuffle=True)
+        model_grid = GridSearchCV(model, para)
+        model_grid.fit(X_train,y_train)
+        cv_result = cross_val_score(model_grid, X_train, y_train, cv = kfold, scoring="accuracy")
+        print ("Cross Validation Accuracy For LR :- Accuracy: %f SD: %f" % (cv_result.mean(), cv_result.std()))
+        print ("Best parameters for Logistic regression :", model_grid.best_params_) 
+        print("Best estimator:\n{}".format(model_grid.best_estimator_))
+        print("Test set score: {:.2f}".format(model_grid.score(X_test, y_test)))
+
+    return cv_result
 
 def random_forest(X_train, X_test, y_train, y_test, df_clean):
     print("Start Random Forest")
@@ -495,7 +515,7 @@ if __name__ == "__main__":
     #Logistic Regression
     # Commented out since still a work in progress
     print("Logistic Regression")
-    
+    logistic_regression_results = logistic_regression(X_train, X_test, y_train, y_test, dataframe)
 
 # K Nearest Neighbours
 # print ("k_neighbors_classifier")
