@@ -6,8 +6,16 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression    #Logistic Regression
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import mean_squared_error as mse
+from sklearn.metrics import classification_report 
+from sklearn.metrics import f1_score
+from sklearn.feature_selection import VarianceThreshold
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 
 
 def read_file(filename):
@@ -482,7 +490,12 @@ if __name__ == "__main__":
     # Decision Trees
     # Commented out since still a work in progress
     print("decision_tree")
-    decision_tree(X_train, X_test, y_train, y_test, dataframe)
+    # decision_tree(X_train, X_test, y_train, y_test, dataframe)
+
+    #Logistic Regression
+    # Commented out since still a work in progress
+    print("Logistic Regression")
+    
 
 # K Nearest Neighbours
 # print ("k_neighbors_classifier")
