@@ -11,7 +11,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import mean_squared_error as mse
-from sklearn.metrics import classification_report 
+from sklearn.metrics import classification_report as cls_report
 from sklearn.metrics import f1_score
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.metrics import precision_score
@@ -282,8 +282,21 @@ def logistic_regression(X_train, X_test, y_train, y_test, df_clean):
         cv_result = cross_val_score(model_grid, X_train, y_train, cv = kfold, scoring="accuracy")
         print ("Cross Validation Accuracy For LR :- Accuracy: %f SD: %f" % (cv_result.mean(), cv_result.std()))
         print ("Best parameters for Logistic regression :", model_grid.best_params_) 
-        print("Best estimator:\n{}".format(model_grid.best_estimator_))
         print("Test set score: {:.2f}".format(model_grid.score(X_test, y_test)))
+        print('Classification Report: \n' + str(cls_report(y_test, cv_result)))
+        confusion_matrix = confusion_matrix(y_test, cv_result)
+    
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.imshow(confusion_matrix,cmap=plt.cm.Blues)
+    ax.grid(False)
+    ax.set_xlabel('Predicted outputs')
+    ax.set_ylabel('Actual outputs')
+
+    plt.title("Logistic Regression Confusion Matrix")
+    for i in range(2):
+        for j in range(2):
+            ax.text(j, i, confusion_matrix[i, j], ha='center', va='center', color='black',fontsize=50)
+    plt.savefig('Confusion_Matrix_LR.png')
 
     return cv_result
 
