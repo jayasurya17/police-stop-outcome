@@ -474,7 +474,25 @@ def random_forest_visualizaton(random_forest):
     plt.ylabel('Accuracy')
     plt.savefig('random_forest.png')
 
-
+# Apply Decision Tree classifier algorithm on the dataset and compare how different 
+# approaches in implementing the algorithm impacts the accuracy
+#
+# The first approach is to find out the best parameters using the grid search
+#
+# In the second approach we try to remove individually one column at a time and try to find out 
+# the accuracy respectively. This way we can find out which column is affecting the outcome much or
+# indicating the importance of each column
+#
+# The third approach is to find accuracy by varying the depth. The Depth parameter for the Decision classifier
+# is varied. For various depths the accuracy is calculated. The increase in the maximum depth causes the
+# algorithm to overifit, hence higher depths are not preferred
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+# df_clean: Original dataset upon which train_test_split was applied
 def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     # Set the parameters you want to evaluate
 
@@ -518,7 +536,7 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
         list_accuracy_when_column_removed.append(grid_search.best_score_)
     
     # The list of depth which are considered and accuracies are calculated
-    list_depths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    list_depths = list(range(1,20))
 
     list_accuracy = []
 
@@ -548,6 +566,12 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 
     return decison_tree_results
 
+# Visualize the accuracy based on either changing the depth
+# or by removing each column of the dataset at a time and then 
+# measuring accuracy
+#  
+# Parameters
+# decision_tree_results: Dictionary Containing accuracies that need to be plotted
 
 def decision_tree_visualizaton(decision_tree_results):
 
