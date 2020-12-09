@@ -361,7 +361,12 @@ def general_preprocessing(dataframe):
 
     return dataframe
 
-
+# Perform the train_test_split on our preprocessed dataset to use in our models
+# 
+# Parameters
+# dataframe: Original dataset after performing preprocessing
+#
+# Return: row with seperate columns for date, month and year
 def test_train_split(dataframe):
     # Set X for test train split and use get_dummies for one hot encoding
     X = dataframe.drop(columns=["stop_outcome"])
@@ -409,7 +414,23 @@ def logistic_regression(X_train, X_test, y_train, y_test, df_clean):
 
     return cv_result
 
-
+# Apply Random Forest classifier algorithm on the dataset and compare how different 
+# approaches in implementing the algorithm impacts the accuracy
+#
+# The first approach is to find out the best parameters using grid search
+#
+# In the second approach we try to remove individually one column at a time and try to find out 
+# the accuracy respectively. This way we can find out which column is affecting the outcome much or
+# indicating the importance of each column
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+# df_clean: Original dataset upon which train_test_split was applied
+#
+# Return: dictionary containing results after individually removing columns
 def random_forest(X_train, X_test, y_train, y_test, df_clean):
     print("Start Random Forest")
     # Find best parameters to run the model most efficently
@@ -459,8 +480,13 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
     # Return the results
     return dict
 
-
+# Visualize the random forest accuracy based on removing each column of the dataset at a 
+# time and then measuring accuracy
+#  
+# Parameters
+# random_forest: dictionary containing results after individually removing columns
 def random_forest_visualizaton(random_forest):
+    # Visualization based on removing individual columns and their respective accuracy
     plt.plot(list(random_forest.values()), '--', marker='o')
     ax = plt.subplot()
 
@@ -472,7 +498,7 @@ def random_forest_visualizaton(random_forest):
     plt.xlabel('Columns Removed')
     plt.grid(True)
     plt.ylabel('Accuracy')
-    plt.savefig('random_forest.png')
+    plt.savefig('analysis_visualization/random_forest.png')
 
 # Apply Decision Tree classifier algorithm on the dataset and compare how different 
 # approaches in implementing the algorithm impacts the accuracy
@@ -572,7 +598,6 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 #  
 # Parameters
 # decision_tree_results: Dictionary Containing accuracies that need to be plotted
-
 def decision_tree_visualizaton(decision_tree_results):
 
     # Visualization based on removing individual columns and their respective accuracy 
@@ -689,11 +714,10 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = test_train_split(dataframe)
 
     # Random Forest
-    # Commented out since still a work in progress
     # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
     # Results from running random forest (so you don't have to run the method)
-    # Comment out this line if you decide to run the random_forest method and get the accuracies from there
+    # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
     # random_forest_results = {'stop_year': 0.9225951283381028, 'stop_month': 0.9195216378715305,
     # 'stop_date': 0.9111169567927885, 'stop_hour': 0.919958632899766,
     # 'driver_gender': 0.9260764349312349, 'drivers_age_bucket': 0.9211530328633148,
