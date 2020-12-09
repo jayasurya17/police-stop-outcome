@@ -51,7 +51,7 @@ def knn_remove_columns_and_find_accuracy(df_clean):
 def knn_accuracy_on_entire_dataset(X_train, X_test, y_train, y_test):
 	X_axis = []
 	Y_axis = []
-	for neighbors in range(2, 11):
+	for neighbors in range(2, 36):
 		knn = KNeighborsClassifier(n_neighbors=neighbors, metric='euclidean')
 		result = predict_and_get_accuracy(knn, X_train, X_test, y_train, y_test)
 		X_axis.append(neighbors)
@@ -66,7 +66,7 @@ def apply_pca_and_compare(X_train, X_test, y_train, y_test):
 	X_test_orig = X_test
 	X_axis = []
 	Y_axis = []
-	for components in range(2, 11):
+	for components in range(2, 36):
 		sklearn_pca = sklearnPCA(n_components=components)
 		X_test = sklearn_pca.fit_transform(X_test_orig)
 		X_test = pd.DataFrame(X_test)
@@ -88,9 +88,9 @@ def knn_apply_cross_val_score(df_clean):
 	y = df_clean["stop_outcome"].copy()
 	X_axis = []
 	Y_axis = []
-	for neighbors in range(2, 11):
+	for neighbors in range(2, 36):
 		knn = KNeighborsClassifier(n_neighbors=neighbors, metric='euclidean')
-		score = cross_val_score(knn, X, y, cv = 7, scoring='accuracy')
+		score = cross_val_score(knn, X, y, cv = 5, scoring='accuracy')
 		result = score.mean()
 		X_axis.append(neighbors)
 		Y_axis.append(result)
