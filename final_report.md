@@ -10,7 +10,13 @@ We decided to run the dataset on four different models, Random Forest, Decision 
 
 
 ## Decision Tree
-
+* Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
+* The first approach is to find out the best parameters using the grid search
+* In the second approach we try to remove individually one column at a time and try to find out 
+  the accuracy respectively. This way we can find out which column is affecting the outcome much or
+  indicating the importance of each column
+* The third approach is to find accuracy by varying the depth. The Depth parameter for the Decision classifier
+  is varied. For various depths the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
 
 ## K Nearest Neighbors
 * Apply KNN algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
