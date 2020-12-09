@@ -559,7 +559,7 @@ def decision_tree_visualizaton(decision_tree_results):
     plt.grid(True)
     plt.legend()  # Show plot labels as legend
     plt.ylim(ymin=0.8)
-    plt.savefig('decision_tree_column.png')  # Save graph
+    plt.savefig('analysis_visualization/decision_tree_column.png')  # Save graph
 
     plt.close()
 
@@ -571,7 +571,7 @@ def decision_tree_visualizaton(decision_tree_results):
     plt.grid(True)
     plt.legend()  # Show plot labels as legend
     plt.ylim(ymin=0.9)
-    plt.savefig('decision_tree_depth.png')  # Save graph
+    plt.savefig('analysis_visualization/decision_tree_depth.png')  # Save graph
 
 
 # Apply KNN algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
@@ -680,13 +680,13 @@ if __name__ == "__main__":
     # Displaying results from running random forest
     # random_forest_visualizaton(random_forest_results)
 
-    # # Decision Trees
-    # # Commented out since still a work in progress
-    # print("decision_tree")
-    # decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
+    # Decision Trees
+    # Commented out since still a work in progress
+    print("decision_tree")
+    decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
-    # # Displaying results from running decision tree
-    # decision_tree_visualizaton(decision_tree_results)
+    # Displaying results from running decision tree
+    decision_tree_visualizaton(decision_tree_results)
 
     #Logistic Regression
     # Commented out since still a work in progress
