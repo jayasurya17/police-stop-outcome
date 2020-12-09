@@ -17,12 +17,35 @@ def test_train_split(dataframe):
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 	return X_train, X_test, y_train, y_test
 
+
+# Fit KNN algorithm on the test and train dataset and find the accuracy with which the model was trained 
+# 
+# Parameters
+# knn: KNN model with n neighbours that needs to be used for training
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+# 
+# Return: Accuracy with which training was done
 def predict_and_get_accuracy(knn, X_train, X_test, y_train, y_test):
 	pred = knn.fit(X_train, y_train)
 	y_pred = knn.predict(X_test)
 	result = accuracy_score(y_test, y_pred)
 	return result
 
+
+# Apply KNN on the entire dataset by removing one column at a time
+# Find the accuracy with which model was able to predict upon removal of each column
+# This shows the importance of each column in the dataset
+# The number of neighbours is set to 5 while applying KNN
+# 
+# Parameters
+# df_clean: Original dataset upon which train_test_split was applied
+# 
+# Return
+# X_axis: Name of column that was removed
+# Y_axis: Accuracy with which model was able to predict upon removal of its corresponding column
 def knn_remove_columns_and_find_accuracy(df_clean):
 	# Remove columns and compare
 	X_axis = []
@@ -47,7 +70,17 @@ def knn_remove_columns_and_find_accuracy(df_clean):
 
 	return X_axis, Y_axis
 
-
+# Apply KNN on the entire dataset by changing the number of neighbours
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+# 
+# Return
+# X_axis: Number of neighbours
+# Y_axis: Accuracy with which model was able to predict with the mentioned number of neighbours
 def knn_accuracy_on_entire_dataset(X_train, X_test, y_train, y_test):
 	X_axis = []
 	Y_axis = []
@@ -60,7 +93,19 @@ def knn_accuracy_on_entire_dataset(X_train, X_test, y_train, y_test):
 
 	return X_axis, Y_axis
 
-
+# Reduce the dataset into n number of features and then apply KNN on the dataset
+# Use PCA to reduce the number of features/components 
+# Find accuracy of prediction using KNN with 5 neighbours 
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+# 
+# Return
+# X_axis: Number of features/components the dataset was reduced to
+# Y_axis: Accuracy with which model was able to predict with the mentioned number of components
 def apply_pca_and_compare(X_train, X_test, y_train, y_test):
 	X_train_orig = X_train
 	X_test_orig = X_test
@@ -82,6 +127,16 @@ def apply_pca_and_compare(X_train, X_test, y_train, y_test):
 
 	return X_axis, Y_axis
 
+
+# Apply KNN on the entire dataset by changing the number of neighbours
+# Get accuracy of prediction using cross_val_score and 5 folds
+# 
+# Parameters
+# df_clean: Original dataset upon which train_test_split was applied
+# 
+# Return
+# X_axis: Number of neighbours
+# Y_axis: Accuracy with which model was able to predict with the mentioned number of neighbours
 def knn_apply_cross_val_score(df_clean):
 	X = df_clean.drop(columns=["stop_outcome"])
 	X = pd.get_dummies(X)
