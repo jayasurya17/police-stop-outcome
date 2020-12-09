@@ -277,7 +277,7 @@ def test_train_split(dataframe):
     y = dataframe["stop_outcome"].copy()
 
     # Perform the test train split
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
     return X_train, X_test, y_train, y_test
 
 
@@ -423,20 +423,6 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
         print("Column Removed:"+str(c)+", Accuracy:"+str(grid_search.best_score_))
         list_accuracy_when_column_removed.append(grid_search.best_score_)
     
-    plt.plot(list_column_removed, list_accuracy_when_column_removed, label='Column Removed vs Accuracy')
-
-    plt.xlabel('Column Removed')  # Label x-axis
-    plt.ylabel('Accuracy')  # Label y-axis
-    plt.grid(True)
-    plt.legend()  # Show plot labels as legend
-    plt.ylim(ymin=0.8)
-    plt.savefig('decision_tree_column.png')  # Save graph
-
-    plt.close()
-    
-    
-
-
     # The list of depth which are considered and accuracies are calculated
     list_depths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -459,7 +445,31 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
         # List of accuracies to plot the data
         list_accuracy.append(acc)
 
-    plt.plot(list_depths, list_accuracy, label='Depth vs Accuracy')
+    decison_tree_results = {
+    "list_column_removed": list_column_removed,
+    "list_accuracy_when_column_removed":list_accuracy_when_column_removed,
+    "list_depths":list_depths, 
+    "list_accuracy":list_accuracy
+    }
+
+    return decison_tree_results
+
+def decision_tree_visualizaton(decision_tree_results):
+
+    # Visualization based on removing individual columns and their respective accuracy 
+    plt.plot(decision_tree_results["list_column_removed"], decision_tree_results["list_accuracy_when_column_removed"], label='Column Removed vs Accuracy')
+
+    plt.xlabel('Column Removed')  # Label x-axis
+    plt.ylabel('Accuracy')  # Label y-axis
+    plt.grid(True)
+    plt.legend()  # Show plot labels as legend
+    plt.ylim(ymin=0.8)
+    plt.savefig('decision_tree_column.png')  # Save graph
+
+    plt.close()
+
+    # Visualization based on varying depths and their respective accuracy 
+    plt.plot(decision_tree_results["list_depths"], decision_tree_results["list_accuracy"], label='Depth vs Accuracy')
 
     plt.xlabel('Maximum Depth')  # Label x-axis
     plt.ylabel('Accuracy')  # Label y-axis
@@ -467,6 +477,7 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     plt.legend()  # Show plot labels as legend
     plt.ylim(ymin=0.9)
     plt.savefig('decision_tree_depth.png')  # Save graph
+
 
 
 def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
@@ -559,10 +570,13 @@ if __name__ == "__main__":
     # Displaying results from running random forest
     # random_forest_visualizaton(random_forest_results)
 
-    # Decision Trees
-    # Commented out since still a work in progress
+    # # Decision Trees
+    # # Commented out since still a work in progress
     # print("decision_tree")
-    # decision_tree(X_train, X_test, y_train, y_test, dataframe)
+    # decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
+
+    # # Displaying results from running decision tree
+    # decision_tree_visualizaton(decision_tree_results)
 
     #Logistic Regression
     # Commented out since still a work in progress
