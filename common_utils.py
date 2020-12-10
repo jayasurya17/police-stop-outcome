@@ -2,17 +2,23 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
+# Perform the train_test_split on our preprocessed dataset to use in our models
+# 
+# Parameters
+# dataframe: Original dataset after performing preprocessing
+#
+# Return: row with seperate columns for date, month and year
 def test_train_split(dataframe):
-	# Set X for test train split and use get_dummies for one hot encoding
-	X = dataframe.drop(columns=["stop_outcome"])
-	X = pd.get_dummies(X)
+    # Set X for test train split and use get_dummies for one hot encoding
+    X = dataframe.drop(columns=["stop_outcome"])
+    X = pd.get_dummies(X)
 
-	# Set y for test train split
-	y = dataframe["stop_outcome"].copy()
+    # Set y for test train split
+    y = dataframe["stop_outcome"].copy()
 
-	# Perform the test train split
-	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-	return X_train, X_test, y_train, y_test
+    # Perform the test train split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    return X_train, X_test, y_train, y_test
 
 
 # Find the accuracy with which each type of outcome was predicted

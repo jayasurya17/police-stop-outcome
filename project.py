@@ -9,6 +9,7 @@ import knn_analysis as knn_analysis
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression    #Logistic Regression
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import plot_confusion_matrix
 from sklearn import metrics
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import mean_squared_error as mse
@@ -19,6 +20,12 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.utils import resample
 import common_utils as common_utils
+import seaborn as sns
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.cm as cm
+from matplotlib import rcParams
+rcParams['xtick.major.pad'] = 1
+rcParams['ytick.major.pad'] = 1
 
 # Read CSV and return dataframe
 # 
@@ -230,8 +237,18 @@ def visualize_data_columns_1_4(dataframe):
 
 
 def visualize_data_columns_5_8(df):
+    # The statistics of the 5-8 coumns are as follows
+
+    # Column 6 -> Driver's Race - The race of the driver who was stopped
+    # Plotting a Pie-Chart representing race of the driver
     plot_pie_chart(df, 'drivers_race', 'priliminary_visualization/drivers_race.png')
+
+    # Column 7 -> Violation Type - The type of violation by the driver
+    # Plotting a Bar-Graph representing type of violation by the driver
     plot_bar_graph(df, 'violations_raw', 'priliminary_visualization/violations_raw.png')
+
+    # Column 8 -> Driver's Age - The age of the driver who was stopped
+    # Plotting a histogram and KDE plot capturing age of the driver 
     plot_kde_graph(df, 'drivers_age_new', 'priliminary_visualization/drivers_age.png')
     plot_hist_graph(df, 'drivers_age_new', 'priliminary_visualization/drivers_hist_age.png')
 
@@ -364,41 +381,152 @@ def general_preprocessing(dataframe):
     return dataframe
 
 
+# Visualize the Confusion Matrix of Logistic Regression Results
+#  
+# Parameters
+# logistic regression on test set: Result of LR performed on Test Set
+# X_test: X_test obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+def confusion_matrix_plot(LR, X_test,y_test):
+    disp = plot_confusion_matrix(LR, X_test, y_test,cmap=plt.cm.Blues)
+    disp.ax_.set_title("Logistic Regression Confusion matrix")
+    plt.grid(None) 
+    plt.savefig('analysis_visualization/LR_Confusion_Matrix.png')
+
+# Visualize the accuracy based on number of iterations
+#  
+# Parameters
+# logistic regression results: Dictionary Containing accuracies that need to be plotted
+def visualize_LR_accuracy(cv_result):
+    fig = plt.figure(1, figsize=(9, 9))
+
+    plt.plot(cv_result)
+    plt.title('Accuracy using Logistic Regression')
+    plt.ylabel('Model Accuracy %')
+    plt.xlabel("No. of iterations")
+    sns.set_style("dark")
+    plt.savefig('analysis_visualization/Accuracy_LR.png')
+
+# Visualize the Logistic Regression accuracy based on removing each column of the dataset at a 
+# time and then measuring accuracy
+#  
+# Parameters
+# Logistic Regression: dictionary containing results after individually removing columns
+def logistic_regression_visualization(logistic_regression):
+    plt.plot(list(logistic_regression.values()), '--', marker='o')
+    ax = plt.subplot()
+
+    keys = logistic_regression.keys()
+    ax.set_xticklabels(keys, rotation=(25), fontsize=8, ha='right')
+    plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), keys)
+
+    plt.title('Logistic Regression')
+    plt.xlabel('Columns Removed')
+    plt.grid(True)
+    plt.ylabel('Accuracy')
+    plt.savefig('analysis_visualization/logistic_regression.png')
+
+# Apply Logistic Regression Algorithm on the dataset and compare how different 
+# approaches in implementing the algorithm impacts the accuracy
+#
+# The first approach is to find out the best parameters using grid search
+#
+# In the second approach we try to remove individually one column at a time and try to find out 
+# the accuracy respectively. This way we can find out which column is affecting the outcome much or
+# indicating the importance of each column
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+# df_clean: Original dataset upon which train_test_split was applied
+#
+# Return: dictionary containing results after individually removing columns
 def logistic_regression(X_train, X_test, y_train, y_test, df_clean):
     print("Begin Logistic Regression Analysis")
     # Define parameters for optimization of Logistic Regression
-    LR_para = {'C':[0.001, 0.1, 1, 10, 100],'max_iter':[1000000]}
+    LR_para = {'C':[0.001, 0.1, 1, 10, 100],'max_iter':[10000]}
     LR_opt=[]
     LR_opt.append((LogisticRegression(), LR_para))
     resultLR=[]
-    print("yes")
+    
     #Checking the accuracy of the Logistic Regression model using Grid Search and Cross Validation 
-    for model, para in LR_opt:    
-        kfold = KFold(2, random_state=0, shuffle=True)
+    for model, para in LR_opt: 
+
+         # 7 Fold Cross-Validation 
+        kfold = KFold(7, random_state=0, shuffle=True)
+
+         # Performing Grid Search
         model_grid = GridSearchCV(model, para)
+
+         # Fit data to the model --
         model_grid.fit(X_train,y_train)
+         
+         # cross validation performed on model obtained from Grid Search
         cv_result = cross_val_score(model_grid, X_train, y_train, cv = kfold, scoring="accuracy")
+
+        # Printing accuracies, best parameters, and best estimator
         print ("Cross Validation Accuracy For LR :- Accuracy: %f SD: %f" % (cv_result.mean(), cv_result.std()))
         print ("Best parameters for Logistic regression :", model_grid.best_params_) 
         print("Test set score: {:.2f}".format(model_grid.score(X_test, y_test)))
-        print('Classification Report: \n' + str(cls_report(y_test, cv_result)))
-        confusion_matrix = confusion_matrix(y_test, cv_result)
+        
+    #Evaluating the Confusion Matrix and Classification Report
+    LR = LogisticRegression(C=1, max_iter=10000)
+    LR.fit(X_train, y_train)
+    y_pred_LR = LR.predict(X_test)
+    print('Classification Report: \n' + str(cls_report(y_test, y_pred_LR)))
+    lr_confusion_matrix = confusion_matrix(y_test, y_pred_LR)
     
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.imshow(confusion_matrix,cmap=plt.cm.Blues)
-    ax.grid(False)
-    ax.set_xlabel('Predicted outputs')
-    ax.set_ylabel('Actual outputs')
+    #visualize Confusion Matrix
+    confusion_matrix_plot(LR, X_test,y_test)
 
-    plt.title("Logistic Regression Confusion Matrix")
-    for i in range(2):
-        for j in range(2):
-            ax.text(j, i, confusion_matrix[i, j], ha='center', va='center', color='black',fontsize=50)
-    plt.savefig('Confusion_Matrix_LR.png')
+    # Visualize Logistic regression accuracy
+    visualize_LR_accuracy(cv_result)
 
-    return cv_result
+    # Store accuracy for no columns removed
+    dict = {}
+    dict['None'] = model_grid.best_score_
 
+    # Find out which column is most impactful in predicting stop_outcome
+    y = df_clean["stop_outcome"].copy()
+    df_clean = df_clean.drop(columns=['stop_outcome'])
 
+    # For every column in the dataset, remove the column and train the model, store accuracy
+    for c in df_clean.columns:
+        print("Removing column", c)
+        x_t = df_clean.drop(columns=[c])
+        x_t = pd.get_dummies(x_t)
+        X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
+        for model, para in LR_opt:    
+            kfold = KFold(7, random_state=0, shuffle=True)
+            grid_search = GridSearchCV(model, para)
+            grid_search.fit(X_train,y_train)
+            cv_result = cross_val_score(grid_search, X_train, y_train, cv = kfold, scoring="accuracy")
+            dict[c] = grid_search.best_score_
+
+    print("Results:\n", dict)
+    print("Logistic Regression Completed")
+
+    return dict
+
+# Apply Random Forest classifier algorithm on the dataset and compare how different 
+# approaches in implementing the algorithm impacts the accuracy
+#
+# The first approach is to find out the best parameters using grid search
+#
+# In the second approach we try to remove individually one column at a time and try to find out 
+# the accuracy respectively. This way we can find out which column is affecting the outcome much or
+# indicating the importance of each column
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+# df_clean: Original dataset upon which train_test_split was applied
+#
+# Return: dictionary containing results after individually removing columns
 def random_forest(X_train, X_test, y_train, y_test, df_clean):
     print("Start Random Forest")
     # Find best parameters to run the model most efficently
@@ -448,8 +576,13 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
     # Return the results
     return dict
 
-
+# Visualize the random forest accuracy based on removing each column of the dataset at a 
+# time and then measuring accuracy
+#  
+# Parameters
+# random_forest: dictionary containing results after individually removing columns
 def random_forest_visualizaton(random_forest):
+    # Visualization based on removing individual columns and their respective accuracy
     plt.plot(list(random_forest.values()), '--', marker='o')
     ax = plt.subplot()
 
@@ -461,7 +594,7 @@ def random_forest_visualizaton(random_forest):
     plt.xlabel('Columns Removed')
     plt.grid(True)
     plt.ylabel('Accuracy')
-    plt.savefig('random_forest.png')
+    plt.savefig('analysis_visualization/random_forest.png')
 
 # Apply Decision Tree classifier algorithm on the dataset and compare how different 
 # approaches in implementing the algorithm impacts the accuracy
@@ -561,7 +694,6 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 #  
 # Parameters
 # decision_tree_results: Dictionary Containing accuracies that need to be plotted
-
 def decision_tree_visualizaton(decision_tree_results):
 
     # Visualization based on removing individual columns and their respective accuracy 
@@ -610,13 +742,6 @@ def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
     # Plot the data as a line chart and mark it in blue
     plt.plot(X_axis, Y_axis, label='KNN accuracy for n neighbors on entire dataset (82 features)', c="blue")
 
-    # Apply PCA and compare
-    X_axis, Y_axis = knn_analysis.apply_pca_and_compare(X_train, X_test, y_train, y_test)
-    # Test Results
-    # Y_axis = [0.594251310934162, 0.7977859778597786, 0.8865799184307632, 0.8886774130899203, 0.888949310545737, 0.8891046805204894, 0.8900757428626918, 0.8882113031656632, 0.8891823655078656, 0.8886385705962323, 0.892212080015537, 0.891396387648087, 0.8917071275975917, 0.8920178675470966, 0.8916682851039037, 0.8919790250534084, 0.8916294426102156, 0.8921732375218488, 0.8912021751796465, 0.8902699553311323, 0.8903864828121966, 0.8907360652553894, 0.8908914352301418, 0.890969120217518, 0.8902699553311323, 0.8906583802680133, 0.8912410176733346, 0.8908914352301418, 0.9032433482229559, 0.9026995533113226, 0.9063119052243154, 0.9060788502621868, 0.9058457953000583, 0.9060788502621868, 0.9058846377937464, 0.9057681103126821, 0.9065838026801321, 0.9065449601864439,  0.906972227617013, 0.9067780151485726, 0.9058069528063701, 0.9060011652748107, 0.9059234802874344, 0.9064672751990678]
-    # Plot the data as a line chart and mark it in red
-    plt.plot(X_axis, Y_axis, label='KNN accuracy after applying PCA and reducing to n components', c="red")
-
     # Apply cross_val_score
     X_axis, Y_axis = knn_analysis.knn_apply_cross_val_score(df_clean)
     # Test Results
@@ -624,11 +749,25 @@ def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
     # Plot the data as a line chart and mark it in green
     plt.plot(X_axis, Y_axis, label='cross_val_score with 5 fold for n neighbors', c="green")
 
-    plt.xlabel("n")
-    plt.ylabel("score")
+    plt.xlabel("n neighbours")
+    plt.ylabel("accuracy score")
     ax.legend()
     plt.tight_layout()
     plt.savefig("analysis_visualization/KNN.png") 
+
+    fig, ax = plt.subplots()
+    # Apply PCA and compare
+    X_axis, Y_axis = knn_analysis.apply_pca_and_compare(X_train, X_test, y_train, y_test)
+    # Test Results
+    # Y_axis = [0.594251310934162, 0.7977859778597786, 0.8865799184307632, 0.8886774130899203, 0.888949310545737, 0.8891046805204894, 0.8900757428626918, 0.8882113031656632, 0.8891823655078656, 0.8886385705962323, 0.892212080015537, 0.891396387648087, 0.8917071275975917, 0.8920178675470966, 0.8916682851039037, 0.8919790250534084, 0.8916294426102156, 0.8921732375218488, 0.8912021751796465, 0.8902699553311323, 0.8903864828121966, 0.8907360652553894, 0.8908914352301418, 0.890969120217518, 0.8902699553311323, 0.8906583802680133, 0.8912410176733346, 0.8908914352301418, 0.9032433482229559, 0.9026995533113226, 0.9063119052243154, 0.9060788502621868, 0.9058457953000583, 0.9060788502621868, 0.9058846377937464, 0.9057681103126821, 0.9065838026801321, 0.9065449601864439,  0.906972227617013, 0.9067780151485726, 0.9058069528063701, 0.9060011652748107, 0.9059234802874344, 0.9064672751990678]
+    # Plot the data as a line chart and mark it in red
+    plt.plot(X_axis, Y_axis, label='KNN accuracy after applying PCA and reducing to n components', c="red")
+
+    plt.xlabel("n components")
+    plt.ylabel("accuracy score")
+    ax.legend()
+    plt.tight_layout()
+    plt.savefig("analysis_visualization/PCA.png") 
 
     # drop one column at a time and find the importance of each column in the dataset
     X_axis, Y_axis = knn_analysis.knn_remove_columns_and_find_accuracy(df_clean)
@@ -706,11 +845,11 @@ if __name__ == "__main__":
     save_to_csv(dataframe, filename)
 
     # Since our dataset is predominantly filled with citations, we are downsampling our data so that there is better learning
-    print("Downsampling data")
+    print("Resampling data")
     dataframe = resample_data(dataframe)
 
-    filename = 'datasets/downsampled_data.csv'
-    print("Saving downsampled data into", filename)
+    filename = 'datasets/resampled_data.csv'
+    print("Saving resampled data into", filename)
     save_to_csv(dataframe, filename)
 
     # Perform a test train split to train our model
@@ -718,11 +857,10 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = common_utils.test_train_split(dataframe)
 
     # Random Forest
-    # Commented out since still a work in progress
     # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
     # Results from running random forest (so you don't have to run the method)
-    # Comment out this line if you decide to run the random_forest method and get the accuracies from there
+    # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
     # random_forest_results = {'stop_year': 0.9225951283381028, 'stop_month': 0.9195216378715305,
     # 'stop_date': 0.9111169567927885, 'stop_hour': 0.919958632899766,
     # 'driver_gender': 0.9260764349312349, 'drivers_age_bucket': 0.9211530328633148,
@@ -745,8 +883,16 @@ if __name__ == "__main__":
     # Commented out since still a work in progress
     # print("Logistic Regression")
     # logistic_regression_results = logistic_regression(X_train, X_test, y_train, y_test, dataframe)
-    
+    # logistic_regression_visualization(logistic_regression_results)
 
+    #RESULTS OF LOGISTIC REGRESSION:
+    # {'None': 0.9280428913411332, 'stop_year': 0.9279991839879596, 'stop_month': 0.9281448557161394,
+    # 'stop_date': 0.928086581720577, 'stop_hour': 0.9280574569226638, 'driver_gender': 0.9279554893650832, 
+    # 'drivers_age_bucket': 0.9279700581291884, 'drivers_race': 0.9279846226498613, 'stop_duration': 0.9280428849759845,
+    # 'is_arrested': 0.8978908252908356, 'drugs_related_stop': 0.9279991924748245, 'violations_raw': 0.9275039340596075,
+    # 'search_score': 0.9280574579835221}
+    
+    
     # K Nearest Neighbours
     print ("k_neighbors_classifier")
     k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
