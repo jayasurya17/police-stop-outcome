@@ -1,21 +1,11 @@
 import pandas as pd
+import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.decomposition import PCA as sklearnPCA
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
-
-def test_train_split(dataframe):
-	# Set X for test train split and use get_dummies for one hot encoding
-	X = dataframe.drop(columns=["stop_outcome"])
-	X = pd.get_dummies(X)
-
-	# Set y for test train split
-	y = dataframe["stop_outcome"].copy()
-
-	# Perform the test train split
-	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-	return X_train, X_test, y_train, y_test
+from sklearn.metrics import confusion_matrix
+import common_utils as common_utils
 
 
 # Fit KNN algorithm on the test and train dataset and find the accuracy with which the model was trained 
@@ -52,7 +42,7 @@ def knn_remove_columns_and_find_accuracy(df_clean):
 	Y_axis = []
 
 	knn = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
-	X_train, X_test, y_train, y_test = test_train_split(df_clean)
+	X_train, X_test, y_train, y_test = common_utils.test_train_split(df_clean)
 	result = predict_and_get_accuracy(knn, X_train, X_test, y_train, y_test)
 	X_axis.append("None")
 	Y_axis.append(result)
@@ -62,7 +52,7 @@ def knn_remove_columns_and_find_accuracy(df_clean):
 		if column == "stop_outcome":
 			continue
 		df_clean = df_clean_orig.drop(columns=[column])
-		X_train, X_test, y_train, y_test = test_train_split(df_clean)
+		X_train, X_test, y_train, y_test = common_utils.test_train_split(df_clean)
 		result = predict_and_get_accuracy(knn, X_train, X_test, y_train, y_test)
 		X_axis.append(column)
 		Y_axis.append(result)
@@ -84,7 +74,7 @@ def knn_remove_columns_and_find_accuracy(df_clean):
 def knn_accuracy_on_entire_dataset(X_train, X_test, y_train, y_test):
 	X_axis = []
 	Y_axis = []
-	for neighbors in range(2, 36):
+	for neighbors in range(2, 26):
 		knn = KNeighborsClassifier(n_neighbors=neighbors, metric='euclidean')
 		result = predict_and_get_accuracy(knn, X_train, X_test, y_train, y_test)
 		X_axis.append(neighbors)
@@ -111,7 +101,7 @@ def apply_pca_and_compare(X_train, X_test, y_train, y_test):
 	X_test_orig = X_test
 	X_axis = []
 	Y_axis = []
-	for components in range(2, 36):
+	for components in range(2, 26):
 		sklearn_pca = sklearnPCA(n_components=components)
 		X_test = sklearn_pca.fit_transform(X_test_orig)
 		X_test = pd.DataFrame(X_test)
@@ -143,7 +133,7 @@ def knn_apply_cross_val_score(df_clean):
 	y = df_clean["stop_outcome"].copy()
 	X_axis = []
 	Y_axis = []
-	for neighbors in range(2, 36):
+	for neighbors in range(2, 26):
 		knn = KNeighborsClassifier(n_neighbors=neighbors, metric='euclidean')
 		score = cross_val_score(knn, X, y, cv = 5, scoring='accuracy')
 		result = score.mean()
@@ -152,3 +142,21 @@ def knn_apply_cross_val_score(df_clean):
 		print ("result for", neighbors, "neighbors (after cross_val_score):", result)
 
 	return X_axis, Y_axis
+
+# Find the accuracy with which each type of outcome was predicted using KNN
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# X_test: X_test obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+# y_test: y_test obtained from train_test_split
+#
+# Return: accuracy with which each type of outcome was predicted using KNN
+def knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test):
+	knn = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
+	pred = knn.fit(X_train, y_train)
+	y_pred = knn.predict(X_test)
+	result = accuracy_score(y_test, y_pred)
+	results = common_utils.find_accuracy_of_each_class(y_test, y_pred)
+	print ("Prediction accuracy of each class using KNN")
+	print (results)
