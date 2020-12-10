@@ -157,6 +157,7 @@ def knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test):
 	pred = knn.fit(X_train, y_train)
 	y_pred = knn.predict(X_test)
 	result = accuracy_score(y_test, y_pred)
+	print (result)
 	results = common_utils.find_accuracy_of_each_class(y_test, y_pred)
 	print ("Prediction accuracy of each class using KNN")
 	print (results)

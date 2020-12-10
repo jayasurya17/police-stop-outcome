@@ -733,27 +733,27 @@ def decision_tree_visualizaton(decision_tree_results):
 # df_clean: Original dataset upon which train_test_split was applied
 def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
 
-    fig, ax = plt.subplots()
+    # fig, ax = plt.subplots()
 
-    # KNN accuracy for n neighbors on entire dataset
-    X_axis, Y_axis = knn_analysis.knn_accuracy_on_entire_dataset(X_train, X_test, y_train, y_test)
-    # Test Results
-    # Y_axis = [0.9070887550980773, 0.895902116915906, 0.9074771800349583, 0.9034764031850845, 0.9067780151485726, 0.9048358904641678, 0.9065449601864439, 0.9054962128568654, 0.9054962128568654, 0.9043697805399107, 0.9047582054767916, 0.9042920955525344, 0.9039425131093416, 0.9032433482229559, 0.9029714507671392, 0.9027772382986988, 0.9027383958050107, 0.9025441833365702, 0.9022722858807536, 0.9018450184501845, 0.901223538551175, 0.9008739561079822, 0.9010293260827346, 0.9006409011458536, 0.9008739561079822, 0.9003301611963488, 0.9004855311711012, 0.9002136337152845, 0.8997475237910274, 0.8994756263352107, 0.8993979413478346, 0.8988929889298893, 0.8989318314235774, 0.8986987764614488, 0.8987764614488251, 0.898349194018256, 0.898349194018256, 0.8982715090308798, 0.8981549815498155, 0.8980384540687513, 0.8980384540687513, 0.8978442416003107, 0.8977665566129346, 0.8974169741697416]
-    # Plot the data as a line chart and mark it in blue
-    plt.plot(X_axis, Y_axis, label='KNN accuracy for n neighbors on entire dataset (82 features)', c="blue")
+    # # KNN accuracy for n neighbors on entire dataset
+    # X_axis, Y_axis = knn_analysis.knn_accuracy_on_entire_dataset(X_train, X_test, y_train, y_test)
+    # # Test Results
+    # # Y_axis = [0.9070887550980773, 0.895902116915906, 0.9074771800349583, 0.9034764031850845, 0.9067780151485726, 0.9048358904641678, 0.9065449601864439, 0.9054962128568654, 0.9054962128568654, 0.9043697805399107, 0.9047582054767916, 0.9042920955525344, 0.9039425131093416, 0.9032433482229559, 0.9029714507671392, 0.9027772382986988, 0.9027383958050107, 0.9025441833365702, 0.9022722858807536, 0.9018450184501845, 0.901223538551175, 0.9008739561079822, 0.9010293260827346, 0.9006409011458536, 0.9008739561079822, 0.9003301611963488, 0.9004855311711012, 0.9002136337152845, 0.8997475237910274, 0.8994756263352107, 0.8993979413478346, 0.8988929889298893, 0.8989318314235774, 0.8986987764614488, 0.8987764614488251, 0.898349194018256, 0.898349194018256, 0.8982715090308798, 0.8981549815498155, 0.8980384540687513, 0.8980384540687513, 0.8978442416003107, 0.8977665566129346, 0.8974169741697416]
+    # # Plot the data as a line chart and mark it in blue
+    # plt.plot(X_axis, Y_axis, label='KNN accuracy for n neighbors on entire dataset (82 features)', c="blue")
 
-    # Apply cross_val_score
-    X_axis, Y_axis = knn_analysis.knn_apply_cross_val_score(df_clean)
-    # Test Results
-    # Y_axis = [0.8511691686412023, 0.8074589172567258, 0.855585647983793, 0.8344704949932877, 0.8642671376901581, 0.8514372277880723, 0.8699538007495896, 0.8612024318951061, 0.8741721998945964, 0.8688118391287192, 0.8795908363952943, 0.8752909024120694, 0.8823409594053253, 0.8793228431036164, 0.8844851175616342, 0.8823642775747198, 0.8869205960049686, 0.885277526611506, 0.888855001300606, 0.8877829324062443, 0.890288323943673, 0.889495927114352, 0.8916983426746548, 0.8909525509538255, 0.8928519864634856, 0.8921761200573013, 0.8940056363625921, 0.8932598575412335, 0.8944950748666946, 0.8944018544659181, 0.89557880759819, 0.8954389719051296, 0.8960682338817414, 0.8961031907682481, 0.8968256778980728, 0.8965460058330319, 0.8970820487667067, 0.8969538680848264, 0.8974782532916429, 0.8971170151580864, 0.8972452019502425, 0.8971519815494663, 0.8977113250006286, 0.8974666206848061]
-    # Plot the data as a line chart and mark it in green
-    plt.plot(X_axis, Y_axis, label='cross_val_score with 5 fold for n neighbors', c="green")
+    # # Apply cross_val_score
+    # X_axis, Y_axis = knn_analysis.knn_apply_cross_val_score(df_clean)
+    # # Test Results
+    # # Y_axis = [0.8511691686412023, 0.8074589172567258, 0.855585647983793, 0.8344704949932877, 0.8642671376901581, 0.8514372277880723, 0.8699538007495896, 0.8612024318951061, 0.8741721998945964, 0.8688118391287192, 0.8795908363952943, 0.8752909024120694, 0.8823409594053253, 0.8793228431036164, 0.8844851175616342, 0.8823642775747198, 0.8869205960049686, 0.885277526611506, 0.888855001300606, 0.8877829324062443, 0.890288323943673, 0.889495927114352, 0.8916983426746548, 0.8909525509538255, 0.8928519864634856, 0.8921761200573013, 0.8940056363625921, 0.8932598575412335, 0.8944950748666946, 0.8944018544659181, 0.89557880759819, 0.8954389719051296, 0.8960682338817414, 0.8961031907682481, 0.8968256778980728, 0.8965460058330319, 0.8970820487667067, 0.8969538680848264, 0.8974782532916429, 0.8971170151580864, 0.8972452019502425, 0.8971519815494663, 0.8977113250006286, 0.8974666206848061]
+    # # Plot the data as a line chart and mark it in green
+    # plt.plot(X_axis, Y_axis, label='cross_val_score with 5 fold for n neighbors', c="green")
 
-    plt.xlabel("n neighbours")
-    plt.ylabel("accuracy score")
-    ax.legend()
-    plt.tight_layout()
-    plt.savefig("analysis_visualization/KNN.png") 
+    # plt.xlabel("n neighbours")
+    # plt.ylabel("accuracy score")
+    # ax.legend()
+    # plt.tight_layout()
+    # plt.savefig("analysis_visualization/KNN.png") 
 
     fig, ax = plt.subplots()
     # Apply PCA and compare
@@ -769,14 +769,14 @@ def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
     plt.tight_layout()
     plt.savefig("analysis_visualization/PCA.png") 
 
-    # drop one column at a time and find the importance of each column in the dataset
-    X_axis, Y_axis = knn_analysis.knn_remove_columns_and_find_accuracy(df_clean)
-    # Test Results
-    # X_axis = ['None', 'stop_year', 'stop_month', 'stop_date', 'stop_hour', 'driver_gender', 'drivers_age_bucket', 'drivers_race', 'stop_duration', 'is_arrested', 'drugs_related_stop', 'violations_raw', 'search_score']
-    # Y_axis = [0.9042763924493125, 0.9074807737124213, 0.9080633884875321, 0.9046259613143789, 0.9116173386157073, 0.9060242367746446, 0.9077138196224657, 0.9069564204148217, 0.903810300629224, 0.8908762526217665, 0.9044511768818457, 0.9063155441622, 0.9076555581449546]
-    plot_line_chart(X_axis, Y_axis, "column", "Accuracy", "KNN accuracy for on removing each feature", "analysis_visualization/KNN_columns.png")
+    # # drop one column at a time and find the importance of each column in the dataset
+    # X_axis, Y_axis = knn_analysis.knn_remove_columns_and_find_accuracy(df_clean)
+    # # Test Results
+    # # X_axis = ['None', 'stop_year', 'stop_month', 'stop_date', 'stop_hour', 'driver_gender', 'drivers_age_bucket', 'drivers_race', 'stop_duration', 'is_arrested', 'drugs_related_stop', 'violations_raw', 'search_score']
+    # # Y_axis = [0.9042763924493125, 0.9074807737124213, 0.9080633884875321, 0.9046259613143789, 0.9116173386157073, 0.9060242367746446, 0.9077138196224657, 0.9069564204148217, 0.903810300629224, 0.8908762526217665, 0.9044511768818457, 0.9063155441622, 0.9076555581449546]
+    # plot_line_chart(X_axis, Y_axis, "column", "Accuracy", "KNN accuracy for on removing each feature", "analysis_visualization/KNN_columns.png")
 
-    knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
+    # knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
 
 
 # Since our dataset is predominatly filled with citations, we need to resample our data so that classification models can learn better
@@ -784,9 +784,12 @@ def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
 # 
 # Parameters
 # dataframe: dataframe containing processed data
+# n_samples: number of samples of each outcome that needs to be generated. Value has to be between 5293 and 77005
 #
 # Return: dataframe which has been resampled
-def resample_data(dataframe):
+def resample_data(dataframe, n_samples):
+    if n_samples < 5293 or n_samples > 77005:
+        return None
 
     df_citation = dataframe[dataframe['stop_outcome'] == 'Citation']
     df_warning = dataframe[dataframe['stop_outcome'] == 'Warning']
@@ -795,10 +798,11 @@ def resample_data(dataframe):
     df_arrest_passenger = dataframe[dataframe['stop_outcome'] == 'Arrest Passenger']
      
     # Resample all values
-    df_citation = resample(df_citation, replace=False, n_samples=5293, random_state=123)
-    df_arrest_driver = resample(df_arrest_driver, replace=True, n_samples=5293, random_state=123)
-    df_no_action = resample(df_no_action, replace=True, n_samples=5293, random_state=123)
-    df_arrest_passenger = resample(df_arrest_passenger, replace=True, n_samples=5293, random_state=123)
+    df_citation = resample(df_citation, replace=False, n_samples=n_samples, random_state=123)
+    df_warning = resample(df_warning, replace=True, n_samples=n_samples, random_state=123)
+    df_arrest_driver = resample(df_arrest_driver, replace=True, n_samples=n_samples, random_state=123)
+    df_no_action = resample(df_no_action, replace=True, n_samples=n_samples, random_state=123)
+    df_arrest_passenger = resample(df_arrest_passenger, replace=True, n_samples=n_samples, random_state=123)
      
     # Combine minority class with downsampled majority class
     df_resampled = pd.concat([df_citation, df_warning, df_arrest_driver, df_no_action, df_arrest_passenger])
@@ -846,7 +850,7 @@ if __name__ == "__main__":
 
     # Since our dataset is predominantly filled with citations, we are downsampling our data so that there is better learning
     print("Resampling data")
-    dataframe = resample_data(dataframe)
+    dataframe = resample_data(dataframe, 20000)
 
     filename = 'datasets/resampled_data.csv'
     print("Saving resampled data into", filename)
@@ -893,6 +897,6 @@ if __name__ == "__main__":
     # 'search_score': 0.9280574579835221}
     
     
-    # # K Nearest Neighbours
-    # print ("k_neighbors_classifier")
-    # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
+    # K Nearest Neighbours
+    print ("k_neighbors_classifier")
+    k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
