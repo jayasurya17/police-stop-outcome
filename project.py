@@ -893,6 +893,6 @@ if __name__ == "__main__":
     # 'search_score': 0.9280574579835221}
     
     
-    # K Nearest Neighbours
-    print ("k_neighbors_classifier")
-    k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
+    # # K Nearest Neighbours
+    # print ("k_neighbors_classifier")
+    # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
