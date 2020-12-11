@@ -902,7 +902,6 @@ if __name__ == "__main__":
     # 'search_score': 0.9280574579835221}
     
     
-<<<<<<< HEAD
     # # K Nearest Neighbours
     # print ("k_neighbors_classifier")
     # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
@@ -911,8 +910,3 @@ if __name__ == "__main__":
     # print ("k_neighbors_classifier performance with resampling data")
     # knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
     
-=======
-    # K Nearest Neighbours
-    # print ("k_neighbors_classifier")
-    # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
->>>>>>> fe1381969eafaf2857d6510accd892c9da8a6e3a
