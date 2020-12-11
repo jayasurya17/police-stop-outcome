@@ -109,7 +109,7 @@ def apply_pca_and_compare(X_train, X_test, y_train, y_test):
 		X_train = sklearn_pca.fit_transform(X_train_orig)
 		X_train = pd.DataFrame(X_train)
 
-		knn = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
+		knn = KNeighborsClassifier(n_neighbors=25, metric='euclidean')
 		result = predict_and_get_accuracy(knn, X_train, X_test, y_train, y_test) 
 		X_axis.append(components)
 		Y_axis.append(result)
@@ -153,11 +153,12 @@ def knn_apply_cross_val_score(df_clean):
 #
 # Return: accuracy with which each type of outcome was predicted using KNN
 def knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test):
-	knn = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
-	pred = knn.fit(X_train, y_train)
-	y_pred = knn.predict(X_test)
-	result = accuracy_score(y_test, y_pred)
-	print (result)
-	results = common_utils.find_accuracy_of_each_class(y_test, y_pred)
-	print ("Prediction accuracy of each class using KNN")
-	print (results)
+	for neighbors in range(5, 26, 5):
+		knn = KNeighborsClassifier(n_neighbors=neighbors, metric='euclidean')
+		pred = knn.fit(X_train, y_train)
+		y_pred = knn.predict(X_test)
+		# result = accuracy_score(y_test, y_pred)
+		# print (result)
+		results = common_utils.find_accuracy_of_each_class(y_test, y_pred)
+		print ("Prediction accuracy of each class using KNN with", neighbors, "neighbors")
+		print (results)

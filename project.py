@@ -127,11 +127,11 @@ def plot_hist_graph(df, column, filename):
 # Plot a line chart and save the image
 # 
 # Parameters
-# x: values that needs to be present in x axis
-# y: corresponding y values that needs to be plotted
-# x_label: label that needs to be marked on x axis
-# y_label: label that needs to be marked on y axis
-# title: title for the graph
+# x: values that needs to be present in x axis as a list
+# y: corresponding y values that needs to be plotted as a list
+# x_label: label that needs to be marked on x axis as a string
+# y_label: label that needs to be marked on y axis as a string
+# title: title for the graph as a string
 # filename: Location/pathname where the resulting graph must be saved
 def plot_line_chart(x, y, x_label, y_label, title, filename):
 	fig, ax = plt.subplots()
@@ -755,19 +755,19 @@ def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
     # plt.tight_layout()
     # plt.savefig("analysis_visualization/KNN.png") 
 
-    fig, ax = plt.subplots()
-    # Apply PCA and compare
-    X_axis, Y_axis = knn_analysis.apply_pca_and_compare(X_train, X_test, y_train, y_test)
-    # Test Results
-    # Y_axis = [0.594251310934162, 0.7977859778597786, 0.8865799184307632, 0.8886774130899203, 0.888949310545737, 0.8891046805204894, 0.8900757428626918, 0.8882113031656632, 0.8891823655078656, 0.8886385705962323, 0.892212080015537, 0.891396387648087, 0.8917071275975917, 0.8920178675470966, 0.8916682851039037, 0.8919790250534084, 0.8916294426102156, 0.8921732375218488, 0.8912021751796465, 0.8902699553311323, 0.8903864828121966, 0.8907360652553894, 0.8908914352301418, 0.890969120217518, 0.8902699553311323, 0.8906583802680133, 0.8912410176733346, 0.8908914352301418, 0.9032433482229559, 0.9026995533113226, 0.9063119052243154, 0.9060788502621868, 0.9058457953000583, 0.9060788502621868, 0.9058846377937464, 0.9057681103126821, 0.9065838026801321, 0.9065449601864439,  0.906972227617013, 0.9067780151485726, 0.9058069528063701, 0.9060011652748107, 0.9059234802874344, 0.9064672751990678]
-    # Plot the data as a line chart and mark it in red
-    plt.plot(X_axis, Y_axis, label='KNN accuracy after applying PCA and reducing to n components', c="red")
+    # fig, ax = plt.subplots()
+    # # Apply PCA and compare
+    # X_axis, Y_axis = knn_analysis.apply_pca_and_compare(X_train, X_test, y_train, y_test)
+    # # Test Results
+    # # Y_axis = [0.594251310934162, 0.7977859778597786, 0.8865799184307632, 0.8886774130899203, 0.888949310545737, 0.8891046805204894, 0.8900757428626918, 0.8882113031656632, 0.8891823655078656, 0.8886385705962323, 0.892212080015537, 0.891396387648087, 0.8917071275975917, 0.8920178675470966, 0.8916682851039037, 0.8919790250534084, 0.8916294426102156, 0.8921732375218488, 0.8912021751796465, 0.8902699553311323, 0.8903864828121966, 0.8907360652553894, 0.8908914352301418, 0.890969120217518, 0.8902699553311323, 0.8906583802680133, 0.8912410176733346, 0.8908914352301418, 0.9032433482229559, 0.9026995533113226, 0.9063119052243154, 0.9060788502621868, 0.9058457953000583, 0.9060788502621868, 0.9058846377937464, 0.9057681103126821, 0.9065838026801321, 0.9065449601864439,  0.906972227617013, 0.9067780151485726, 0.9058069528063701, 0.9060011652748107, 0.9059234802874344, 0.9064672751990678]
+    # # Plot the data as a line chart and mark it in red
+    # plt.plot(X_axis, Y_axis, label='KNN accuracy after applying PCA and reducing to n components', c="red")
 
-    plt.xlabel("n components")
-    plt.ylabel("accuracy score")
-    ax.legend()
-    plt.tight_layout()
-    plt.savefig("analysis_visualization/PCA.png") 
+    # plt.xlabel("n components")
+    # plt.ylabel("accuracy score")
+    # ax.legend()
+    # plt.tight_layout()
+    # plt.savefig("analysis_visualization/PCA.png") 
 
     # # drop one column at a time and find the importance of each column in the dataset
     # X_axis, Y_axis = knn_analysis.knn_remove_columns_and_find_accuracy(df_clean)
@@ -776,7 +776,7 @@ def k_neighbors_classifier(X_train, X_test, y_train, y_test, df_clean):
     # # Y_axis = [0.9042763924493125, 0.9074807737124213, 0.9080633884875321, 0.9046259613143789, 0.9116173386157073, 0.9060242367746446, 0.9077138196224657, 0.9069564204148217, 0.903810300629224, 0.8908762526217665, 0.9044511768818457, 0.9063155441622, 0.9076555581449546]
     # plot_line_chart(X_axis, Y_axis, "column", "Accuracy", "KNN accuracy for on removing each feature", "analysis_visualization/KNN_columns.png")
 
-    # knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
+    knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
 
 
 # Since our dataset is predominatly filled with citations, we need to resample our data so that classification models can learn better
@@ -848,9 +848,13 @@ if __name__ == "__main__":
     print("Saving dataframe into", filename)
     save_to_csv(dataframe, filename)
 
+    # Perform a test train split to train our model
+    print("Performing a test train split to train our model")
+    X_train_orig, X_test_orig, y_train_orig, y_test_orig = common_utils.test_train_split(dataframe)
+
     # Since our dataset is predominantly filled with citations, we are downsampling our data so that there is better learning
     print("Resampling data")
-    dataframe = resample_data(dataframe, 20000)
+    dataframe = resample_data(dataframe, 10000)
 
     filename = 'datasets/resampled_data.csv'
     print("Saving resampled data into", filename)
