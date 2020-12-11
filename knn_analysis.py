@@ -109,7 +109,7 @@ def apply_pca_and_compare(X_train, X_test, y_train, y_test):
 		X_train = sklearn_pca.fit_transform(X_train_orig)
 		X_train = pd.DataFrame(X_train)
 
-		knn = KNeighborsClassifier(n_neighbors=25, metric='euclidean')
+		knn = KNeighborsClassifier(n_neighbors=15, metric='euclidean')
 		result = predict_and_get_accuracy(knn, X_train, X_test, y_train, y_test) 
 		X_axis.append(components)
 		Y_axis.append(result)
