@@ -868,19 +868,17 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = common_utils.test_train_split(dataframe)
 
     # Random Forest
-    # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+    random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
     # Results from running random forest (so you don't have to run the method)
     # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
-    # random_forest_results = {'stop_year': 0.9225951283381028, 'stop_month': 0.9195216378715305,
-    # 'stop_date': 0.9111169567927885, 'stop_hour': 0.919958632899766,
-    # 'driver_gender': 0.9260764349312349, 'drivers_age_bucket': 0.9211530328633148,
-    # 'drivers_race': 0.9256394908241876, 'stop_duration': 0.9267173438574698,
-    # 'is_arrested': 0.8986191255845395, 'drugs_related_stop': 0.92706694009223,
-    # 'violations_raw': 0.9240226264056173, 'search_score': 0.9265280072104403,
-    # 'None': 0.9267901887388534}
+    # random_forest_results = {'None': 0.9567625, 'stop_year': 0.9503375000000001, 'stop_month': 0.9529125, 
+    # 'stop_date': 0.949075, 'stop_hour': 0.9527749999999999, 'driver_gender': 0.9554874999999999, 
+    # 'drivers_age_bucket': 0.9533250000000001, 'drivers_race': 0.9558625000000001, 'stop_duration': 0.9561125, 
+    # 'is_arrested': 0.9446625, 'drugs_related_stop': 0.9561249999999999, 'violations_raw': 0.9544750000000001, 
+    # 'search_score': 0.9555875}
     # Displaying results from running random forest
-    # random_forest_visualizaton(random_forest_results)
+    random_forest_visualizaton(random_forest_results)
 
     # Decision Trees
     # Commented out since still a work in progress
@@ -904,6 +902,7 @@ if __name__ == "__main__":
     # 'search_score': 0.9280574579835221}
     
     
+<<<<<<< HEAD
     # # K Nearest Neighbours
     # print ("k_neighbors_classifier")
     # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
@@ -912,3 +911,8 @@ if __name__ == "__main__":
     # print ("k_neighbors_classifier performance with resampling data")
     # knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
     
+=======
+    # K Nearest Neighbours
+    # print ("k_neighbors_classifier")
+    # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
+>>>>>>> fe1381969eafaf2857d6510accd892c9da8a6e3a
