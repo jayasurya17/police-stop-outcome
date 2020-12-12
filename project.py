@@ -705,18 +705,18 @@ def decision_tree_visualizaton(decision_tree_results, type):
     plt.close()
     
     # Visualization based on removing individual columns and their respective accuracy 
-    plt.plot(decision_tree_results["list_column_removed"], decision_tree_results["list_accuracy_when_column_removed"], label='Column Removed vs Accuracy')
-
-    plt.xlabel('Column Removed')  # Label x-axis
-    plt.ylabel('Accuracy')  # Label y-axis
-    plt.grid(True)
-    plt.legend()  # Show plot labels as legend
-    if type=="without_resampling":
-        ymin=0.8
-    else:
-        ymin=0.4    
-    plt.ylim(ymin=ymin)
-    plt.savefig('analysis_visualization/decision_tree_column_{}.png'.format(type))  # Save graph
+    # plt.plot(decision_tree_results["list_column_removed"], decision_tree_results["list_accuracy_when_column_removed"], label='Column Removed vs Accuracy')
+    plot_line_chart(decision_tree_results["list_column_removed"], decision_tree_results["list_accuracy_when_column_removed"], "Column", "Accuracy", "Column Removed vs Accuracy", "analysis_visualization/decision_tree_column_{}.png".format(type))   
+    #  plt.xlabel('Column Removed')  # Label x-axis
+    # plt.ylabel('Accuracy')  # Label y-axis
+    # plt.grid(True)
+    # plt.legend()  # Show plot labels as legend
+    # if type=="without_resampling":
+    #     ymin=0.8
+    # else:
+    #     ymin=0.4    
+    # plt.ylim(ymin=ymin)
+    # plt.savefig('analysis_visualization/decision_tree_column_{}.png'.format(type))  # Save graph
 
     plt.close()
 
