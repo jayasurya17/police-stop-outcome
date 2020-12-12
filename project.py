@@ -639,6 +639,9 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     print("Best estimator:\n{}".format(grid_search_cv.best_estimator_))
     print("Test set score: {:.2f}".format(grid_search_cv.score(X_test, y_test)))
 
+    # See how well the model is accurately predicting the stop_outcome for each type
+    print("Prediction Results for decision Tree with no column removed:\n", common_utils.find_accuracy_of_each_class(y_test,grid_search_cv.predict(X_test)))
+
     dict = {}
 
     # Store accuracy for no columns removed
@@ -663,6 +666,9 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
         list_column_removed.append(c)
         print("Column Removed:"+str(c)+", Accuracy:"+str(grid_search.best_score_))
         list_accuracy_when_column_removed.append(grid_search.best_score_)
+
+        # print("Prediction Results for coumn {} removed:\n".format(str(c)), common_utils.find_accuracy_of_each_class(y_test,grid_search.predict(X_test)))
+
     
     # The list of depth which are considered and accuracies are calculated
     list_depths = list(range(1,20))
@@ -880,7 +886,7 @@ if __name__ == "__main__":
 
 
     # Random Forest
-    # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+    random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
     # Results from running random forest (so you don't have to run the method)
     # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
@@ -890,7 +896,7 @@ if __name__ == "__main__":
     # 'is_arrested': 0.9446625, 'drugs_related_stop': 0.9561249999999999, 'violations_raw': 0.9544750000000001, 
     # 'search_score': 0.9555875}
     # Displaying results from running random forest
-    # random_forest_visualizaton(random_forest_results)
+    random_forest_visualizaton(random_forest_results)
 
 
 
