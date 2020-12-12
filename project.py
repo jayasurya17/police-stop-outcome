@@ -552,6 +552,9 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
     print("Best estimator:\n{}".format(grid_search.best_estimator_))
     print("Test set score: {:.2f}".format(grid_search.score(X_test, y_test)))
 
+    # See how well the model is accurately predicting the stop_outcome for each type
+    print("Prediction Results:\n", common_utils.find_accuracy_of_each_class(y_test,grid_search.predict(X_test)))
+
     # Store accuracy for no columns removed
     dict['None'] = grid_search.best_score_
 
@@ -569,6 +572,10 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
                                    param_grid, cv=5)
         grid_search.fit(X_train, y_train)
         dict[c] = grid_search.best_score_
+
+        # See how well the model is accurately predicting the stop_outcome for each type
+        print("Prediction Results:\n", common_utils.find_accuracy_of_each_class(y_test,grid_search.predict(X_test)))
+
 
     print("Results:\n", dict)
     print("Random Forest Completed")
@@ -588,7 +595,7 @@ def random_forest_visualizaton(random_forest):
 
     keys = random_forest.keys()
     ax.set_xticklabels(keys, rotation=(25), fontsize=8, ha='right')
-    plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14), keys)
+    plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), keys)
 
     plt.title('Random Forest')
     plt.xlabel('Columns Removed')
