@@ -41,50 +41,39 @@ One last approach in analyzing the model is how accurate it was predicting the `
   is varied. For various depths the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
 
 ## K Nearest Neighbors
-Apply KNN algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
-1) The first approach is to apply KNN on the entire dataset by selecting n number of neighbours
-2) The second approach is to reduce the dataset into n number of features and then apply KNN on the dataset
-3) The third approach is to find accuracy by using cross_val_score with 5 folds on KNN
-4) Finally, drop one column at a time and find the importance of each column in the dataset
+We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
+1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbours. Implementaion of this is written in `knn_accuracy_on_entire_dataset` methos which can be found in `knn_analysis.py` 
+2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementaion of this is written in `knn_apply_cross_val_score` methos which can be found in `knn_analysis.py` 
+
+	These two approaches will show how clusted the data is and also give an insight into if the model is overfitting the data 
+
+3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` methos which can be found in `knn_analysis.py` 
+
+	This approach tells us how many features will be sufficient to predict the outcome 
+
+4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementaion of this is written in `knn_remove_columns_and_find_accuracy` methos which can be found in `knn_analysis.py` 
+
+	This approach will additionally prove the results from the first two approaches
 
 ![KNN neighbous analysis](analysis_visualization/KNN.png)
 
-* On looking at the above graph we notice that accuracy of KNN with and without cross_val_score is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that the model is not overfitted or underfitted. Also, as expected the accuracy decreases by considering higher number of neighbours for analysis.
-* By looking at the following results where the accuracy of prediction of each outcome is mentioned, we observe that the ideal value for K must be 15 where it is not too biased towards a few outcomes or too low for other outcomes
-	- Prediction accuracy of each class using KNN with 5 neighbors
+* On looking at the above graph we notice that as the number of neighbours increase, accuracy decreases. This shows that data is not clustered in just a few places. It is evenly distributed.
+* Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that the model is not overfitted or underfitted. Also, as expected the accuracy decreases by considering higher number of neighbours for analysis.
+* Following are the results of the accuracy with which KNN was able to classify each of the class in outcome . Implementaion of this is written in `knn_find_accuracy_of_each_class` methos which can be found in `knn_analysis.py`
 
-	| stop_outcome |  accuracy |
-	| --------- | --------------- |
-	|     Arrest Driver |  0.953954 |
-	|  Arrest Passenger | 1.000000 | 
-	|          Citation |  0.568627| 
-	|         No Action | 1.000000| 
-	|           Warning |  0.775100| 
+	| stop_outcome |  accuracy with 5 neighbors |accuracy with 15 neighbors| accuracy with 25 neighbors| 
+	| --------- | --------------- |----------------|---------|
+	|     Arrest Driver |  0.953954 |0.788288| 0.681181| 
+	|  Arrest Passenger | 1.000000 | 1.000000| 0.994074| 
+	|          Citation |  0.568627| 0.562594|  0.556058| 
+	|         No Action | 1.000000| 0.993988| 0.937876| 
+	|           Warning |  0.775100| 0.689759| 0.663153| 
 
-	- Prediction accuracy of each class using KNN with 15 neighbors
-
-	| stop_outcome  | accuracy| 
-	|---------------|---------|
-	| Arrest Driver  | 0.788288| 
-	| Arrest Passenger  | 1.000000| 
-	| Citation  | 0.562594| 
-	| No Action  | 0.993988| 
-	| Warning  | 0.689759| 
-
-	- Prediction accuracy of each class using KNN with 25 neighbors
-
-	| stop_outcome  | accuracy| 
-	|----------------|---------|
-	| Arrest Driver | 0.681181| 
-	| Arrest Passenger  | 0.994074| 
-	| Citation  | 0.556058| 
-	| No Action  | 0.937876| 
-	| Warning  | 0.663153| 
 
 ![PCA analysis](analysis_visualization/PCA.png)
 
-* The above plot was obtained by running KNN with 15 neighbours. The original dataframe has about 82 features and reducing that to very low number of features will make the dataframe lose a lot of information and that is reflected in the graph where we see the accuracy is very low.
-* The ideal number of components would be anything above 13. For all values above 13 components, there is not much significant difference we notice in prediction
+* The above plot was obtained by running KNN with 15 neighbours. The original dataframe has about 82 features and reducing that to very low number of features will make the dataframe lose a lot of information and that is reflected in the graph where we see the accuracy is very low
+* The ideal number of components would be anything above 13. For all values above 13 components, there is no significant difference in classification accuracy
 
 
 ## Logistic Regression
@@ -113,3 +102,11 @@ In following graphs, we remove one column at time and look at the accuracy with 
 Comparing what we did in our project to the [Kaggle competition](https://www.kaggle.com/faressayah/stanford-open-policing-project) we got our dataset from, we seem to have had different goals and approaches to preprocessing. When looking at the notebooks associated, it looks like people were trying to answer questions like "Do men or women speed more often?" and "Which year had the least number of stops?" while our project aimed to predict the `stop_outcome`. Also, the preprocessing and visualization done in the Kaggle notebooks seemed to go more in depth about distributions within some of the columns, which in retrospect would have been good for us to do in our preliminary analysis.
 
 # Conclusion
+
+<!-- Which model is performing better? Why? Is it being overfitted? -->
+
+<!-- How similar or different are results from decision tree and random forest? Why? -->
+
+<!-- Why did we have to rescale our data? How did it impact our results? -->
+
+<!-- Scope for improvement -->
