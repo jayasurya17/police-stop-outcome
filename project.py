@@ -701,8 +701,9 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 #  
 # Parameters
 # decision_tree_results: Dictionary Containing accuracies that need to be plotted
-def decision_tree_visualizaton(decision_tree_results):
-
+def decision_tree_visualizaton(decision_tree_results, type):
+    plt.close()
+    
     # Visualization based on removing individual columns and their respective accuracy 
     plt.plot(decision_tree_results["list_column_removed"], decision_tree_results["list_accuracy_when_column_removed"], label='Column Removed vs Accuracy')
 
@@ -710,8 +711,12 @@ def decision_tree_visualizaton(decision_tree_results):
     plt.ylabel('Accuracy')  # Label y-axis
     plt.grid(True)
     plt.legend()  # Show plot labels as legend
-    plt.ylim(ymin=0.8)
-    plt.savefig('analysis_visualization/decision_tree_column.png')  # Save graph
+    if type=="without_resampling":
+        ymin=0.8
+    else:
+        ymin=0.4    
+    plt.ylim(ymin=ymin)
+    plt.savefig('analysis_visualization/decision_tree_column_{}.png'.format(type))  # Save graph
 
     plt.close()
 
@@ -722,8 +727,12 @@ def decision_tree_visualizaton(decision_tree_results):
     plt.ylabel('Accuracy')  # Label y-axis
     plt.grid(True)
     plt.legend()  # Show plot labels as legend
-    plt.ylim(ymin=0.9)
-    plt.savefig('analysis_visualization/decision_tree_depth.png')  # Save graph
+    if type=="without_resampling":
+        ymin=0.9
+    else:
+        ymin=0.3
+    plt.ylim(ymin=ymin)
+    plt.savefig('analysis_visualization/decision_tree_depth_{}.png'.format(type))  # Save graph
 
 
 # Apply KNN algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
@@ -862,6 +871,14 @@ if __name__ == "__main__":
     print("Performing a test train split to train our model")
     X_train_orig, X_test_orig, y_train_orig, y_test_orig = common_utils.test_train_split(dataframe)
 
+    # Decision Trees
+    # Commented out since still a work in progress
+    print("decision_tree without resampling data")
+    decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe)
+
+    # Displaying results from running decision tree
+    decision_tree_visualizaton(decision_tree_results, "without_resampling")
+
     # Since our dataset is predominantly filled with citations, we are downsampling our data so that there is better learning
     print("Resampling data")
     dataframe = resample_data(dataframe, 10000)
@@ -874,8 +891,18 @@ if __name__ == "__main__":
     print("Performing a test train split to train our model")
     X_train, X_test, y_train, y_test = common_utils.test_train_split(dataframe)
 
+    # Decision Trees
+    # Commented out since still a work in progress
+    print("decision_tree with resampling data")
+    decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
+
+    
+    # Displaying results from running decision tree
+    decision_tree_visualizaton(decision_tree_results, "with_resampling")
+
+
     # Random Forest
-    random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+    # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
     # Results from running random forest (so you don't have to run the method)
     # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
@@ -885,15 +912,9 @@ if __name__ == "__main__":
     # 'is_arrested': 0.9446625, 'drugs_related_stop': 0.9561249999999999, 'violations_raw': 0.9544750000000001, 
     # 'search_score': 0.9555875}
     # Displaying results from running random forest
-    random_forest_visualizaton(random_forest_results)
+    # random_forest_visualizaton(random_forest_results)
 
-    # Decision Trees
-    # Commented out since still a work in progress
-    # print("decision_tree")
-    # decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
-    # Displaying results from running decision tree
-    # decision_tree_visualizaton(decision_tree_results)
 
     #Logistic Regression
     # Commented out since still a work in progress
