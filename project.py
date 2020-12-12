@@ -625,7 +625,7 @@ def random_forest_visualizaton(random_forest):
 def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     # Set the parameters you want to evaluate
 
-    params = {'max_leaf_nodes': list(range(2, 8)), 'min_samples_split': [2, 3]}
+    params = {'max_leaf_nodes': list(range(2, 30)), 'min_samples_split': [2, 3]}
 
     # Create the GridSearch object for the Random Forest classifier passing the parameters
     grid_search_cv = GridSearchCV(DecisionTreeClassifier(), params, verbose=1, cv=3)
@@ -661,7 +661,7 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
         x_t = df_clean.drop(columns=[c])
         x_t = pd.get_dummies(x_t)
         X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
-        grid_search = GridSearchCV(DecisionTreeClassifier(max_depth=5), params, cv=5)
+        grid_search = GridSearchCV(DecisionTreeClassifier(max_depth=16), params, cv=5)
         grid_search.fit(X_train, y_train)
         list_column_removed.append(c)
         print("Column Removed:"+str(c)+", Accuracy:"+str(grid_search.best_score_))
@@ -671,7 +671,7 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 
     
     # The list of depth which are considered and accuracies are calculated
-    list_depths = list(range(1,20))
+    list_depths = list(range(1,17))
 
     list_accuracy = []
 

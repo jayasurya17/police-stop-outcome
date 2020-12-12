@@ -32,6 +32,7 @@ One last approach in analyzing the model is how accurate it was predicting the `
 |           Warning |  0.967047| 
 
 ## Decision Tree
+We used the deisicion tree classification technique to understand how the classification works based ont the rules it generates. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, t
 * Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
 * The first approach is to find out the best parameters using the grid search
 * In the second approach we try to remove individually one column at a time and try to find out 
