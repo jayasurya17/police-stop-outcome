@@ -93,7 +93,7 @@ In following graphs, we remove one column at time and look at the accuracy with 
 
 * Accuracy using Decision Tree
 
-![Decision tree analysis](analysis_visualization/decision_tree_column.png)
+![Decision tree analysis](analysis_visualization/decision_tree_column_with_resampling.png)
 
 * Accuracy using Logistic Regression
 
