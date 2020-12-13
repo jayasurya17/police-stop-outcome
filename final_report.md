@@ -47,7 +47,7 @@ param_grid ={'C':[0.001, 0.1, 1, 10, 100],
 
 ## Random Forest
 
-We chose random forest as a model to try out because random forests can be influenced less by outliers and that random forest provides a better understanding of the relationship features have with the target and the kind of influence they have on the dataset. The way we implemented Random Forest was to put the model inside of Grid Search to best find the hyperparameters to use. There were a couple approaches we tried on the model.
+We chose random forest as a model to try out because random forests can be influenced less by outliers and that random forest provides a better understanding of the relationship features have with the target and the kind of influence they have on the dataset. Random forest is good because having a large number of trees that work together will outperform individual models. The way we implemented Random Forest was to put the model inside of Grid Search to best find the hyperparameters to use. There were a couple approaches we tried on the model.
 
 Using GridSearchCV, we found the best parameters out of a list of parameters for n_estimators and max_depth to use on the random forest model. Grid search will loop through every possibility in `param_grid` and test it on the model and save the best parameters to use. In the end, `n_estimators` as 250 and `max_depth` as None proved to be the best parameters to run random forest on. The code block below shows the `param_grid` use to find the best parameters:
 
@@ -63,13 +63,27 @@ The next piece of information we wanted to find out was which column(s) impact t
 
 One last approach in analyzing the model is how accurate it was predicting the `stop_outcome`. By calling the `find_accuracy_of_each_class` method in the `common_utils.py` file, we were able to see the accuracy the model is having in identifying each `stop_outcome` type. We put this method after each time we run the loop mentioned in the previous paragraph and the accuracy looked like the following table with given a +/- 0.002 margin.
 
+Since decision trees and random forests are similar, we compared the two when testing out the models. For example, I would test out different `max_depths` that decision tree saw that were good to see if it would translate to random forest.
+
+Lastly, we figured later into the project that we should have resampled our data. So we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 94% with the resampled data and the original data gave around 92%. Trends between the two outputs are really similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion). Random forest seems to be a good option for this dataset since .
+
+### Original Data Accuracy
+| stop_outcome     | accuracy |
+| ---------------- | -------- |
+| Arrest Driver    | 1.000000 |
+| Arrest Passenger | 0.030303 |
+| Citation         | 0.995253 |
+| No Action        | 0.293578 |
+| Warning          | 0.036765 |
+
+### Resampled Data Accuracy
 | stop_outcome     | accuracy |
 | ---------------- | -------- |
 | Arrest Driver    | 1.000000 |
 | Arrest Passenger | 1.000000 |
-| Citation         | 0.843259 |
+| Citation         | 0.780292 |
 | No Action        | 1.000000 |
-| Warning          | 0.967047 |
+| Warning          | 0.919177 |
 
 ## Decision Tree
 
@@ -89,7 +103,7 @@ We have found the best parameters for our model can be obtained by using the gri
 
 --If we set it too low, then the decision tree has too little flexibility to capture the patterns and interactions in the training data
 
-**Variation of Accuracy with depth**
+### Variation of Accuracy with depth
 ![Variation with depth](analysis_visualization/decision_tree_depth_with_resampling.png)
 
 Based on the analysis, we understood the data we had was inbalanced, which means the final outcome didnt have a equal distribution of outcomes. For example, citation was the most dominant followed by other. So we had to do sampling of the data, either downsampling or upsampling to a value where we have equal balance of data.
@@ -97,8 +111,7 @@ Based on the analysis, we understood the data we had was inbalanced, which means
 The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuray reduction was observed indicating its a valuable column.
 
 
-**Variation of Accuracy when each column is Removed**
-
+### Variation of Accuracy when each column is Removed
 ![Column Removal](analysis_visualization/decision_tree_column_with_resampling.png)
 
 | stop_outcome     | accuracy |
@@ -153,7 +166,7 @@ Finally, the above graphs shows how data is clustered. We observe that all the d
 
 In following graphs, we remove one column at time and look at the accuracy with which each of the models is able to predict/classify. We notice that the accuracy decreases upon removing column is_arrested in each of the methods. This indicates that is_arrested is the most important column in this data since this directly leads to either arrest of driver or passenger.
 
-![Logistic Regression analysis](analysis_visualization/remove_columns.png)
+![Comparision after removing columns](analysis_visualization/remove_columns.png)
 
 <!-- * Accuracy using KNN 
 
@@ -175,15 +188,15 @@ Comparing what we did in our project to the [Kaggle competition](https://www.kag
 
 # Conclusion
 
-**Which model is performing better? Why? Is it being overfitted?**
+### Which model is performing better? Why? Is it being overfitted?
 
 Logistic Regression gave an accuracy of 92.8% without re-sampling and after sampling it gave an accuracy of 96%. It clearly indicates that initially Logistic Regression model was being overfitted since the data was bias towards a particular attribute therefore learning model outputs were bias too. After resampling, the model started to learn and was no longer overfitted.
 
-**How similar or different are results from decision tree and random forest? Why?**
+### How similar or different are results from decision tree and random forest? Why?
 
-In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average/best decision tree of all of those predictions.
+In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average/best decision tree of all of those predictions. Random forest doesn't rely on feature importance on a single decision tree because of the way random forest randomly chooses features during the training process. Another reason why random forest would perform better is that random forest trees are already fully grown and unpruned so the feature space is smaller compared to decision tree as well as having diverse trees.
 
-**Why did we have to resample our data? How did it impact our results?**
+### Why did we have to resample our data? How did it impact our results?
 
 * The following table shows the number of occurances of each outcome. We see that *citation* is dominating and this will result in the models learning from an "imbalanced" data. 
 
@@ -198,5 +211,4 @@ In our case we did the decision tree based classification based on the parameter
 * We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.  
 * Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbours. Similar results were obtained by other algorithms as well)
 
-
-**Scope for improvement**
+### Scope for improvement

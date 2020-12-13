@@ -616,20 +616,12 @@ def random_forest(X_train, X_test, y_train, y_test, df_clean):
 #  
 # Parameters
 # random_forest: dictionary containing results after individually removing columns
-def random_forest_visualizaton(random_forest):
+def random_forest_visualizaton(random_forest,type):
     # Visualization based on removing individual columns and their respective accuracy
-    plt.plot(list(random_forest.values()), '--', marker='o')
-    ax = plt.subplot()
+    X_axis = list(random_forest.keys())
+    Y_axis = list(random_forest.values())
 
-    keys = random_forest.keys()
-    ax.set_xticklabels(keys, rotation=(25), fontsize=8, ha='right')
-    plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), keys)
-
-    plt.title('Random Forest')
-    plt.xlabel('Columns Removed')
-    plt.grid(True)
-    plt.ylabel('Accuracy')
-    plt.savefig('analysis_visualization/random_forest.png')
+    plot_line_chart(X_axis, Y_axis, "Column Removed", "Accuracy", "Random Forest", "analysis_visualization/random_forest_{}.png".format(type))
 
 # Apply Decision Tree classifier algorithm on the dataset and compare how different 
 # approaches in implementing the algorithm impacts the accuracy
@@ -914,17 +906,26 @@ if __name__ == "__main__":
 
 
     # Random Forest
-    # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+    # Original Data
+    # random_forest_results = random_forest(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
+    # Results from running random forest WITH ORIGINAL (so you don't have to run the method)
+    # random_forest_results = {'None': 0.9267901887388534, 'stop_year': 0.9225951283381028, 'stop_month': 0.9195216378715305, 
+    # 'stop_date': 0.9111169567927885, 'stop_hour': 0.919958632899766, 'driver_gender': 0.9260764349312349, 
+    # 'drivers_age_bucket': 0.9211530328633148, 'drivers_race': 0.9256394908241876, 'stop_duration': 0.9267173438574698, 
+    # 'is_arrested': 0.8986191255845395, 'drugs_related_stop': 0.92706694009223, 'violations_raw': 0.9240226264056173, 
+    # 'search_score': 0.9265280072104403}
+    # random_forest_visualizaton(random_forest_results, "original")
 
-    # Results from running random forest (so you don't have to run the method)
+    # Resampling Data
+    # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+    # Results from running random forest WITH RESAMPLING (so you don't have to run the method)
     # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
-    # random_forest_results = {'None': 0.9567625, 'stop_year': 0.9503375000000001, 'stop_month': 0.9529125, 
-    # 'stop_date': 0.949075, 'stop_hour': 0.9527749999999999, 'driver_gender': 0.9554874999999999, 
-    # 'drivers_age_bucket': 0.9533250000000001, 'drivers_race': 0.9558625000000001, 'stop_duration': 0.9561125, 
-    # 'is_arrested': 0.9446625, 'drugs_related_stop': 0.9561249999999999, 'violations_raw': 0.9544750000000001, 
-    # 'search_score': 0.9555875}
+    # random_forest_results = {'None': 0.9284500000000001, 'stop_year': 0.9154, 'stop_month': 0.925425, 'stop_date': 0.921875, 
+    # 'stop_hour': 0.924925, 'driver_gender': 0.9290499999999999, 'drivers_age_bucket': 0.926975, 'drivers_race': 0.92875, 
+    # 'stop_duration': 0.9282, 'is_arrested': 0.90715, 'drugs_related_stop': 0.928875, 'violations_raw': 0.9231999999999999, 
+    # 'search_score': 0.9284500000000001}
     # Displaying results from running random forest
-    # random_forest_visualizaton(random_forest_results)
+    # random_forest_visualizaton(random_forest_results, "resampling")
 
 
 
