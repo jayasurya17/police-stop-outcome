@@ -32,14 +32,47 @@ One last approach in analyzing the model is how accurate it was predicting the `
 |           Warning |  0.967047| 
 
 ## Decision Tree
-We used the deisicion tree classification technique to understand how the classification works based ont the rules it generates. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, t
-* Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
+We used the deisicion tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions. 
+
+Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
+
 * The first approach is to find out the best parameters using the grid search
-* In the second approach we try to remove individually one column at a time and try to find out 
-  the accuracy respectively. This way we can find out which column is affecting the outcome much or
-  indicating the importance of each column
-* The third approach is to find accuracy by varying the depth. The Depth parameter for the Decision classifier
-  is varied. For various depths the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
+
+* In the second approach we try to find the accuracy by varying the depth. The Depth parameter for the Decision classifier is varied. For various depths the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
+
+* In the third approach we try to remove individually one column at a time and try to find out the accuracy respectively. This way we can find out which column is affecting the outcome much or indicating the importance of each column
+
+We have found the best parameters for our model can be obtained by using the gridsearch. We found out the best max depth was at depth=16. 
+
+--If we set the max_depth too high, then the decision tree simply overfits the training data without capturing useful patterns 
+
+ --If we set it too low, then the decision tree has too little flexibility to capture the patterns and interactions in the training data
+
+**Variation of Accuracy with depth**
+![Variation with depth](analysis_visualization/decision_tree_depth_with_resampling.png)
+
+
+Based on the analysis, we understood the data we had was inbalanced, which means the final outcome didnt have a equal distribution of outcomes. For example, citation was the most dominant followed by other. So we had to do sampling of the data, either downsampling or upsampling to a value where we have equal balance of data.
+
+The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuray reduction was observed indicating its a valuable column.
+
+**Variation of Accuracy when each column is Removed**
+
+
+![Column Removal](analysis_visualization/decision_tree_column_with_resampling.png)
+
+
+
+
+
+
+| stop_outcome |  accuracy |
+| --------- | --------------- |
+|     Arrest Driver |  0.806807|
+|  Arrest Passenger | 0.400988 | 
+|          Citation |   0.590749| 
+|         No Action | 0.754008| 
+|           Warning |  0.627008| 
 
 ## K Nearest Neighbors
 We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
@@ -55,7 +88,8 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementaion of this is written in `knn_remove_columns_and_find_accuracy` methos which can be found in `knn_analysis.py` 
 
 	This approach will additionally prove the results from the first two approaches
-
+	
+	
 ![KNN neighbous analysis](analysis_visualization/KNN.png)
 
 * On looking at the above graph we notice that as the number of neighbours increase, accuracy decreases. This shows that data is not clustered in just a few places. It is evenly distributed.
