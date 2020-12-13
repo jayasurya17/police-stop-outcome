@@ -1,7 +1,27 @@
 # **Predicting Police Stop Outcome**
 
-# Setup
-<!-- Steps including how to clone the project, commands to install dependencies and run the project -->
+
+## Steps to Run the Code
+
+1. Open a terminal and enter the following command to clone the repository
+```
+$ git clone https://github.com/jayasurya17/police-stop-outcome.git
+```
+
+2. cd into the project and ensure there is the requirements.txt file
+```
+$ cd police-stop-outcome
+```
+
+3. run the following command to install all dependencies 
+```
+$ pip install -r requirements.txt
+```
+
+4. run the following command to execute this project
+```
+$ python project.py
+```
 
 # Team members
 

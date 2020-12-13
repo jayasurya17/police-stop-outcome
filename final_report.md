@@ -6,14 +6,6 @@ Due to the recent police activity and call for police reform over the past few m
 # Experiments/Analysis
 We decided to run the dataset on four different models, Random Forest, Decision Tree, K Nearest Neighbors, and Logistic Regression, to see how the models will perform. We also wanted to find some other details like which column is most important to predict the stop_outcome and if different depths on Decision Tree would make a difference.
 
-## Steps to Run the Code
-
-1. cd to the directory and ensure there is the requirements.txt file
-
-2. run the command $ pip install -r requirements.txt
-
-3. run the command $ python project.py
-
 ## Random Forest
 We chose random forest as a model to try out because random forests can be influenced less by outliers and that random forest provides a better understanding of the relationship features have with the target and the kind of influence they have on the dataset. The way we implemented Random Forest was to put the model inside of Grid Search to best find the hyperparameters to use. There were a couple approaches we tried on the model. 
 
@@ -78,16 +70,16 @@ The accuracy of each possible outcome in the stop_outcome are as follows:
 
 ## K Nearest Neighbors
 We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
-1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbours. Implementaion of this is written in `knn_accuracy_on_entire_dataset` methos which can be found in `knn_analysis.py` 
-2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementaion of this is written in `knn_apply_cross_val_score` methos which can be found in `knn_analysis.py` 
+1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbours. Implementaion of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py` 
+2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementaion of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py` 
 
 	These two approaches will show how clusted the data is and also give an insight into if the model is overfitting the data 
 
-3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` methos which can be found in `knn_analysis.py` 
+3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` method which can be found in `knn_analysis.py` 
 
 	This approach tells us how many features will be sufficient to predict the outcome 
 
-4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementaion of this is written in `knn_remove_columns_and_find_accuracy` methos which can be found in `knn_analysis.py` 
+4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementaion of this is written in `knn_remove_columns_and_find_accuracy` method which can be found in `knn_analysis.py` 
 
 	This approach will additionally prove the results from the first two approaches
 	
@@ -96,7 +88,7 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 
 * On looking at the above graph we notice that as the number of neighbours increase, accuracy decreases. This shows that data is not clustered in just a few places. It is evenly distributed.
 * Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that the model is not overfitted or underfitted. Also, as expected the accuracy decreases by considering higher number of neighbours for analysis.
-* Following are the results of the accuracy with which KNN was able to classify each of the class in outcome . Implementaion of this is written in `knn_find_accuracy_of_each_class` methos which can be found in `knn_analysis.py`
+* Following are the results of the accuracy with which KNN was able to classify each of the class in outcome. Implementaion of this is written in `knn_find_accuracy_of_each_class` method which can be found in `knn_analysis.py`
 
 	| stop_outcome |  accuracy with 5 neighbors |accuracy with 15 neighbors| accuracy with 25 neighbors| 
 	| --------- | --------------- |----------------|---------|
@@ -112,6 +104,9 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 * The above plot was obtained by running KNN with 15 neighbours. The original dataframe has about 82 features and reducing that to very low number of features will make the dataframe lose a lot of information and that is reflected in the graph where we see the accuracy is very low
 * The ideal number of components would be anything above 13. For all values above 13 components, there is no significant difference in classification accuracy
 
+![Clustering using KNN](analysis_visualization/knn_clustering.png)
+
+Finally, the above graphs shows how data is clustered. We observe that all the data is clustered at the same place. This was obtained by reducing data into 3 components usign PCA. Since all datapoints are clustered at the same place, it is also fairly obvious as to why the prediction accuracy is so low for n = 3 components in the previous graph. Implementaion of this is written in `visualize_grouping` method which can be found in `knn_analysis.py`
 
 ## Logistic Regression
 
@@ -120,7 +115,9 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 
 In following graphs, we remove one column at time and look at the accuracy with which each of the models is able to predict/classify. We notice that the accuracy decreases upon removing column is_arrested in each of the methods. This indicates that is_arrested is the most important column in this data since this directly leads to either arrest of driver or passenger.
 
-* Accuracy using KNN 
+![Logistic Regression analysis](analysis_visualization/remove_columns.png)
+
+<!-- * Accuracy using KNN 
 
 ![Importance of column using KNN](analysis_visualization/KNN_columns.png)
 
@@ -134,18 +131,33 @@ In following graphs, we remove one column at time and look at the accuracy with 
 
 * Accuracy using Logistic Regression
 
-![Logistic Regression analysis](analysis_visualization/logistic_regression.png)
+![Logistic Regression analysis](analysis_visualization/logistic_regression.png) -->
 
 Comparing what we did in our project to the [Kaggle competition](https://www.kaggle.com/faressayah/stanford-open-policing-project) we got our dataset from, we seem to have had different goals and approaches to preprocessing. When looking at the notebooks associated, it looks like people were trying to answer questions like "Do men or women speed more often?" and "Which year had the least number of stops?" while our project aimed to predict the `stop_outcome`. Also, the preprocessing and visualization done in the Kaggle notebooks seemed to go more in depth about distributions within some of the columns, which in retrospect would have been good for us to do in our preliminary analysis.
 
 # Conclusion
 
-<!-- Which model is performing better? Why? Is it being overfitted? -->
+**Which model is performing better? Why? Is it being overfitted?**
 
-<!-- How similar or different are results from decision tree and random forest? Why? -->
+**How similar or different are results from decision tree and random forest? Why?**
 
 In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average of all of those predictions. 
 
-<!-- Why did we have to rescale our data? How did it impact our results? -->
+**Why did we have to resample our data? How did it impact our results?**
 
-<!-- Scope for improvement -->
+* The following table shows the number of occurances of each outcome. We see that *citation* is dominating and this will result in the models learning from an "imbalanced" data. 
+
+|Outcome | Occurances in dataset | Accuracy **before** resampling | Accuracy **after** resampling |
+|----------------|-------|----------------|-------|
+|Citation|            77005| 0.457854 | 0.953954 |
+| Warning |              5293| 0.030303 | 1.000000 | 
+| Arrest Driver |        2571| 0.991677 | 0.568627 |
+| No Action |             589| 0.000000 | 1.000000 |
+| Arrest Passenger |      358| 0.026654 | 0.775100 |
+
+* We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.  
+* Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbours. Similar results were obtained by other algorithms as well)
+
+
+
+**Scope for improvement**

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.decomposition import PCA as sklearnPCA
 from sklearn.model_selection import cross_val_score
@@ -162,3 +163,85 @@ def knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test):
 		results = common_utils.find_accuracy_of_each_class(y_test, y_pred)
 		print ("Prediction accuracy of each class using KNN with", neighbors, "neighbors")
 		print (results)
+
+
+# Return a fig object that can be used to draw a plot
+# 
+# Parameters
+# n: figure number
+#
+#Return: a fig object that can be used to draw a plot
+def get_3d_plot(n):
+	fig = plt.figure(n)
+	ax = fig.add_subplot(111, projection='3d')
+	return fig, ax
+
+
+# Save plots with a title in a given location
+# 
+# Parameters
+# fig: plt.figure()
+# ax: subplots of the figure
+# title: title that needs to be given for the figure
+# location: location where the image needs to be saved
+def save_plot(fig, ax, title, location):
+	ax.legend()
+	ax.grid(True)
+	plt.title(title)
+	fig.savefig(location)
+
+
+# Visualize and understand how our data is clustered using scatter 3d plot
+# 
+# Parameters
+# X_train: X_train obtained from train_test_split
+# y_train: y_train obtained from train_test_split
+def visualize_grouping(X_train, y_train):
+	print ("visualizing data using scatter plot")
+	sklearn_pca = sklearnPCA(n_components=3)
+	X_train = sklearn_pca.fit_transform(X_train)
+	X_train = pd.DataFrame(data=X_train, columns=["x", "y", "z"])
+
+	df = y_train.reset_index()
+	del df['index']
+	df[['x', 'y', 'z']] = X_train[['x', 'y', 'z']]
+
+
+	fig_combined, ax_combined = get_3d_plot(1)
+
+	fig, ax = get_3d_plot(2)
+	temp_df = df[df['stop_outcome'] == 'Arrest Driver']
+	ax_combined.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'red', label = 'Arrest Driver')
+	ax.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'red', label = 'Arrest Driver')
+	save_plot(fig, ax, 'Police stop outcome', 'analysis_visualization/knn_clustering_arrest_driver.png')
+	
+
+	fig, ax = get_3d_plot(2)
+	temp_df = df[df['stop_outcome'] == 'Arrest Passenger']
+	ax_combined.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'green', label = 'Arrest Passenger')
+	ax.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'green', label = 'Arrest Passenger')
+	save_plot(fig, ax, 'Police stop outcome', 'analysis_visualization/knn_clustering_arrest_passenger.png')
+
+
+	fig, ax = get_3d_plot(2)
+	temp_df = df[df['stop_outcome'] == 'Citation']
+	ax_combined.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'blue', label = 'Citation')
+	ax.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'blue', label = 'Citation')
+	save_plot(fig, ax, 'Police stop outcome', 'analysis_visualization/knn_clustering_citation.png')
+
+
+	fig, ax = get_3d_plot(2)
+	temp_df = df[df['stop_outcome'] == 'No Action']
+	ax_combined.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'yellow', label = 'No Action')
+	ax.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'yellow', label = 'No Action')
+	save_plot(fig, ax, 'Police stop outcome', 'analysis_visualization/knn_clustering_no_action.png')
+
+
+
+	fig, ax = get_3d_plot(2)
+	temp_df = df[df['stop_outcome'] == 'Warning']
+	ax_combined.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'brown', label = 'Warning')
+	ax.scatter(temp_df['x'], temp_df['y'], temp_df['z'] , c= 'brown', label = 'Warning')
+	save_plot(fig, ax, 'Police stop outcome', 'analysis_visualization/knn_clustering_warning.png')
+
+	save_plot(fig_combined, ax_combined, 'Police stop outcome', 'analysis_visualization/knn_clustering_stop_outcome.png')

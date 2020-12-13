@@ -916,6 +916,7 @@ if __name__ == "__main__":
     
     # # K Nearest Neighbours
     # print ("k_neighbors_classifier")
+    # knn_analysis.visualize_grouping(X_train_orig, y_train_orig)
     # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
     # print ("k_neighbors_classifier performance without resampling data")
     # knn_analysis.knn_find_accuracy_of_each_class(X_train_orig, X_test_orig, y_train_orig, y_test_orig)
