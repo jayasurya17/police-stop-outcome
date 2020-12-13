@@ -122,15 +122,15 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 
    These two approaches will show how clusted the data is and also give an insight into if the model is overfitting the data
 
-<<<<<<< HEAD 3. The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` methos which can be found in `knn_analysis.py`
-=======
-| stop_outcome | accuracy |
-| --------- | --------------- |
-| Arrest Driver | 0.675175|
+# <<<<<<< HEAD 3. The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` methos which can be found in `knn_analysis.py`
+
+| stop_outcome     | accuracy |
+| ---------------- | -------- |
+| Arrest Driver    | 0.675175 |
 | Arrest Passenger | 0.643457 |
-| Citation | 0.669180|
-| No Action | 0.747495|
-| Warning | 0.717369|
+| Citation         | 0.669180 |
+| No Action        | 0.747495 |
+| Warning          | 0.717369 |
 
 ## K Nearest Neighbors
 
@@ -194,9 +194,11 @@ Comparing what we did in our project to the [Kaggle competition](https://www.kag
 
 <!-- Which model is performing better? Why? Is it being overfitted? -->
 
+Logistic Regression gave an accuracy of 92.8% without re-sampling and after sampling it gave an accuracy of 96%. It clearly indicates that initially Logistic Regression model was being overfitted since the data was bias towards a particular attribute therefore learning model outputs were bias too. After resampling, the model started to learn and was no longer overfitted.
+
 <!-- How similar or different are results from decision tree and random forest? Why? -->
 
-In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average of all of those predictions.
+In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average/best decision tree of all of those predictions.
 
 <!-- Why did we have to rescale our data? How did it impact our results? -->
 

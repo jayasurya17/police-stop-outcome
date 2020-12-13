@@ -413,15 +413,8 @@ def visualize_LR_accuracy(cv_result,flag):
         plt.xlabel("No. of iterations")
         sns.set_style("dark")
         plt.savefig('analysis_visualization/Accuracy_LR.png')
-    elif(flag==1):
-        fig = plt.figure(1, figsize=(9, 9))
-        plt.plot(cv_result)
-        plt.title('Accuracy using Logistic Regression using Re-Sampling')
-        plt.ylabel('Model Accuracy %')
-        plt.xlabel("No. of iterations")
-        sns.set_style("dark")
-        plt.savefig('analysis_visualization/Accuracy_LR_resampled.png')
-
+    
+    
 # Visualize the Logistic Regression accuracy based on removing each column of the dataset at a 
 # time and then measuring accuracy
 #  
@@ -515,8 +508,8 @@ def logistic_regression(X_train, X_test, y_train, y_test, df_clean,flag):
     elif (flag==1):
         #visualize Confusion Matrix
         confusion_matrix_plot(LR, X_test,y_test,1)
-        # Visualize Logistic regression accuracy
-        visualize_LR_accuracy(cv_result,1)
+        
+        
 
     # Store accuracy for no columns removed
     dict = {}
@@ -905,10 +898,10 @@ if __name__ == "__main__":
     # Decision Trees
     # Commented out since still a work in progress
     print("decision_tree without resampling data")
-    decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
+    # decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
 
     # Displaying results from running decision tree
-    decision_tree_visualizaton(decision_tree_results, "without_resampling")
+    # decision_tree_visualizaton(decision_tree_results, "without_resampling")
 
     # Decision Trees
     # Commented out since still a work in progress
@@ -945,7 +938,7 @@ if __name__ == "__main__":
     # 'drivers_age_bucket': 0.9279700581291884, 'drivers_race': 0.9279846226498613, 'stop_duration': 0.9280428849759845,
     # 'is_arrested': 0.8978908252908356, 'drugs_related_stop': 0.9279991924748245, 'violations_raw': 0.9275039340596075,
     # 'search_score': 0.9280574579835221}
-    logistic_regression_visualization(logistic_regression_results,1)
+    # logistic_regression_visualization(logistic_regression_results,1)
 
     #RESAMPLING
     logistic_regression_results_resampled = logistic_regression(X_train, X_test, y_train, y_test, dataframe , 1)
@@ -953,7 +946,7 @@ if __name__ == "__main__":
     # 'stop_date': 0.6905749999999999, 'stop_hour': 0.6992, 'driver_gender': 0.689575, 'drivers_age_bucket': 0.698325,
     # 'drivers_race': 0.696775, 'stop_duration': 0.68965, 'is_arrested': 0.566025, 'drugs_related_stop': 0.69585, 
     # 'violations_raw': 0.588125, 'search_score': 0.69915}
-    logistic_regression_visualization(logistic_regression_results_resampled,1)
+    # logistic_regression_visualization(logistic_regression_results_resampled,1)
 
    
 
