@@ -523,27 +523,27 @@ def logistic_regression(X_train, X_test, y_train, y_test, df_clean,flag):
     dict['None'] = model_grid.best_score_
 
     # Find out which column is most impactful in predicting stop_outcome
-    y = df_clean["stop_outcome"].copy()
-    df_clean = df_clean.drop(columns=['stop_outcome'])
+    # y = df_clean["stop_outcome"].copy()
+    # df_clean = df_clean.drop(columns=['stop_outcome'])
 
-    # For every column in the dataset, remove the column and train the model, store accuracy
-    for c in df_clean.columns:
-        print("Removing column", c)
-        x_t = df_clean.drop(columns=[c])
-        x_t = pd.get_dummies(x_t)
-        X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
-        for model, para in LR_opt:    
-            kfold = KFold(7, random_state=0, shuffle=True)
-            grid_search = GridSearchCV(model, para)
-            grid_search.fit(X_train,y_train)
-            cv_result = cross_val_score(grid_search, X_train, y_train, cv = kfold, scoring="accuracy")
-            dict[c] = grid_search.best_score_
+    # # For every column in the dataset, remove the column and train the model, store accuracy
+    # for c in df_clean.columns:
+    #     print("Removing column", c)
+    #     x_t = df_clean.drop(columns=[c])
+    #     x_t = pd.get_dummies(x_t)
+    #     X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
+    #     for model, para in LR_opt:    
+    #         kfold = KFold(7, random_state=0, shuffle=True)
+    #         grid_search = GridSearchCV(model, para)
+    #         grid_search.fit(X_train,y_train)
+    #         cv_result = cross_val_score(grid_search, X_train, y_train, cv = kfold, scoring="accuracy")
+    #         dict[c] = grid_search.best_score_
 
-    # print("Results:\n", dict)
-    print("CV result",cv_result)
-    print("Logistic Regression Completed")
+    # # print("Results:\n", dict)
+    # print("CV result",cv_result)
+    # print("Logistic Regression Completed")
 
-    return cv_result
+    return dict
 
 # Apply Random Forest classifier algorithm on the dataset and compare how different 
 # approaches in implementing the algorithm impacts the accuracy
