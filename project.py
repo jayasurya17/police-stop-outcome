@@ -387,44 +387,64 @@ def general_preprocessing(dataframe):
 # logistic regression on test set: Result of LR performed on Test Set
 # X_test: X_test obtained from train_test_split
 # y_test: y_test obtained from train_test_split
-def confusion_matrix_plot(LR, X_test,y_test):
-    disp = plot_confusion_matrix(LR, X_test, y_test,cmap=plt.cm.Blues)
-    disp.ax_.set_title("Logistic Regression Confusion matrix")
-    plt.grid(None) 
-    plt.savefig('analysis_visualization/LR_Confusion_Matrix.png')
+def confusion_matrix_plot(LR, X_test,y_test,flag):
+    if (flag==0):
+        disp = plot_confusion_matrix(LR, X_test, y_test,cmap=plt.cm.Blues)
+        disp.ax_.set_title("Logistic Regression Confusion matrix")
+        plt.grid(None) 
+        plt.savefig('analysis_visualization/LR_Confusion_Matrix.png')
+    elif(flag==1):
+        disp = plot_confusion_matrix(LR, X_test, y_test,cmap=plt.cm.Blues)
+        disp.ax_.set_title("Logistic Regression Confusion matrix using Re-Sampling")
+        plt.grid(None) 
+        plt.savefig('analysis_visualization/LR_Confusion_Matrix_resampled.png')
+    
 
 # Visualize the accuracy based on number of iterations
 #  
 # Parameters
 # logistic regression results: Dictionary Containing accuracies that need to be plotted
-def visualize_LR_accuracy(cv_result):
-    fig = plt.figure(1, figsize=(9, 9))
-
-    plt.plot(cv_result)
-    plt.title('Accuracy using Logistic Regression')
-    plt.ylabel('Model Accuracy %')
-    plt.xlabel("No. of iterations")
-    sns.set_style("dark")
-    plt.savefig('analysis_visualization/Accuracy_LR.png')
-
+def visualize_LR_accuracy(cv_result,flag):
+    if (flag==0):
+        fig = plt.figure(1, figsize=(9, 9))
+        plt.plot(cv_result)
+        plt.title('Accuracy using Logistic Regression')
+        plt.ylabel('Model Accuracy %')
+        plt.xlabel("No. of iterations")
+        sns.set_style("dark")
+        plt.savefig('analysis_visualization/Accuracy_LR.png')
+    
+    
 # Visualize the Logistic Regression accuracy based on removing each column of the dataset at a 
 # time and then measuring accuracy
 #  
 # Parameters
 # Logistic Regression: dictionary containing results after individually removing columns
-def logistic_regression_visualization(logistic_regression):
-    plt.plot(list(logistic_regression.values()), '--', marker='o')
-    ax = plt.subplot()
+def logistic_regression_visualization(logistic_regression,flag):
+    if (flag==0):
+        plt.plot(list(logistic_regression.values()), '--', marker='o')
+        ax = plt.subplot()
+        keys = logistic_regression.keys()
+        ax.set_xticklabels(keys, rotation=(25), fontsize=8, ha='right')
+        plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), keys)
 
-    keys = logistic_regression.keys()
-    ax.set_xticklabels(keys, rotation=(25), fontsize=8, ha='right')
-    plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), keys)
+        plt.title('Logistic Regression')
+        plt.xlabel('Columns Removed')
+        plt.grid(True)
+        plt.ylabel('Accuracy')
+        plt.savefig('analysis_visualization/logistic_regression.png')
+    elif(flag==1):
+        plt.plot(list(logistic_regression.values()), '--', marker='o')
+        ax = plt.subplot()
+        keys = logistic_regression.keys()
+        ax.set_xticklabels(keys, rotation=(25), fontsize=8, ha='right')
+        plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), keys)
 
-    plt.title('Logistic Regression')
-    plt.xlabel('Columns Removed')
-    plt.grid(True)
-    plt.ylabel('Accuracy')
-    plt.savefig('analysis_visualization/logistic_regression.png')
+        plt.title('Logistic Regression Re-Sampled')
+        plt.xlabel('Columns Removed')
+        plt.grid(True)
+        plt.ylabel('Accuracy')
+        plt.savefig('analysis_visualization/logistic_regression_resampled.png')
 
 # Apply Logistic Regression Algorithm on the dataset and compare how different 
 # approaches in implementing the algorithm impacts the accuracy
@@ -443,7 +463,8 @@ def logistic_regression_visualization(logistic_regression):
 # df_clean: Original dataset upon which train_test_split was applied
 #
 # Return: dictionary containing results after individually removing columns
-def logistic_regression(X_train, X_test, y_train, y_test, df_clean):
+def logistic_regression(X_train, X_test, y_train, y_test, df_clean,flag):
+
     print("Begin Logistic Regression Analysis")
     # Define parameters for optimization of Logistic Regression
     LR_para = {'C':[0.001, 0.1, 1, 10, 100],'max_iter':[10000]}
@@ -468,45 +489,52 @@ def logistic_regression(X_train, X_test, y_train, y_test, df_clean):
 
         # Printing accuracies, best parameters, and best estimator
         print ("Cross Validation Accuracy For LR :- Accuracy: %f SD: %f" % (cv_result.mean(), cv_result.std()))
-        print ("Best parameters for Logistic regression :", model_grid.best_params_) 
+        print ("Best parameters for Logistic regression :", model_grid.best_params_, model_grid.best_params_['C']) 
         print("Test set score: {:.2f}".format(model_grid.score(X_test, y_test)))
         
     #Evaluating the Confusion Matrix and Classification Report
-    LR = LogisticRegression(C=1, max_iter=10000)
+    LR = LogisticRegression(C=model_grid.best_params_['C'], max_iter=model_grid.best_params_['max_iter'])
     LR.fit(X_train, y_train)
     y_pred_LR = LR.predict(X_test)
     print('Classification Report: \n' + str(cls_report(y_test, y_pred_LR)))
     lr_confusion_matrix = confusion_matrix(y_test, y_pred_LR)
     
-    #visualize Confusion Matrix
-    confusion_matrix_plot(LR, X_test,y_test)
-
-    # Visualize Logistic regression accuracy
-    visualize_LR_accuracy(cv_result)
+    
+    if (flag==0):
+        #visualize Confusion Matrix
+        confusion_matrix_plot(LR, X_test,y_test,0)
+        # Visualize Logistic regression accuracy
+        visualize_LR_accuracy(cv_result,0)
+    elif (flag==1):
+        #visualize Confusion Matrix
+        confusion_matrix_plot(LR, X_test,y_test,1)
+        
+        
 
     # Store accuracy for no columns removed
     dict = {}
     dict['None'] = model_grid.best_score_
 
     # Find out which column is most impactful in predicting stop_outcome
-    y = df_clean["stop_outcome"].copy()
-    df_clean = df_clean.drop(columns=['stop_outcome'])
+    # y = df_clean["stop_outcome"].copy()
+    # df_clean = df_clean.drop(columns=['stop_outcome'])
 
-    # For every column in the dataset, remove the column and train the model, store accuracy
-    for c in df_clean.columns:
-        print("Removing column", c)
-        x_t = df_clean.drop(columns=[c])
-        x_t = pd.get_dummies(x_t)
-        X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
-        for model, para in LR_opt:    
-            kfold = KFold(7, random_state=0, shuffle=True)
-            grid_search = GridSearchCV(model, para)
-            grid_search.fit(X_train,y_train)
-            cv_result = cross_val_score(grid_search, X_train, y_train, cv = kfold, scoring="accuracy")
-            dict[c] = grid_search.best_score_
+    # # For every column in the dataset, remove the column and train the model, store accuracy
+    # for c in df_clean.columns:
+    #     print("Removing column", c)
+    #     x_t = df_clean.drop(columns=[c])
+    #     x_t = pd.get_dummies(x_t)
+    #     X_train, X_test, y_train, y_test = train_test_split(x_t, y, test_size=0.2, random_state=0)
+    #     for model, para in LR_opt:    
+    #         kfold = KFold(7, random_state=0, shuffle=True)
+    #         grid_search = GridSearchCV(model, para)
+    #         grid_search.fit(X_train,y_train)
+    #         cv_result = cross_val_score(grid_search, X_train, y_train, cv = kfold, scoring="accuracy")
+    #         dict[c] = grid_search.best_score_
 
-    print("Results:\n", dict)
-    print("Logistic Regression Completed")
+    # # print("Results:\n", dict)
+    # print("CV result",cv_result)
+    # print("Logistic Regression Completed")
 
     return dict
 
@@ -870,19 +898,19 @@ if __name__ == "__main__":
     # Decision Trees
     # Commented out since still a work in progress
     print("decision_tree without resampling data")
-    decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
+    # decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
 
     # Displaying results from running decision tree
-    decision_tree_visualizaton(decision_tree_results, "without_resampling")
+    # decision_tree_visualizaton(decision_tree_results, "without_resampling")
 
     # Decision Trees
     # Commented out since still a work in progress
     print("decision_tree with resampling data")
-    decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
+    # decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
     
     # Displaying results from running decision tree
-    decision_tree_visualizaton(decision_tree_results, "with_resampling")
+    # decision_tree_visualizaton(decision_tree_results, "with_resampling")
 
 
     # Random Forest
@@ -903,15 +931,26 @@ if __name__ == "__main__":
     #Logistic Regression
     # Commented out since still a work in progress
     # print("Logistic Regression")
-    # logistic_regression_results = logistic_regression(X_train, X_test, y_train, y_test, dataframe)
-    # logistic_regression_visualization(logistic_regression_results)
-
-    #RESULTS OF LOGISTIC REGRESSION:
+    logistic_regression_results = logistic_regression(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig , 1)
+     #RESULTS OF LOGISTIC REGRESSION:
     # {'None': 0.9280428913411332, 'stop_year': 0.9279991839879596, 'stop_month': 0.9281448557161394,
     # 'stop_date': 0.928086581720577, 'stop_hour': 0.9280574569226638, 'driver_gender': 0.9279554893650832, 
     # 'drivers_age_bucket': 0.9279700581291884, 'drivers_race': 0.9279846226498613, 'stop_duration': 0.9280428849759845,
     # 'is_arrested': 0.8978908252908356, 'drugs_related_stop': 0.9279991924748245, 'violations_raw': 0.9275039340596075,
     # 'search_score': 0.9280574579835221}
+    # logistic_regression_visualization(logistic_regression_results,1)
+
+    #RESAMPLING
+    logistic_regression_results_resampled = logistic_regression(X_train, X_test, y_train, y_test, dataframe , 1)
+    # logistic_regression_results_resampled {'None': 0.7005750000000001, 'stop_year': 0.677275, 'stop_month': 0.6999749999999999, 
+    # 'stop_date': 0.6905749999999999, 'stop_hour': 0.6992, 'driver_gender': 0.689575, 'drivers_age_bucket': 0.698325,
+    # 'drivers_race': 0.696775, 'stop_duration': 0.68965, 'is_arrested': 0.566025, 'drugs_related_stop': 0.69585, 
+    # 'violations_raw': 0.588125, 'search_score': 0.69915}
+    # logistic_regression_visualization(logistic_regression_results_resampled,1)
+
+   
+
+   
     
     
     # # K Nearest Neighbours
