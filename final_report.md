@@ -73,7 +73,7 @@ One last approach in analyzing the model is how accurate it was predicting the `
 
 ## Decision Tree
 
-We used the decision tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions.
+We used the deisicion tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions.
 
 Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
 
@@ -96,6 +96,7 @@ Based on the analysis, we understood the data we had was inbalanced, which means
 
 The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuray reduction was observed indicating its a valuable column.
 
+<<<<<<< HEAD
 **Variation of Accuracy when each column is Removed**
 
 ![Column Removal](analysis_visualization/decision_tree_column_with_resampling.png)
@@ -113,15 +114,38 @@ The reason for removal of each column is to analyze the impact of each column on
 We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
 
 1. The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbours. Implementaion of this is written in `knn_accuracy_on_entire_dataset` methos which can be found in `knn_analysis.py`
-2. The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementaion of this is written in `knn_apply_cross_val_score` methos which can be found in `knn_analysis.py`
+2. # The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementaion of this is written in `knn_apply_cross_val_score` methos which can be found in `knn_analysis.py`
+
+   The accuracy of each possible outcome in the stop_outcome are as follows:
+
+   > > > > > > > ca0bd1f6e5fd8dda63b23326d7498f53949d7b1f
 
    These two approaches will show how clusted the data is and also give an insight into if the model is overfitting the data
 
-3. The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` methos which can be found in `knn_analysis.py`
+<<<<<<< HEAD 3. The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` methos which can be found in `knn_analysis.py`
+=======
+| stop_outcome | accuracy |
+| --------- | --------------- |
+| Arrest Driver | 0.675175|
+| Arrest Passenger | 0.643457 |
+| Citation | 0.669180|
+| No Action | 0.747495|
+| Warning | 0.717369|
 
-   This approach tells us how many features will be sufficient to predict the outcome
+## K Nearest Neighbors
 
-4. Finally, drop one column at a time and find the importance of each column in the dataset. Implementaion of this is written in `knn_remove_columns_and_find_accuracy` methos which can be found in `knn_analysis.py`
+We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
+
+1.  The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbours. Implementaion of this is written in `knn_accuracy_on_entire_dataset` methos which can be found in `knn_analysis.py`
+2.  The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementaion of this is written in `knn_apply_cross_val_score` methos which can be found in `knn_analysis.py`
+
+        These two approaches will show how clusted the data is and also give an insight into if the model is overfitting the data
+
+    > > > > > > > ca0bd1f6e5fd8dda63b23326d7498f53949d7b1f
+
+    This approach tells us how many features will be sufficient to predict the outcome
+
+4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementaion of this is written in `knn_remove_columns_and_find_accuracy` methos which can be found in `knn_analysis.py`
 
    This approach will additionally prove the results from the first two approaches
 
@@ -171,6 +195,8 @@ Comparing what we did in our project to the [Kaggle competition](https://www.kag
 <!-- Which model is performing better? Why? Is it being overfitted? -->
 
 <!-- How similar or different are results from decision tree and random forest? Why? -->
+
+In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average of all of those predictions.
 
 <!-- Why did we have to rescale our data? How did it impact our results? -->
 

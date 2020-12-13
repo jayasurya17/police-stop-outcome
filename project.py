@@ -880,24 +880,19 @@ if __name__ == "__main__":
 
     # Last minute catches to finalize preprocessing
     print("General Preprocessing")
-    dataframe = general_preprocessing(dataframe)
+    dataframe_orig = general_preprocessing(dataframe)
 
-    filename = 'datasets/processed_data.csv'
+    filename = 'datasets/processed_data_orig.csv'
     print("Saving dataframe into", filename)
-    save_to_csv(dataframe, filename)
+    save_to_csv(dataframe_orig, filename)
 
     # Perform a test train split to train our model
     print("Performing a test train split to train our model")
-    X_train_orig, X_test_orig, y_train_orig, y_test_orig = common_utils.test_train_split(dataframe)
-    
-    #Logistic Regression
-    # Commented out since still a work in progress
-    # print("Logistic Regression")
-    # logistic_regression_results = logistic_regression(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe,0)
-    # logistic_regression_visualization(logistic_regression_results,0)
+    X_train_orig, X_test_orig, y_train_orig, y_test_orig = common_utils.test_train_split(dataframe_orig)
+
     # Since our dataset is predominantly filled with citations, we are downsampling our data so that there is better learning
     print("Resampling data")
-    dataframe = resample_data(dataframe, 10000)
+    dataframe = resample_data(dataframe_orig, 10000)
 
     filename = 'datasets/resampled_data.csv'
     print("Saving resampled data into", filename)
@@ -906,6 +901,14 @@ if __name__ == "__main__":
     # Perform a test train split to train our model
     print("Performing a test train split to train our model")
     X_train, X_test, y_train, y_test = common_utils.test_train_split(dataframe)
+
+    # Decision Trees
+    # Commented out since still a work in progress
+    print("decision_tree without resampling data")
+    decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
+
+    # Displaying results from running decision tree
+    decision_tree_visualizaton(decision_tree_results, "without_resampling")
 
     # Decision Trees
     # Commented out since still a work in progress
@@ -935,6 +938,16 @@ if __name__ == "__main__":
     #Logistic Regression
     # Commented out since still a work in progress
     # print("Logistic Regression")
+    logistic_regression_results = logistic_regression(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig , 1)
+     #RESULTS OF LOGISTIC REGRESSION:
+    # {'None': 0.9280428913411332, 'stop_year': 0.9279991839879596, 'stop_month': 0.9281448557161394,
+    # 'stop_date': 0.928086581720577, 'stop_hour': 0.9280574569226638, 'driver_gender': 0.9279554893650832, 
+    # 'drivers_age_bucket': 0.9279700581291884, 'drivers_race': 0.9279846226498613, 'stop_duration': 0.9280428849759845,
+    # 'is_arrested': 0.8978908252908356, 'drugs_related_stop': 0.9279991924748245, 'violations_raw': 0.9275039340596075,
+    # 'search_score': 0.9280574579835221}
+    logistic_regression_visualization(logistic_regression_results,1)
+
+    #RESAMPLING
     logistic_regression_results_resampled = logistic_regression(X_train, X_test, y_train, y_test, dataframe , 1)
     # logistic_regression_results_resampled {'None': 0.7005750000000001, 'stop_year': 0.677275, 'stop_month': 0.6999749999999999, 
     # 'stop_date': 0.6905749999999999, 'stop_hour': 0.6992, 'driver_gender': 0.689575, 'drivers_age_bucket': 0.698325,
@@ -942,14 +955,9 @@ if __name__ == "__main__":
     # 'violations_raw': 0.588125, 'search_score': 0.69915}
     logistic_regression_visualization(logistic_regression_results_resampled,1)
 
-    #RESULTS OF LOGISTIC REGRESSION:
-    # {'None': 0.9280428913411332, 'stop_year': 0.9279991839879596, 'stop_month': 0.9281448557161394,
-    # 'stop_date': 0.928086581720577, 'stop_hour': 0.9280574569226638, 'driver_gender': 0.9279554893650832, 
-    # 'drivers_age_bucket': 0.9279700581291884, 'drivers_race': 0.9279846226498613, 'stop_duration': 0.9280428849759845,
-    # 'is_arrested': 0.8978908252908356, 'drugs_related_stop': 0.9279991924748245, 'violations_raw': 0.9275039340596075,
-    # 'search_score': 0.9280574579835221}
+   
 
-    # {'None': 0.7005750000000001, 'stop_year': 0.677275, 'stop_month': 0.6999749999999999, 'stop_date': 0.6905749999999999, 'stop_hour': 0.6992, 'driver_gender': 0.689575, 'drivers_age_bucket': 0.698325, 'drivers_race': 0.696775, 'stop_duration': 0.68965, 'is_arrested': 0.566025, 'drugs_related_stop': 0.69585, 'violations_raw': 0.588125, 'search_score': 0.69915}
+   
     
     
     # # K Nearest Neighbours
