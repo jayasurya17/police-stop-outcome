@@ -6,6 +6,14 @@ Due to the recent police activity and call for police reform over the past few m
 # Experiments/Analysis
 We decided to run the dataset on four different models, Random Forest, Decision Tree, K Nearest Neighbors, and Logistic Regression, to see how the models will perform. We also wanted to find some other details like which column is most important to predict the stop_outcome and if different depths on Decision Tree would make a difference.
 
+## Steps to Run the Code
+
+1. cd to the directory and ensure there is the requirements.txt file
+
+2. run the command $ pip install -r requirements.txt
+
+3. run the command $ python project.py
+
 ## Random Forest
 We chose random forest as a model to try out because random forests can be influenced less by outliers and that random forest provides a better understanding of the relationship features have with the target and the kind of influence they have on the dataset. The way we implemented Random Forest was to put the model inside of Grid Search to best find the hyperparameters to use. There were a couple approaches we tried on the model. 
 
@@ -32,6 +40,7 @@ One last approach in analyzing the model is how accurate it was predicting the `
 |           Warning |  0.967047| 
 
 ## Decision Tree
+
 We used the deisicion tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions. 
 
 Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
@@ -56,23 +65,16 @@ Based on the analysis, we understood the data we had was inbalanced, which means
 
 The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuray reduction was observed indicating its a valuable column.
 
-**Variation of Accuracy when each column is Removed**
-
-
-![Column Removal](analysis_visualization/decision_tree_column_with_resampling.png)
-
-
-
-
+The accuracy of each possible outcome in the stop_outcome are as follows:
 
 
 | stop_outcome |  accuracy |
 | --------- | --------------- |
-|     Arrest Driver |  0.806807|
-|  Arrest Passenger | 0.400988 | 
-|          Citation |   0.590749| 
-|         No Action | 0.754008| 
-|           Warning |  0.627008| 
+|     Arrest Driver |  0.675175|
+|  Arrest Passenger | 0.643457 | 
+|          Citation |   0.669180| 
+|         No Action | 0.747495| 
+|           Warning |  0.717369| 
 
 ## K Nearest Neighbors
 We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
@@ -141,6 +143,8 @@ Comparing what we did in our project to the [Kaggle competition](https://www.kag
 <!-- Which model is performing better? Why? Is it being overfitted? -->
 
 <!-- How similar or different are results from decision tree and random forest? Why? -->
+
+In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average of all of those predictions. 
 
 <!-- Why did we have to rescale our data? How did it impact our results? -->
 

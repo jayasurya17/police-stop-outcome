@@ -845,27 +845,19 @@ if __name__ == "__main__":
 
     # Last minute catches to finalize preprocessing
     print("General Preprocessing")
-    dataframe = general_preprocessing(dataframe)
+    dataframe_orig = general_preprocessing(dataframe)
 
-    filename = 'datasets/processed_data.csv'
+    filename = 'datasets/processed_data_orig.csv'
     print("Saving dataframe into", filename)
-    save_to_csv(dataframe, filename)
+    save_to_csv(dataframe_orig, filename)
 
     # Perform a test train split to train our model
     print("Performing a test train split to train our model")
-    X_train_orig, X_test_orig, y_train_orig, y_test_orig = common_utils.test_train_split(dataframe)
-
-    # Decision Trees
-    # Commented out since still a work in progress
-    print("decision_tree without resampling data")
-    decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe)
-
-    # Displaying results from running decision tree
-    decision_tree_visualizaton(decision_tree_results, "without_resampling")
+    X_train_orig, X_test_orig, y_train_orig, y_test_orig = common_utils.test_train_split(dataframe_orig)
 
     # Since our dataset is predominantly filled with citations, we are downsampling our data so that there is better learning
     print("Resampling data")
-    dataframe = resample_data(dataframe, 10000)
+    dataframe = resample_data(dataframe_orig, 10000)
 
     filename = 'datasets/resampled_data.csv'
     print("Saving resampled data into", filename)
@@ -874,6 +866,14 @@ if __name__ == "__main__":
     # Perform a test train split to train our model
     print("Performing a test train split to train our model")
     X_train, X_test, y_train, y_test = common_utils.test_train_split(dataframe)
+
+    # Decision Trees
+    # Commented out since still a work in progress
+    print("decision_tree without resampling data")
+    decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
+
+    # Displaying results from running decision tree
+    decision_tree_visualizaton(decision_tree_results, "without_resampling")
 
     # Decision Trees
     # Commented out since still a work in progress
@@ -886,7 +886,7 @@ if __name__ == "__main__":
 
 
     # Random Forest
-    random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+    # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
 
     # Results from running random forest (so you don't have to run the method)
     # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
@@ -896,7 +896,7 @@ if __name__ == "__main__":
     # 'is_arrested': 0.9446625, 'drugs_related_stop': 0.9561249999999999, 'violations_raw': 0.9544750000000001, 
     # 'search_score': 0.9555875}
     # Displaying results from running random forest
-    random_forest_visualizaton(random_forest_results)
+    # random_forest_visualizaton(random_forest_results)
 
 
 
