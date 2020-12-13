@@ -3,6 +3,14 @@
 # Setup
 <!-- Steps including how to clone the project, commands to install dependencies and run the project -->
 
+1. open any terminal and  press $ 'git clone  https://github.com/jayasurya17/police-stop-outcome.git'
+
+2. Once the project is clone, cd to the directory and ensure there is the requirements.txt file
+
+3. run the command $ pip install -r requirements.txt
+
+4. In the same directory, run the command $ python project.py
+
 # Team members
 
 | Name             | GitHub username |

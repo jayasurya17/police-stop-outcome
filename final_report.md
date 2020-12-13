@@ -6,13 +6,6 @@ Due to the recent police activity and call for police reform over the past few m
 # Experiments/Analysis
 We decided to run the dataset on four different models, Random Forest, Decision Tree, K Nearest Neighbors, and Logistic Regression, to see how the models will perform. We also wanted to find some other details like which column is most important to predict the stop_outcome and if different depths on Decision Tree would make a difference.
 
-## Steps to Run the Code
-
-1. cd to the directory and ensure there is the requirements.txt file
-
-2. run the command $ pip install -r requirements.txt
-
-3. run the command $ python project.py
 
 ## Random Forest
 We chose random forest as a model to try out because random forests can be influenced less by outliers and that random forest provides a better understanding of the relationship features have with the target and the kind of influence they have on the dataset. The way we implemented Random Forest was to put the model inside of Grid Search to best find the hyperparameters to use. There were a couple approaches we tried on the model. 
