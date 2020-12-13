@@ -166,7 +166,7 @@ Finally, the above graphs shows how data is clustered. We observe that all the d
 
 In following graphs, we remove one column at time and look at the accuracy with which each of the models is able to predict/classify. We notice that the accuracy decreases upon removing column is_arrested in each of the methods. This indicates that is_arrested is the most important column in this data since this directly leads to either arrest of driver or passenger.
 
-![Comparision after removing columns](analysis_visualization/remove_columns.png)
+![Comparision after removing columns](analysis_visualization/remove_columns_comparision.png)
 
 <!-- * Accuracy using KNN 
 
