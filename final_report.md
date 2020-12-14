@@ -4,6 +4,8 @@
 
 Due to the recent police activity and call for police reform over the past few months, we want to predict the outcome of a police stop based on a variety of attributes. We thought of the idea based on recent events around police reform and wanted to implement some way to see what happens and what will happen at a police stop. We want to look into what factors are reported for a police stop and see what will be the most important when predicting the stop_outcome.
 
+We aimed to use four different models: random forest, decision tree, logistic regression, and k nearest neighbors. We wanted to compare how each model would perform against each other and which would be the best to predict the stop_outcome. Each model went through similar approaches when it came to testing like removing each column to see which column proved to be important in the prediction.
+
 # Experiments/Analysis
 
 We decided to run the dataset on four different models, Random Forest, Decision Tree, K Nearest Neighbors, and Logistic Regression, to see how the models will perform. We also wanted to find some other details like which column is most important to predict the stop_outcome, how number of iterations affect Logistic Regression and if different depths on Decision Tree would make a difference.
@@ -65,7 +67,7 @@ One last approach in analyzing the model is how accurate it was predicting the `
 
 Since decision trees and random forests are similar, we compared the two when testing out the models. For example, I would test out different `max_depths` that decision tree saw that were good to see if it would translate to random forest.
 
-Lastly, we figured later into the project that we should have resampled our data. So we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 94% with the resampled data and the original data gave around 92%. Trends between the two outputs are really similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion). Random forest seems to be a good option for this dataset since .
+Lastly, we figured later into the project that we should have resampled our data. So we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 94% with the resampled data and the original data gave around 92%. Trends between the two outputs are really similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion).
 
 ### Original Data Accuracy
 | stop_outcome     | accuracy |
@@ -87,7 +89,7 @@ Lastly, we figured later into the project that we should have resampled our data
 
 ## Decision Tree
 
-We used the deisicion tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions.
+We used the decision tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions.
 
 Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
 
@@ -184,19 +186,26 @@ In following graphs, we remove one column at time and look at the accuracy with 
 
 ![Logistic Regression analysis](analysis_visualization/logistic_regression.png) -->
 
+## Kaggle Comparision
 Comparing what we did in our project to the [Kaggle competition](https://www.kaggle.com/faressayah/stanford-open-policing-project) we got our dataset from, we seem to have had different goals and approaches to preprocessing. When looking at the notebooks associated, it looks like people were trying to answer questions like "Do men or women speed more often?" and "Which year had the least number of stops?" while our project aimed to predict the `stop_outcome`. Also, the preprocessing and visualization done in the Kaggle notebooks seemed to go more in depth about distributions within some of the columns, which in retrospect would have been good for us to do in our preliminary analysis.
 
 # Conclusion
 
-### Which model is performing better? Why? Is it being overfitted?
+The goal of this project was to test out different models to see which one would perform best in predicting the stop_outcome for our given dataset. We wanted a chance to get some hands on experience with some models that were discussed in lecture over the past semester and thought that random forest, logistic regression, decision tree, and knn were interesting to pick up and figure out. Overall, we saw that random forest was the model that performed the best out, with 94% accuracy, of the four models we chose to implement. We think this is the case because random forest is best at avoiding overfitting, doesn't rely on a specific feature, and depth doesn't matter as much compared to other decision tree algorithms.
 
-Logistic Regression gave an accuracy of 92.8% without re-sampling and after sampling it gave an accuracy of 96%. It clearly indicates that initially Logistic Regression model was being overfitted since the data was bias towards a particular attribute therefore learning model outputs were bias too. After resampling, the model started to learn and was no longer overfitted.
+## Which model is performing better? Why?
 
-### How similar or different are results from decision tree and random forest? Why?
+We expected this sort of outcome since our dataset has too many features for knn and logistic regression to be efficent and perform well. For knn, the clustering was happening in the same spot across all the features which proved to be a problem for knn. For logistic regression, the output had too many variables to predict so it could not make a proper prediction in a good range of accuracy. For decision tree, the model only has one tree compared to random forest having multiple trees to rely on.
+
+<!-- ## Which model is performing better? Why? Is it being overfitted?
+
+Logistic Regression gave an accuracy of 92.8% without re-sampling and after sampling it gave an accuracy of 96%. It clearly indicates that initially Logistic Regression model was being overfitted since the data was bias towards a particular attribute therefore learning model outputs were bias too. After resampling, the model started to learn and was no longer overfitted. -->
+
+## How similar or different are results from decision tree and random forest? Why?
 
 In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average/best decision tree of all of those predictions. Random forest doesn't rely on feature importance on a single decision tree because of the way random forest randomly chooses features during the training process. Another reason why random forest would perform better is that random forest trees are already fully grown and unpruned so the feature space is smaller compared to decision tree as well as having diverse trees.
 
-### Why did we have to resample our data? How did it impact our results?
+## Why did we have to resample our data? How did it impact our results?
 
 * The following table shows the number of occurances of each outcome. We see that *citation* is dominating and this will result in the models learning from an "imbalanced" data. 
 
@@ -211,4 +220,9 @@ In our case we did the decision tree based classification based on the parameter
 * We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.  
 * Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbours. Similar results were obtained by other algorithms as well)
 
-### Scope for improvement
+## Scope for improvement
+
+- Looking at how the notebooks in the Kaggle competition did their preprocessing, we could have dug a bit deeper into the depth about distributions within some of the columns
+- Having more models like neural network and SVM would have been good to see how they would perform compared to the models we currently have
+- Looking at other policing datasets, like the [Open Policing Stanford](https://openpolicing.stanford.edu/data/) dataset, and testing our models with that would have been a good measure in how well they were fitted
+- Using get_dummies from pandas increased the number of features, so we could have done the one-hot encoding ourselves to see a change in performance in our models like knn
