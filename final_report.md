@@ -131,8 +131,7 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 
 ![KNN neighbous analysis](analysis_visualization/KNN.png)
 
-- On looking at the above graph we notice that as the number of neighbors increases, accuracy decreases. This shows that data is not clustered in just a few places. It is evenly distributed.
-- Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that the model is not overfitted or under fitted. Also, as expected the accuracy decreases by considering a higher number of neighbors for analysis.
+- Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that lower values of K is more favorable for the outcome.
 - Following are the results of the accuracy with which KNN was able to classify each of the class in the outcome. Implementation of this is written in `knn_find_accuracy_of_each_class` method which can be found in `knn_analysis.py`
 
   | stop_outcome     | accuracy with 5 neighbors | accuracy with 15 neighbors | accuracy with 25 neighbors |
