@@ -645,7 +645,7 @@ def random_forest_visualizaton(random_forest,type):
 def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     # Set the parameters you want to evaluate
 
-    params = {'max_leaf_nodes': list(range(2, 30)), 'min_samples_split': [2, 3]}
+    params = {'max_leaf_nodes': list(range(2, 40)), 'min_samples_split': [2, 3]}
 
     # Create the GridSearch object for the Random Forest classifier passing the parameters
     grid_search_cv = GridSearchCV(DecisionTreeClassifier(), params, verbose=1, cv=3)
@@ -691,7 +691,7 @@ def decision_tree(X_train, X_test, y_train, y_test, df_clean):
 
     
     # The list of depth which are considered and accuracies are calculated
-    list_depths = list(range(1,17))
+    list_depths = list(range(1,40))
 
     list_accuracy = []
 
@@ -889,7 +889,7 @@ if __name__ == "__main__":
 
     # Decision Trees
     # Commented out since still a work in progress
-    print("decision_tree without resampling data")
+    # print("decision_tree without resampling data")
     # decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
 
     # Displaying results from running decision tree
@@ -898,11 +898,11 @@ if __name__ == "__main__":
     # Decision Trees
     # Commented out since still a work in progress
     print("decision_tree with resampling data")
-    # decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
+    decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
     
     # Displaying results from running decision tree
-    # decision_tree_visualizaton(decision_tree_results, "with_resampling")
+    decision_tree_visualizaton(decision_tree_results, "with_resampling")
 
 
     # Random Forest
@@ -932,7 +932,7 @@ if __name__ == "__main__":
     #Logistic Regression
     # Commented out since still a work in progress
     # print("Logistic Regression")
-    logistic_regression_results = logistic_regression(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig , 1)
+    # logistic_regression_results = logistic_regression(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig , 1)
      #RESULTS OF LOGISTIC REGRESSION:
     # {'None': 0.9280428913411332, 'stop_year': 0.9279991839879596, 'stop_month': 0.9281448557161394,
     # 'stop_date': 0.928086581720577, 'stop_hour': 0.9280574569226638, 'driver_gender': 0.9279554893650832, 
@@ -942,7 +942,7 @@ if __name__ == "__main__":
     # logistic_regression_visualization(logistic_regression_results,1)
 
     #RESAMPLING
-    logistic_regression_results_resampled = logistic_regression(X_train, X_test, y_train, y_test, dataframe , 1)
+    # logistic_regression_results_resampled = logistic_regression(X_train, X_test, y_train, y_test, dataframe , 1)
     # logistic_regression_results_resampled {'None': 0.7005750000000001, 'stop_year': 0.677275, 'stop_month': 0.6999749999999999, 
     # 'stop_date': 0.6905749999999999, 'stop_hour': 0.6992, 'driver_gender': 0.689575, 'drivers_age_bucket': 0.698325,
     # 'drivers_race': 0.696775, 'stop_duration': 0.68965, 'is_arrested': 0.566025, 'drugs_related_stop': 0.69585, 
