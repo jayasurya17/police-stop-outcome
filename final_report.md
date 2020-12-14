@@ -67,23 +67,14 @@ Since decision trees and random forests are similar, we compared the two when te
 
 Lastly, we figured later into the project that we should have resampled our data. So we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 94% with the resampled data and the original data gave around 92%. Trends between the two outputs are really similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion). Random forest seems to be a good option for this dataset since .
 
-### Original Data Accuracy
-| stop_outcome     | accuracy |
-| ---------------- | -------- |
-| Arrest Driver    | 1.000000 |
-| Arrest Passenger | 0.030303 |
-| Citation         | 0.995253 |
-| No Action        | 0.293578 |
-| Warning          | 0.036765 |
-
-### Resampled Data Accuracy
-| stop_outcome     | accuracy |
-| ---------------- | -------- |
-| Arrest Driver    | 1.000000 |
-| Arrest Passenger | 1.000000 |
-| Citation         | 0.780292 |
-| No Action        | 1.000000 |
-| Warning          | 0.919177 |
+### Accuracy with original and resampled data
+| stop_outcome     | Accuracy with original data | Accuracy with resampled data |
+| ---------------- | -------- |-------- |
+| Arrest Driver    | 1.000000 |1.000000 |
+| Arrest Passenger | 0.030303 |1.000000 |
+| Citation         | 0.995253 |0.780292 |
+| No Action        | 0.293578 |1.000000 |
+| Warning          | 0.036765 |0.919177 |
 
 ## Decision Tree
 
@@ -108,11 +99,8 @@ We have found the best parameters for our model can be obtained by using the gri
 
 Based on the analysis, we understood the data we had was inbalanced, which means the final outcome didnt have a equal distribution of outcomes. For example, citation was the most dominant followed by other. So we had to do sampling of the data, either downsampling or upsampling to a value where we have equal balance of data.
 
-The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuray reduction was observed indicating its a valuable column.
+The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuracy reduction was observed indicating its a valuable column.
 
-
-### Variation of Accuracy when each column is Removed
-![Column Removal](analysis_visualization/decision_tree_column_with_resampling.png)
 
 | stop_outcome     | accuracy |
 | ---------------- | -------- |
@@ -126,24 +114,24 @@ The reason for removal of each column is to analyze the impact of each column on
 
 We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
 
-1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbours. Implementaion of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py` 
-2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementaion of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py` 
+1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbors. Implementation of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py` 
+2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementation of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py` 
 
-   These two approaches will show how clusted the data is and also give an insight into if the model is overfitting the data
+   These two approaches will show how clustered the data is and also give an insight into if the model is overfitting the data
    
-3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementaion of this is written in `apply_pca_and_compare` methos which can be found in `knn_analysis.py`
+3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementation of this is written in `apply_pca_and_compare` method which can be found in `knn_analysis.py`
 
     This approach tells us how many features will be sufficient to predict the outcome
 
-4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementaion of this is written in `knn_remove_columns_and_find_accuracy` methos which can be found in `knn_analysis.py`
+4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementation of this is written in `knn_remove_columns_and_find_accuracy` method which can be found in `knn_analysis.py`
 
    This approach will additionally prove the results from the first two approaches
 
 ![KNN neighbous analysis](analysis_visualization/KNN.png)
 
-- On looking at the above graph we notice that as the number of neighbours increase, accuracy decreases. This shows that data is not clustered in just a few places. It is evenly distributed.
-- Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that the model is not overfitted or underfitted. Also, as expected the accuracy decreases by considering higher number of neighbours for analysis.
-- Following are the results of the accuracy with which KNN was able to classify each of the class in outcome . Implementaion of this is written in `knn_find_accuracy_of_each_class` methos which can be found in `knn_analysis.py`
+- On looking at the above graph we notice that as the number of neighbors increases, accuracy decreases. This shows that data is not clustered in just a few places. It is evenly distributed.
+- Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that the model is not overfitted or under fitted. Also, as expected the accuracy decreases by considering a higher number of neighbors for analysis.
+- Following are the results of the accuracy with which KNN was able to classify each of the class in the outcome. Implementation of this is written in `knn_find_accuracy_of_each_class` method which can be found in `knn_analysis.py`
 
   | stop_outcome     | accuracy with 5 neighbors | accuracy with 15 neighbors | accuracy with 25 neighbors |
   | ---------------- | ------------------------- | -------------------------- | -------------------------- |
@@ -155,12 +143,12 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 
 ![PCA analysis](analysis_visualization/PCA.png)
 
-- The above plot was obtained by running KNN with 15 neighbours. The original dataframe has about 82 features and reducing that to very low number of features will make the dataframe lose a lot of information and that is reflected in the graph where we see the accuracy is very low
+- The above plot was obtained by running KNN with 15 neighbors. The original dataframe has about 82 features and reducing that to a very low number of features will make the dataframe lose a lot of information and that is reflected in the graph where we see the accuracy is very low
 - The ideal number of components would be anything above 13. For all values above 13 components, there is no significant difference in classification accuracy
 
 ![Clustering using KNN](analysis_visualization/knn_clustering.png)
 
-Finally, the above graphs shows how data is clustered. We observe that all the data is clustered at the same place. This was obtained by reducing data into 3 components usign PCA. Since all datapoints are clustered at the same place, it is also fairly obvious as to why the prediction accuracy is so low for n = 3 components in the previous graph. Implementaion of this is written in `visualize_grouping` method which can be found in `knn_analysis.py`
+Finally, the above graphs show how data is clustered. We observe that all the data is clustered at the same place. This was obtained by reducing data into 3 components using PCA. Since all datapoints are clustered at the same place, it is also fairly obvious as to why the prediction accuracy is so low for n = 3 components in the previous graph. Implementation of this is written in `visualize_grouping` method which can be found in `knn_analysis.py`
 
 # Comparisons
 
@@ -198,7 +186,7 @@ In our case we did the decision tree based classification based on the parameter
 
 ### Why did we have to resample our data? How did it impact our results?
 
-* The following table shows the number of occurances of each outcome. We see that *citation* is dominating and this will result in the models learning from an "imbalanced" data. 
+* The following table shows the number of occurrences of each outcome. We see that *citation* is dominating and this will result in the models learning from "imbalanced" data. 
 
 |Outcome | Occurances in dataset | Accuracy **before** resampling | Accuracy **after** resampling |
 |----------------|-------|----------------|-------|
@@ -209,6 +197,6 @@ In our case we did the decision tree based classification based on the parameter
 | Arrest Passenger |      358| 0.026654 | 0.775100 |
 
 * We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.  
-* Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbours. Similar results were obtained by other algorithms as well)
+* Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbors. Similar results were obtained by other algorithms as well)
 
 ### Scope for improvement

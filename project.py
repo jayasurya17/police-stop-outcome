@@ -854,14 +854,14 @@ if __name__ == "__main__":
     dataframe = transform_data_columns_13_15(dataframe)
 
     print("Visualizing data. Commented this part to save time")
-    # # Hari visualization
-    # visualize_data_columns_1_4(dataframe)
-    # # Akash's visualization
-    # visualize_data_columns_5_8(dataframe)
-    # # Jayasurya visualization
-    # visualize_data_columns_9_12(dataframe)
-    # # Anthony visualization
-    # visualize_data_columns_13_15(dataframe)
+    # Hari visualization
+    visualize_data_columns_1_4(dataframe)
+    # Akash's visualization
+    visualize_data_columns_5_8(dataframe)
+    # Jayasurya visualization
+    visualize_data_columns_9_12(dataframe)
+    # Anthony visualization
+    visualize_data_columns_13_15(dataframe)
 
     # Last minute catches to finalize preprocessing
     print("General Preprocessing")
@@ -888,78 +888,118 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = common_utils.test_train_split(dataframe)
 
     # Decision Trees
-    # Commented out since still a work in progress
     print("decision_tree without resampling data")
-    # decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
+    decision_tree_results = decision_tree(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
 
     # Displaying results from running decision tree
-    # decision_tree_visualizaton(decision_tree_results, "without_resampling")
+    decision_tree_visualizaton(decision_tree_results, "without_resampling")
 
     # Decision Trees
-    # Commented out since still a work in progress
     print("decision_tree with resampling data")
-    # decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
+    decision_tree_results = decision_tree(X_train, X_test, y_train, y_test, dataframe)
 
     
     # Displaying results from running decision tree
-    # decision_tree_visualizaton(decision_tree_results, "with_resampling")
+    decision_tree_visualizaton(decision_tree_results, "with_resampling")
 
 
     # Random Forest
     # Original Data
-    # random_forest_results = random_forest(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
+    random_forest_results = random_forest(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig)
     # Results from running random forest WITH ORIGINAL (so you don't have to run the method)
-    # random_forest_results = {'None': 0.9267901887388534, 'stop_year': 0.9225951283381028, 'stop_month': 0.9195216378715305, 
-    # 'stop_date': 0.9111169567927885, 'stop_hour': 0.919958632899766, 'driver_gender': 0.9260764349312349, 
-    # 'drivers_age_bucket': 0.9211530328633148, 'drivers_race': 0.9256394908241876, 'stop_duration': 0.9267173438574698, 
-    # 'is_arrested': 0.8986191255845395, 'drugs_related_stop': 0.92706694009223, 'violations_raw': 0.9240226264056173, 
-    # 'search_score': 0.9265280072104403}
-    # random_forest_visualizaton(random_forest_results, "original")
+    # random_forest_results = {
+    #    "None":0.9267901887388534,
+    #    "stop_year":0.9225951283381028,
+    #    "stop_month":0.9195216378715305,
+    #    "stop_date":0.9111169567927885,
+    #    "stop_hour":0.919958632899766,
+    #    "driver_gender":0.9260764349312349,
+    #    "drivers_age_bucket":0.9211530328633148,
+    #    "drivers_race":0.9256394908241876,
+    #    "stop_duration":0.9267173438574698,
+    #    "is_arrested":0.8986191255845395,
+    #    "drugs_related_stop":0.92706694009223,
+    #    "violations_raw":0.9240226264056173,
+    #    "search_score":0.9265280072104403
+    # }
+    random_forest_visualizaton(random_forest_results, "original")
 
     # Resampling Data
-    # random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
+    random_forest_results = random_forest(X_train, X_test, y_train, y_test, dataframe)
     # Results from running random forest WITH RESAMPLING (so you don't have to run the method)
     # Comment out the following line if you decide to run the random_forest method and get the accuracies from there
-    # random_forest_results = {'None': 0.9284500000000001, 'stop_year': 0.9154, 'stop_month': 0.925425, 'stop_date': 0.921875, 
-    # 'stop_hour': 0.924925, 'driver_gender': 0.9290499999999999, 'drivers_age_bucket': 0.926975, 'drivers_race': 0.92875, 
-    # 'stop_duration': 0.9282, 'is_arrested': 0.90715, 'drugs_related_stop': 0.928875, 'violations_raw': 0.9231999999999999, 
-    # 'search_score': 0.9284500000000001}
+    # random_forest_results = {
+    #    "None":0.9284500000000001,
+    #    "stop_year":0.9154,
+    #    "stop_month":0.925425,
+    #    "stop_date":0.921875,
+    #    "stop_hour":0.924925,
+    #    "driver_gender":0.9290499999999999,
+    #    "drivers_age_bucket":0.926975,
+    #    "drivers_race":0.92875,
+    #    "stop_duration":0.9282,
+    #    "is_arrested":0.90715,
+    #    "drugs_related_stop":0.928875,
+    #    "violations_raw":0.9231999999999999,
+    #    "search_score":0.9284500000000001
+    # }
     # Displaying results from running random forest
-    # random_forest_visualizaton(random_forest_results, "resampling")
+    random_forest_visualizaton(random_forest_results, "resampling")
 
 
 
-    #Logistic Regression
-    # Commented out since still a work in progress
-    # print("Logistic Regression")
-    logistic_regression_results = logistic_regression(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig , 1)
-     #RESULTS OF LOGISTIC REGRESSION:
-    # {'None': 0.9280428913411332, 'stop_year': 0.9279991839879596, 'stop_month': 0.9281448557161394,
-    # 'stop_date': 0.928086581720577, 'stop_hour': 0.9280574569226638, 'driver_gender': 0.9279554893650832, 
-    # 'drivers_age_bucket': 0.9279700581291884, 'drivers_race': 0.9279846226498613, 'stop_duration': 0.9280428849759845,
-    # 'is_arrested': 0.8978908252908356, 'drugs_related_stop': 0.9279991924748245, 'violations_raw': 0.9275039340596075,
-    # 'search_score': 0.9280574579835221}
-    # logistic_regression_visualization(logistic_regression_results,1)
+    # #Logistic Regression
+    # print("Logistic Regression unsampled data")
+    # logistic_regression_results = logistic_regression(X_train_orig, X_test_orig, y_train_orig, y_test_orig, dataframe_orig , 0)
+    # # RESULTS OF LOGISTIC REGRESSION:
+    # # {
+    # #    "None":0.9280428913411332,
+    # #    "stop_year":0.9279991839879596,
+    # #    "stop_month":0.9281448557161394,
+    # #    "stop_date":0.928086581720577,
+    # #    "stop_hour":0.9280574569226638,
+    # #    "driver_gender":0.9279554893650832,
+    # #    "drivers_age_bucket":0.9279700581291884,
+    # #    "drivers_race":0.9279846226498613,
+    # #    "stop_duration":0.9280428849759845,
+    # #    "is_arrested":0.8978908252908356,
+    # #    "drugs_related_stop":0.9279991924748245,
+    # #    "violations_raw":0.9275039340596075,
+    # #    "search_score":0.9280574579835221
+    # # }
+    # logistic_regression_visualization(logistic_regression_results,0)
 
     #RESAMPLING
+    print("Logistic Regression with sampled data")
     logistic_regression_results_resampled = logistic_regression(X_train, X_test, y_train, y_test, dataframe , 1)
-    # logistic_regression_results_resampled {'None': 0.7005750000000001, 'stop_year': 0.677275, 'stop_month': 0.6999749999999999, 
-    # 'stop_date': 0.6905749999999999, 'stop_hour': 0.6992, 'driver_gender': 0.689575, 'drivers_age_bucket': 0.698325,
-    # 'drivers_race': 0.696775, 'stop_duration': 0.68965, 'is_arrested': 0.566025, 'drugs_related_stop': 0.69585, 
-    # 'violations_raw': 0.588125, 'search_score': 0.69915}
-    # logistic_regression_visualization(logistic_regression_results_resampled,1)
+    # logistic_regression_results_resampled {
+    #    "None":0.7005750000000001,
+    #    "stop_year":0.677275,
+    #    "stop_month":0.6999749999999999,
+    #    "stop_date":0.6905749999999999,
+    #    "stop_hour":0.6992,
+    #    "driver_gender":0.689575,
+    #    "drivers_age_bucket":0.698325,
+    #    "drivers_race":0.696775,
+    #    "stop_duration":0.68965,
+    #    "is_arrested":0.566025,
+    #    "drugs_related_stop":0.69585,
+    #    "violations_raw":0.588125,
+    #    "search_score":0.69915
+    # }   
+    logistic_regression_visualization(logistic_regression_results_resampled,1)
 
    
 
    
     
     
-    # # K Nearest Neighbours
-    # print ("k_neighbors_classifier")
-    # knn_analysis.visualize_grouping(X_train_orig, y_train_orig)
-    # k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
-    # print ("k_neighbors_classifier performance without resampling data")
-    # knn_analysis.knn_find_accuracy_of_each_class(X_train_orig, X_test_orig, y_train_orig, y_test_orig)
-    # print ("k_neighbors_classifier performance with resampling data")
-    # knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
+    # K Nearest Neighbours
+    print ("k_neighbors_classifier")
+    knn_analysis.visualize_grouping(X_train_orig, y_train_orig)
+    k_neighbors_classifier(X_train, X_test, y_train, y_test, dataframe)
+    print ("k_neighbors_classifier performance without resampling data")
+    knn_analysis.knn_find_accuracy_of_each_class(X_train_orig, X_test_orig, y_train_orig, y_test_orig)
+    print ("k_neighbors_classifier performance with resampling data")
+    knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
     
