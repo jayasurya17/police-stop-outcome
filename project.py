@@ -645,7 +645,7 @@ def random_forest_visualizaton(random_forest,type):
 def decision_tree(X_train, X_test, y_train, y_test, df_clean):
     # Set the parameters you want to evaluate
 
-    params = {'max_leaf_nodes': list(range(2, 40)), 'min_samples_split': [2, 3]}
+    params = {'max_leaf_nodes': list(range(2, 20)), 'min_samples_split': [2, 3]}
 
     # Create the GridSearch object for the Random Forest classifier passing the parameters
     grid_search_cv = GridSearchCV(DecisionTreeClassifier(), params, verbose=1, cv=3)
