@@ -8,7 +8,7 @@ We aimed to use four different models: random forest, decision tree, logistic re
 
 # Experiments/Analysis
 
-We decided to run the dataset on four different models, Random Forest, Decision Tree, K Nearest Neighbors, and Logistic Regression, to see how the models will perform. We also wanted to find some other details like which column is most important to predict the stop_outcome, how number of iterations affect Logistic Regression and if different depths on Decision Tree would make a difference.
+We decided to run the dataset on four different models, Random Forest, Decision Tree, K Nearest Neighbors, and Logistic Regression to see how the models will perform. We also wanted to find some other details like which column is most important to predict the stop_outcome, how number of iterations affect Logistic Regression, and if different depths on Decision Tree would make a difference.
 
 ## Logistic Regression
 
@@ -26,16 +26,16 @@ param_grid ={'C':[0.001, 0.1, 1, 10, 100],
 
 ![Accuracy LR](analysis_visualization/Accuracy_LR.png)
 
-- From the graph above, it can be concluded with increase in number of iterations, the accuracy definitely increase but having too high or too low iterations have consequences. The repurcussions are discussed here:
+- From the graph above, it can be concluded with increase in number of iterations, the accuracy definitely increases but having too high or too low iterations have consequences. The repurcussions are discussed here:
 
 - If we set `max_itr` too low, then the Logistic Regression has too little training to converge and therefore throw an exception.
 - If we set the `max_itr` too high, then the Logistic Regression simply overfits the training data without capturing useful patterns.
 
 ![Confusion Matrix](analysis_visualization/LR_Confusion_Matrix.png)
 
--Second Approach- Based on the analysis of Confusion Matrix above,it was clear that the data is inbalanced with citation being the dominant. So we did sampling of the data, either downsampling or upsampling to a value where we have equal balance of data and then again trained our models
+-Second Approach- Based on the analysis of Confusion Matrix above, it was clear that the data is inbalanced with citation being the dominant. So, we did sampling of the data, either downsampling or upsampling to a value where we have equal balance of data and then again trained our models
 
--Third Approach - We tried figuring out column(s) impact the prediction of the `stop_outcome` column on resampled data. In order to do so, we looped through the dataset and removed each column individually, retrain the model, predict the outcome, and see which cross validation scores came back lower than most. In the end, Logistic Regression saw that when `is_arrested` column has the lowest cross validation score, which meant that column is important in predicting the `stop_outcome` column. It confirms the fact that when `is_arrested` column is true, the stop outcome would result into arrest driver or passanger by removing this column, we are loosing a lot of information.
+-Third Approach - We tried figuring out column(s) impact the prediction of the `stop_outcome` column on resampled data. To do so, we looped through the dataset and removed each column individually, retrain the model, predict the outcome, and see which cross validation scores came back lower than most. In the end, Logistic Regression saw that when `is_arrested` column has the lowest cross validation score, which meant that column is important in predicting the `stop_outcome` column. It confirms the fact that when `is_arrested` column is true, the stop outcome would result into arrest driver or passanger by removing this column, we are losing a lot of information.
 
 -Fourth Approach - The final approach is to analyze the precision of model in predicting the `stop_outcome`.
 
@@ -49,7 +49,7 @@ param_grid ={'C':[0.001, 0.1, 1, 10, 100],
 
 ## Random Forest
 
-We chose random forest as a model to try out because random forests can be influenced less by outliers and that random forest provides a better understanding of the relationship features have with the target and the kind of influence they have on the dataset. Random forest is good because having a large number of trees that work together will outperform individual models. The way we implemented Random Forest was to put the model inside of Grid Search to best find the hyperparameters to use. There were a couple approaches we tried on the model.
+We chose random forest as a model to try out because random forests can be influenced less by outliers and that random forest provides a better understanding of the relationship features have with the target and the kind of influence they have on the dataset. Random forest is good because having many trees that work together will outperform individual models. The way we implemented Random Forest was to put the model inside of Grid Search to best find the hyperparameters to use. There were a couple approaches we tried on the model.
 
 Using GridSearchCV, we found the best parameters out of a list of parameters for n_estimators and max_depth to use on the random forest model. Grid search will loop through every possibility in `param_grid` and test it on the model and save the best parameters to use. In the end, `n_estimators` as 250 and `max_depth` as None proved to be the best parameters to run random forest on. The code block below shows the `param_grid` use to find the best parameters:
 
@@ -61,13 +61,13 @@ param_grid = {'n_estimators': [50,75,100,150,200,250,300,350,400,450,500],
     		 }
 ```
 
-The next piece of information we wanted to find out was which column(s) impact the prediction of the `stop_outcome` column. In order to do so, we looped through the dataset and removed each column individually, retrain the model, predict the outcome, and see which cross validation scores came back lower than most. In the end, random forest saw that when `is_arrested` column has the lowest cross validation score, which meant that column is important in predicting the `stop_outcome` column. Which makes sense considering there are only five different outcomes and if they end up arrested, they will have gotten a specific outcome like arrest driver or passenger. The graph for this can be seen in the Comparison section below.
+The next piece of information we wanted to find out was which column(s) impact the prediction of the `stop_outcome` column. To do so, we looped through the dataset and removed each column individually, retrain the model, predict the outcome, and see which cross validation scores came back lower than most. In the end, random forest saw that when `is_arrested` column has the lowest cross validation score, which meant that column is important in predicting the `stop_outcome` column. Which makes sense considering there are only five different outcomes and if they end up arrested, they will have gotten a specific outcome like arrest driver or passenger. The graph for this can be seen in the Comparison section below.
 
 One last approach in analyzing the model is how accurate it was predicting the `stop_outcome`. By calling the `find_accuracy_of_each_class` method in the `common_utils.py` file, we were able to see the accuracy the model is having in identifying each `stop_outcome` type. We put this method after each time we run the loop mentioned in the previous paragraph and the accuracy looked like the following table with given a +/- 0.002 margin.
 
 Since decision trees and random forests are similar, we compared the two when testing out the models. For example, I would test out different `max_depths` that decision tree saw that were good to see if it would translate to random forest.
 
-Lastly, we figured later into the project that we should have resampled our data. So we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 94% with the resampled data and the original data gave around 92%. Trends between the two outputs are really similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion).
+Lastly, we figured later into the project that we should have resampled our data. So, we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 92% with the resampled data and the original data gave around 92%. Trends between the two outputs are similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion).
 
 ### Accuracy with original and resampled data
 | stop_outcome     | Accuracy with original data | Accuracy with resampled data |
@@ -80,15 +80,15 @@ Lastly, we figured later into the project that we should have resampled our data
 
 ## Decision Tree
 
-We used the decision tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions.
+We used the decision tree classification technique to predict the stop outcome and understand how the classification works based on the rules it generates over the coloumns. So, the various columns affecting the output would be considered by the decision tree. The outcome is based on the contents of the leaf node, and the conditions along the path form a conjunction in the if clause. In general, we have worked on the following approaches in decision trees to understand the importance of each columns and obtain the best predictions.
 
 Apply Decision Tree classifier algorithm on the dataset and compare how different approaches in implementing the algorithm impacts the accuracy
 
 - The first approach is to find out the best parameters using the grid search
 
-- In the second approach we try to find the accuracy by varying the depth. The Depth parameter for the Decision classifier is varied. For various depths the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
+- In the second approach we try to find the accuracy by varying the depth. The Depth parameter for the Decision classifier is varied. For various depths, the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
 
-- In the third approach we try to remove individually one column at a time and try to find out the accuracy respectively. This way we can find out which column is affecting the outcome much or indicating the importance of each column
+- In the third approach we try to remove individually one column at a time and try to find out the accuracy, respectively. This way we can find out which column is affecting the outcome much or indicating the importance of each column
 
 We have found the best parameters for our model can be obtained by using the gridsearch. We found out the best max depth was at depth=16.
 
@@ -99,10 +99,9 @@ We have found the best parameters for our model can be obtained by using the gri
 ### Variation of Accuracy with depth
 ![Variation with depth](analysis_visualization/decision_tree_depth_with_resampling.png)
 
-Based on the analysis, we understood the data we had was inbalanced, which means the final outcome didnt have a equal distribution of outcomes. For example, citation was the most dominant followed by other. So we had to do sampling of the data, either downsampling or upsampling to a value where we have equal balance of data.
+Based on the analysis, we understood the data we had was inbalanced, which means the final outcome didnt have an equal distribution of outcomes. For example, citation was the most dominant followed by other. So, we had to do sampling of the data, either downsampling or upsampling to a value where we have equal balance of data.
 
-The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuracy reduction was observed indicating its a valuable column.
-
+The reason for removal of each column is to analyze the impact of each column on the outcome. For example, when we remove a column called is_arrested, the accuracy reduction was observed indicating its a valuable column.
 
 | stop_outcome     | accuracy |
 | ---------------- | -------- |
@@ -119,7 +118,7 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbors. Implementation of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py` 
 2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementation of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py` 
 
-   These two approaches will show how clustered the data is and also give an insight into if the model is overfitting the data
+   These two approaches will show how clustered the data is and give an insight into if the model is overfitting the data
    
 3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementation of this is written in `apply_pca_and_compare` method which can be found in `knn_analysis.py`
 
@@ -131,7 +130,7 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 
 ![KNN neighbous analysis](analysis_visualization/KNN.png)
 
-- Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is more or less the same always. This indicates that lower values of K is more favorable for the outcome.
+- Accuracy of KNN with and without `cross_val_score` is almost the same. It starts at the same accuracy and slowly moves further away but the difference is always the same. This indicates that lower values of K is more favorable for the outcome.
 - Following are the results of the accuracy with which KNN was able to classify each of the class in the outcome. Implementation of this is written in `knn_find_accuracy_of_each_class` method which can be found in `knn_analysis.py`
 
   | stop_outcome     | accuracy with 5 neighbors | accuracy with 15 neighbors | accuracy with 25 neighbors |
@@ -149,7 +148,7 @@ We used K Nearest Neighbors to understand how clustered our data is. We wanted t
 
 ![Clustering using KNN](analysis_visualization/knn_clustering.png)
 
-Finally, the above graphs show how data is clustered. We observe that all the data is clustered at the same place. This was obtained by reducing data into 3 components using PCA. Since all datapoints are clustered at the same place, it is also fairly obvious as to why the prediction accuracy is so low for n = 3 components in the previous graph. Implementation of this is written in `visualize_grouping` method which can be found in `knn_analysis.py`
+Finally, the above graphs show how data is clustered. We observe that all the data is clustered at the same place. This was obtained by reducing data into 3 components using PCA. Since all datapoints are clustered at the same place, it is also obvious as to why the prediction accuracy is so low for n = 3 components in the previous graph. Implementation of this is written in `visualize_grouping` method which can be found in `knn_analysis.py`
 
 # Comparisons
 
@@ -157,40 +156,20 @@ In following graphs, we remove one column at time and look at the accuracy with 
 
 ![Comparision after removing columns](analysis_visualization/remove_columns_comparision.png)
 
-<!-- * Accuracy using KNN 
-
-![Importance of column using KNN](analysis_visualization/KNN_columns.png)
-
-- Accuracy using Random Forest
-
-![Random forest analysis](analysis_visualization/random_forest.png)
-
-- Accuracy using Decision Tree
-
-![Decision tree analysis](analysis_visualization/decision_tree_column_with_resampling.png)
-
-- Accuracy using Logistic Regression
-
-![Logistic Regression analysis](analysis_visualization/logistic_regression.png) -->
-
-## Kaggle Comparision
+## Kaggle Comparison
 Comparing what we did in our project to the [Kaggle competition](https://www.kaggle.com/faressayah/stanford-open-policing-project) we got our dataset from, we seem to have had different goals and approaches to preprocessing. When looking at the notebooks associated, it looks like people were trying to answer questions like "Do men or women speed more often?" and "Which year had the least number of stops?" while our project aimed to predict the `stop_outcome`. Also, the preprocessing and visualization done in the Kaggle notebooks seemed to go more in depth about distributions within some of the columns, which in retrospect would have been good for us to do in our preliminary analysis.
 
 # Conclusion
 
-The goal of this project was to test out different models to see which one would perform best in predicting the stop_outcome for our given dataset. We wanted a chance to get some hands on experience with some models that were discussed in lecture over the past semester and thought that random forest, logistic regression, decision tree, and knn were interesting to pick up and figure out. Overall, we saw that random forest was the model that performed the best out, with 94% accuracy, of the four models we chose to implement. We think this is the case because random forest is best at avoiding overfitting, doesn't rely on a specific feature, and depth doesn't matter as much compared to other decision tree algorithms.
+The goal of this project was to test out different models to see which one would perform best in predicting the stop_outcome for our given dataset. We wanted a chance to get some hands-on experience with some models that were discussed in lecture over the past semester and thought that random forest, logistic regression, decision tree, and knn were interesting to pick up and figure out. Overall, we saw that random forest was the model that performed the best, with 92% accuracy, out of the four models we chose to implement. We think this is the case because random forest is best at avoiding overfitting, does not rely on a specific feature, and depth does not matter as much compared to other decision tree algorithms.
 
 ## Which model is performing better? Why?
 
-We expected this sort of outcome since our dataset has too many features for knn and logistic regression to be efficent and perform well. For knn, the clustering was happening in the same spot across all the features which proved to be a problem for knn. For logistic regression, the output had too many variables to predict so it could not make a proper prediction in a good range of accuracy. For decision tree, the model only has one tree compared to random forest having multiple trees to rely on.
-
-<!-- ## Which model is performing better? Why? Is it being overfitted?
-
-Logistic Regression gave an accuracy of 92.8% without re-sampling and after sampling it gave an accuracy of 96%. It clearly indicates that initially Logistic Regression model was being overfitted since the data was bias towards a particular attribute therefore learning model outputs were bias too. After resampling, the model started to learn and was no longer overfitted. -->
+We expected this outcome since our dataset has too many features for knn and logistic regression to be efficent and perform well. For knn, the clustering was happening in the same spot across all the features which proved to be a problem for knn. For logistic regression, the output had too many variables to predict so it could not make a proper prediction in a good range of accuracy. For decision tree, the model only has one tree compared to random forest having multiple trees to rely on.
 
 ## How similar or different are results from decision tree and random forest? Why?
 
-In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average/best decision tree of all of those predictions. Random forest doesn't rely on feature importance on a single decision tree because of the way random forest randomly chooses features during the training process. Another reason why random forest would perform better is that random forest trees are already fully grown and unpruned so the feature space is smaller compared to decision tree as well as having diverse trees.
+In our case we did the decision tree-based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various decision trees, and it takes the average/best decision tree of all of those predictions. Random forest does not rely on feature importance on a single decision tree because of the way random forest randomly chooses features during the training process. Another reason why random forest would perform better is that random forest trees are already fully grown and unpruned, so the feature space is smaller compared to decision tree as well as having diverse trees.
 
 ## Why did we have to resample our data? How did it impact our results?
 

@@ -42,7 +42,6 @@ def find_accuracy_of_each_class(y_test, y_pred):
 	pred_results = pred_results[pred_results.result == True]
 	pred_results = pd.merge(pred_results, pred_count, on='stop_outcome', how='right')
 	pred_results['accuracy'] = pred_results.apply(lambda x: x['0_x'] / x['0_y'], axis = 1)
-	# print (pred_results)
 	
 	del pred_results['result']
 	del pred_results['0_x']

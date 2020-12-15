@@ -191,16 +191,6 @@ def transform_data_columns_5_8(df):
     df["violations_raw"] = df["violation_raw"].fillna(df["violation_raw"].mode())
     df = df.drop(columns=["violation_raw"], axis=1, inplace=False)
 
-    # x=0
-    # y=0
-    # z=int(df["driver_age"].mean())
-
-    # for i in df.index:
-    # 	x= df["stop_year"][i]-df["driver_age_raw"][i]
-    # 	if(x<16 or df["driver_age"][i]==np.nan or x!= df["driver_age"][i]):
-    # 		y=y+1
-    # 		df["drivers_age_new"][i]=z
-
     # Find mean age of all drivers in the dataframe 
     mean_age = int(df["driver_age"].mean())
     # "Corrected" age of all drivers
@@ -349,7 +339,13 @@ def split_date(row):
     row['stop_year'] = date[0]
     return row
 
-
+# After completing the individual column preprocessing, this method covers the broad checks of the dataset
+# and makes changes if need be
+# 
+# Parameters
+# dataframe: dataframe where visualizations must be applied
+#
+# Return: final dataset after preprocessing
 def general_preprocessing(dataframe):
 
     # split stop_date into its corresponding date, month and year
@@ -989,11 +985,6 @@ if __name__ == "__main__":
     # }   
     logistic_regression_visualization(logistic_regression_results_resampled,1)
 
-   
-
-   
-    
-    
     # K Nearest Neighbours
     print ("k_neighbors_classifier")
     knn_analysis.visualize_grouping(X_train_orig, y_train_orig)
@@ -1002,4 +993,3 @@ if __name__ == "__main__":
     knn_analysis.knn_find_accuracy_of_each_class(X_train_orig, X_test_orig, y_train_orig, y_test_orig)
     print ("k_neighbors_classifier performance with resampling data")
     knn_analysis.knn_find_accuracy_of_each_class(X_train, X_test, y_train, y_test)
-    
