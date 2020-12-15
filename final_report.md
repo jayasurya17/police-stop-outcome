@@ -18,7 +18,7 @@ We chose to perform Logistic Regression model for training our data since it is 
 
 ```
 # Find best parameters to run the model most efficently
-# Set the parameters you want to evaluate
+# Set the parameters:
 param_grid ={'C':[0.001, 0.1, 1, 10, 100],
 'max_iter':[10000]
 }
@@ -39,13 +39,13 @@ param_grid ={'C':[0.001, 0.1, 1, 10, 100],
 
 -Fourth Approach - The final approach is to analyze the precision of model in predicting the `stop_outcome`.
 
-| stop_outcome     | Precision |
-| ---------------- | --------- |
-| Arrest Driver    | 0.68      |
-| Arrest Passenger | 0.67      |
-| Citation         | 0.67      |
-| No Action        | 0.86      |
-| Warning          | 0.64      |
+| stop_outcome     | Precision with original data | Precision with resampled data |
+| ---------------- | ---------------------------- | ----------------------------- |
+| Arrest Driver    | 0.89                         | 0.68                          |
+| Arrest Passenger | 0.67                         | 0.67                          |
+| Citation         | 0.93                         | 0.67                          |
+| No Action        | 0.54                         | 0.86                          |
+| Warning          | 0.00                         | 0.64                          |
 
 ## Random Forest
 
@@ -70,13 +70,14 @@ Since decision trees and random forests are similar, we compared the two when te
 Lastly, we figured later into the project that we should have resampled our data. So we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 94% with the resampled data and the original data gave around 92%. Trends between the two outputs are really similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion).
 
 ### Accuracy with original and resampled data
+
 | stop_outcome     | Accuracy with original data | Accuracy with resampled data |
-| ---------------- | -------- |-------- |
-| Arrest Driver    | 1.000000 |1.000000 |
-| Arrest Passenger | 0.030303 |1.000000 |
-| Citation         | 0.995253 |0.780292 |
-| No Action        | 0.293578 |1.000000 |
-| Warning          | 0.036765 |0.919177 |
+| ---------------- | --------------------------- | ---------------------------- |
+| Arrest Driver    | 1.000000                    | 1.000000                     |
+| Arrest Passenger | 0.030303                    | 1.000000                     |
+| Citation         | 0.995253                    | 0.780292                     |
+| No Action        | 0.293578                    | 1.000000                     |
+| Warning          | 0.036765                    | 0.919177                     |
 
 ## Decision Tree
 
@@ -97,12 +98,12 @@ We have found the best parameters for our model can be obtained by using the gri
 --If we set it too low, then the decision tree has too little flexibility to capture the patterns and interactions in the training data
 
 ### Variation of Accuracy with depth
+
 ![Variation with depth](analysis_visualization/decision_tree_depth_with_resampling.png)
 
 Based on the analysis, we understood the data we had was inbalanced, which means the final outcome didnt have a equal distribution of outcomes. For example, citation was the most dominant followed by other. So we had to do sampling of the data, either downsampling or upsampling to a value where we have equal balance of data.
 
 The reason for removal of each column is to analyze the impact of each column on the outcome. For example when we remove a column called is_arrested, the accuracy reduction was observed indicating its a valuable column.
-
 
 | stop_outcome     | accuracy |
 | ---------------- | -------- |
@@ -116,16 +117,16 @@ The reason for removal of each column is to analyze the impact of each column on
 
 We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
 
-1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbors. Implementation of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py` 
-2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementation of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py` 
+1. The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbors. Implementation of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py`
+2. The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementation of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py`
 
    These two approaches will show how clustered the data is and also give an insight into if the model is overfitting the data
-   
-3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementation of this is written in `apply_pca_and_compare` method which can be found in `knn_analysis.py`
 
-    This approach tells us how many features will be sufficient to predict the outcome
+3. The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementation of this is written in `apply_pca_and_compare` method which can be found in `knn_analysis.py`
 
-4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementation of this is written in `knn_remove_columns_and_find_accuracy` method which can be found in `knn_analysis.py`
+   This approach tells us how many features will be sufficient to predict the outcome
+
+4. Finally, drop one column at a time and find the importance of each column in the dataset. Implementation of this is written in `knn_remove_columns_and_find_accuracy` method which can be found in `knn_analysis.py`
 
    This approach will additionally prove the results from the first two approaches
 
@@ -157,7 +158,7 @@ In following graphs, we remove one column at time and look at the accuracy with 
 
 ![Comparision after removing columns](analysis_visualization/remove_columns_comparision.png)
 
-<!-- * Accuracy using KNN 
+<!-- * Accuracy using KNN
 
 ![Importance of column using KNN](analysis_visualization/KNN_columns.png)
 
@@ -174,6 +175,7 @@ In following graphs, we remove one column at time and look at the accuracy with 
 ![Logistic Regression analysis](analysis_visualization/logistic_regression.png) -->
 
 ## Kaggle Comparision
+
 Comparing what we did in our project to the [Kaggle competition](https://www.kaggle.com/faressayah/stanford-open-policing-project) we got our dataset from, we seem to have had different goals and approaches to preprocessing. When looking at the notebooks associated, it looks like people were trying to answer questions like "Do men or women speed more often?" and "Which year had the least number of stops?" while our project aimed to predict the `stop_outcome`. Also, the preprocessing and visualization done in the Kaggle notebooks seemed to go more in depth about distributions within some of the columns, which in retrospect would have been good for us to do in our preliminary analysis.
 
 # Conclusion
@@ -184,28 +186,24 @@ The goal of this project was to test out different models to see which one would
 
 We expected this sort of outcome since our dataset has too many features for knn and logistic regression to be efficent and perform well. For knn, the clustering was happening in the same spot across all the features which proved to be a problem for knn. For logistic regression, the output had too many variables to predict so it could not make a proper prediction in a good range of accuracy. For decision tree, the model only has one tree compared to random forest having multiple trees to rely on.
 
-<!-- ## Which model is performing better? Why? Is it being overfitted?
-
-Logistic Regression gave an accuracy of 92.8% without re-sampling and after sampling it gave an accuracy of 96%. It clearly indicates that initially Logistic Regression model was being overfitted since the data was bias towards a particular attribute therefore learning model outputs were bias too. After resampling, the model started to learn and was no longer overfitted. -->
-
 ## How similar or different are results from decision tree and random forest? Why?
 
 In our case we did the decision tree based classification based on the parameters provided by the gridsearch. Based on the optimum depth we performed the accuracy calculations. But a random forest is a combination of various different decision trees, and it takes the average/best decision tree of all of those predictions. Random forest doesn't rely on feature importance on a single decision tree because of the way random forest randomly chooses features during the training process. Another reason why random forest would perform better is that random forest trees are already fully grown and unpruned so the feature space is smaller compared to decision tree as well as having diverse trees.
 
 ## Why did we have to resample our data? How did it impact our results?
 
-* The following table shows the number of occurrences of each outcome. We see that *citation* is dominating and this will result in the models learning from "imbalanced" data. 
+- The following table shows the number of occurrences of each outcome. We see that _citation_ is dominating and this will result in the models learning from "imbalanced" data.
 
-|Outcome | Occurances in dataset | Accuracy **before** resampling | Accuracy **after** resampling |
-|----------------|-------|----------------|-------|
-|Citation|            77005| 0.457854 | 0.953954 |
-| Warning |              5293| 0.030303 | 1.000000 | 
-| Arrest Driver |        2571| 0.991677 | 0.568627 |
-| No Action |             589| 0.000000 | 1.000000 |
-| Arrest Passenger |      358| 0.026654 | 0.775100 |
+| Outcome          | Occurances in dataset | Accuracy **before** resampling | Accuracy **after** resampling |
+| ---------------- | --------------------- | ------------------------------ | ----------------------------- |
+| Citation         | 77005                 | 0.457854                       | 0.953954                      |
+| Warning          | 5293                  | 0.030303                       | 1.000000                      |
+| Arrest Driver    | 2571                  | 0.991677                       | 0.568627                      |
+| No Action        | 589                   | 0.000000                       | 1.000000                      |
+| Arrest Passenger | 358                   | 0.026654                       | 0.775100                      |
 
-* We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.  
-* Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbors. Similar results were obtained by other algorithms as well)
+- We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.
+- Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbors. Similar results were obtained by other algorithms as well)
 
 ## Scope for improvement
 
