@@ -18,7 +18,7 @@ We chose to perform Logistic Regression model for training our data since it is 
 
 ```
 # Find best parameters to run the model most efficently
-# Set the parameters you want to evaluate
+# Set the parameters:
 param_grid ={'C':[0.001, 0.1, 1, 10, 100],
 'max_iter':[10000]
 }
@@ -39,13 +39,13 @@ param_grid ={'C':[0.001, 0.1, 1, 10, 100],
 
 -Fourth Approach - The final approach is to analyze the precision of model in predicting the `stop_outcome`.
 
-| stop_outcome     | Precision |
-| ---------------- | --------- |
-| Arrest Driver    | 0.68      |
-| Arrest Passenger | 0.67      |
-| Citation         | 0.67      |
-| No Action        | 0.86      |
-| Warning          | 0.64      |
+| stop_outcome     | Precision with original data | Precision with resampled data |
+| ---------------- | ---------------------------- | ----------------------------- |
+| Arrest Driver    | 0.89                         | 0.68                          |
+| Arrest Passenger | 0.67                         | 0.67                          |
+| Citation         | 0.93                         | 0.67                          |
+| No Action        | 0.54                         | 0.86                          |
+| Warning          | 0.00                         | 0.64                          |
 
 ## Random Forest
 
@@ -70,13 +70,14 @@ Since decision trees and random forests are similar, we compared the two when te
 Lastly, we figured later into the project that we should have resampled our data. So, we compared our original preprocessed data with the resampled data to see if the resampled data helped improve accuracy in our models. In the end, random forest gave an accuracy of around 92% with the resampled data and the original data gave around 92%. Trends between the two outputs are similar, only around a 2% difference in accuracies because of the way the resampling works (explained in the conclusion).
 
 ### Accuracy with original and resampled data
+
 | stop_outcome     | Accuracy with original data | Accuracy with resampled data |
-| ---------------- | -------- |-------- |
-| Arrest Driver    | 1.000000 |1.000000 |
-| Arrest Passenger | 0.030303 |1.000000 |
-| Citation         | 0.995253 |0.780292 |
-| No Action        | 0.293578 |1.000000 |
-| Warning          | 0.036765 |0.919177 |
+| ---------------- | --------------------------- | ---------------------------- |
+| Arrest Driver    | 1.000000                    | 1.000000                     |
+| Arrest Passenger | 0.030303                    | 1.000000                     |
+| Citation         | 0.995253                    | 0.780292                     |
+| No Action        | 0.293578                    | 1.000000                     |
+| Warning          | 0.036765                    | 0.919177                     |
 
 ## Decision Tree
 
@@ -86,9 +87,9 @@ Apply Decision Tree classifier algorithm on the dataset and compare how differen
 
 - The first approach is to find out the best parameters using the grid search
 
-- In the second approach we try to find the accuracy by varying the depth. The Depth parameter for the Decision classifier is varied. For various depths, the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
+- In the second approach we try to find the accuracy by varying the depth. Hence, the max_depth parameter for the Decision classifier is varied. For various depths the accuracy is calculated. A great increase in the maximum depth causes the algorithm to overifit, hence very higher depths are not preferred
 
-- In the third approach we try to remove individually one column at a time and try to find out the accuracy, respectively. This way we can find out which column is affecting the outcome much or indicating the importance of each column
+- In the third approach we try to remove one column each at a time and try to find out the accuracy respectively. This way we can find out which column is affecting the outcome much or indicating the importance of each column
 
 We have found the best parameters for our model can be obtained by using the gridsearch. We found out the best max depth was at depth=16.
 
@@ -97,11 +98,10 @@ We have found the best parameters for our model can be obtained by using the gri
 --If we set it too low, then the decision tree has too little flexibility to capture the patterns and interactions in the training data
 
 ### Variation of Accuracy with depth
+
 ![Variation with depth](analysis_visualization/decision_tree_depth_with_resampling.png)
 
 Based on the analysis, we understood the data we had was inbalanced, which means the final outcome didnt have an equal distribution of outcomes. For example, citation was the most dominant followed by other. So, we had to do sampling of the data, either downsampling or upsampling to a value where we have equal balance of data.
-
-The reason for removal of each column is to analyze the impact of each column on the outcome. For example, when we remove a column called is_arrested, the accuracy reduction was observed indicating its a valuable column.
 
 | stop_outcome     | accuracy |
 | ---------------- | -------- |
@@ -115,16 +115,16 @@ The reason for removal of each column is to analyze the impact of each column on
 
 We used K Nearest Neighbors to understand how clustered our data is. We wanted to know if events occur randomly or if just a few parameters determine the outcome. `euclidean` distance was measured in all the cases
 
-1) The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbors. Implementation of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py` 
-2) The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementation of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py` 
+1. The first approach is to apply `KNN` on the entire dataset by selecting n number of neighbors. Implementation of this is written in `knn_accuracy_on_entire_dataset` method which can be found in `knn_analysis.py`
+2. The second approach is to find accuracy by using `cross_val_score` with 5 folds on KNN. Implementation of this is written in `knn_apply_cross_val_score` method which can be found in `knn_analysis.py`
 
-   These two approaches will show how clustered the data is and give an insight into if the model is overfitting the data
-   
-3) The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementation of this is written in `apply_pca_and_compare` method which can be found in `knn_analysis.py`
+   These two approaches will show how clustered the data is and also give an insight into if the model is overfitting the data
 
-    This approach tells us how many features will be sufficient to predict the outcome
+3. The third approach is to reduce the dataset into n number of features using `PCA` and then apply `KNN` on the dataset. Implementation of this is written in `apply_pca_and_compare` method which can be found in `knn_analysis.py`
 
-4) Finally, drop one column at a time and find the importance of each column in the dataset. Implementation of this is written in `knn_remove_columns_and_find_accuracy` method which can be found in `knn_analysis.py`
+   This approach tells us how many features will be sufficient to predict the outcome
+
+4. Finally, drop one column at a time and find the importance of each column in the dataset. Implementation of this is written in `knn_remove_columns_and_find_accuracy` method which can be found in `knn_analysis.py`
 
    This approach will additionally prove the results from the first two approaches
 
@@ -173,18 +173,18 @@ In our case we did the decision tree-based classification based on the parameter
 
 ## Why did we have to resample our data? How did it impact our results?
 
-* The following table shows the number of occurrences of each outcome. We see that *citation* is dominating and this will result in the models learning from "imbalanced" data. 
+- The following table shows the number of occurrences of each outcome. We see that _citation_ is dominating and this will result in the models learning from "imbalanced" data.
 
-|Outcome | Occurances in dataset | Accuracy **before** resampling | Accuracy **after** resampling |
-|----------------|-------|----------------|-------|
-|Citation|            77005| 0.457854 | 0.953954 |
-| Warning |              5293| 0.030303 | 1.000000 | 
-| Arrest Driver |        2571| 0.991677 | 0.568627 |
-| No Action |             589| 0.000000 | 1.000000 |
-| Arrest Passenger |      358| 0.026654 | 0.775100 |
+| Outcome          | Occurances in dataset | Accuracy **before** resampling | Accuracy **after** resampling |
+| ---------------- | --------------------- | ------------------------------ | ----------------------------- |
+| Citation         | 77005                 | 0.457854                       | 0.953954                      |
+| Warning          | 5293                  | 0.030303                       | 1.000000                      |
+| Arrest Driver    | 2571                  | 0.991677                       | 0.568627                      |
+| No Action        | 589                   | 0.000000                       | 1.000000                      |
+| Arrest Passenger | 358                   | 0.026654                       | 0.775100                      |
 
-* We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.  
-* Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbors. Similar results were obtained by other algorithms as well)
+- We resampled our data so that each outcome appears 10000 times in the dataset. This will make the outcomes evenly distributed for any model to train and learn from the data that is present. Implementation can be found under `resample_data` method in `project.py` file.
+- Looking at the table also observe a significant change in prediction accuracy of each outcome after resampling our data (Values written are for KNN implementation with 5 neighbors. Similar results were obtained by other algorithms as well)
 
 ## Scope for improvement
 
