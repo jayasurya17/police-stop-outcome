@@ -86,9 +86,9 @@ Apply Decision Tree classifier algorithm on the dataset and compare how differen
 
 - The first approach is to find out the best parameters using the grid search
 
-- In the second approach we try to find the accuracy by varying the depth. The Depth parameter for the Decision classifier is varied. For various depths the accuracy is calculated. The increase in the maximum depth causes the algorithm to overifit, hence higher depths are not preferred
+- In the second approach we try to find the accuracy by varying the depth. Hence, the max_depth parameter for the Decision classifier is varied. For various depths the accuracy is calculated. A great increase in the maximum depth causes the algorithm to overifit, hence very higher depths are not preferred
 
-- In the third approach we try to remove individually one column at a time and try to find out the accuracy respectively. This way we can find out which column is affecting the outcome much or indicating the importance of each column
+- In the third approach we try to remove one column each at a time and try to find out the accuracy respectively. This way we can find out which column is affecting the outcome much or indicating the importance of each column
 
 We have found the best parameters for our model can be obtained by using the gridsearch. We found out the best max depth was at depth=16.
 
